@@ -50,11 +50,7 @@ class Sortie
     private ?Participant $organisateur = null;
 
 
-    /**
-     * @var Collection<int, Site>
-     */
-    #[ORM\OneToMany(targetEntity: Site::class, mappedBy: 'sortie')]
-    private Collection $Site;
+
 
     public function __construct()
     {
@@ -62,13 +58,15 @@ class Sortie
         $this->participant = new ArrayCollection();
     }
 
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Lieu $idLieu = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Lieu $Lieu = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $Site = null;
 
     public function getId(): ?int
     {
@@ -198,35 +196,6 @@ class Sortie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Site>
-     */
-    public function getSite(): Collection
-    {
-        return $this->Site;
-    }
-
-    public function addSite(Site $site): static
-    {
-        if (!$this->Site->contains($site)) {
-            $this->Site->add($site);
-            $site->setSortie($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSite(Site $site): static
-    {
-        if ($this->Site->removeElement($site)) {
-            // set the owning side to null (unless already changed)
-            if ($site->getSortie() === $this) {
-                $site->setSortie(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getIdLieu(): ?Lieu
     {
@@ -248,6 +217,18 @@ class Sortie
     public function setLieu(?Lieu $Lieu): static
     {
         $this->Lieu = $Lieu;
+
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->Site;
+    }
+
+    public function setSite(?Site $Site): static
+    {
+        $this->Site = $Site;
 
         return $this;
     }
