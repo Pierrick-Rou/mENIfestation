@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 
-use App\Class\Etat;
+use App\classtemp\Etat;
 use App\Repository\SortieRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
