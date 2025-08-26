@@ -1,6 +1,6 @@
 <?php
 
-namespace App\class;
+namespace App\Class;
 
 interface BackedEnumInterface extends \BackedEnum {}
 
