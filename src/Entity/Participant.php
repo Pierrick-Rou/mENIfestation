@@ -90,9 +90,10 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @param list<string> $roles
      */
-    public function setRoles(array $roles): static
+    #[ORM\PrePersist]
+    public function setRoles(): static
     {
-        $this->roles = $roles;
+        $this->roles = ['ROLE_USER'];
 
         return $this;
     }
