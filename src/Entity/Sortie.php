@@ -5,6 +5,8 @@ namespace App\Entity;
 
 use App\Class\Etat;
 use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,6 +40,17 @@ class Sortie
 
     #[ORM\Column(enumType: Etat::class)]
     private Etat $etat = Etat::CREATED;
+
+    /**
+     * @var Collection<int, Site>
+     */
+    #[ORM\OneToMany(targetEntity: Site::class, mappedBy: 'sortie')]
+    private Collection $Site;
+
+    public function __construct()
+    {
+        $this->Site = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -127,6 +140,36 @@ class Sortie
     public function setEtat(Etat $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Site>
+     */
+    public function getSite(): Collection
+    {
+        return $this->Site;
+    }
+
+    public function addSite(Site $site): static
+    {
+        if (!$this->Site->contains($site)) {
+            $this->Site->add($site);
+            $site->setSortie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSite(Site $site): static
+    {
+        if ($this->Site->removeElement($site)) {
+            // set the owning side to null (unless already changed)
+            if ($site->getSortie() === $this) {
+                $site->setSortie(null);
+            }
+        }
 
         return $this;
     }

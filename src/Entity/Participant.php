@@ -48,6 +48,10 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $actif = null;
 
+    #[ORM\ManyToOne(inversedBy: 'participants')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $Site = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -192,6 +196,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActif(): static
     {
         $this->actif = true;
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->Site;
+    }
+
+    public function setSite(?Site $Site): static
+    {
+        $this->Site = $Site;
+
         return $this;
     }
 }
