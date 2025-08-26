@@ -1,17 +1,30 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}M'ENIfestation{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+{#    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 #}
+{#        viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚑</text></svg>">#}
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">M'ENIfestation</div>
+        <ul class="nav-links">
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Les évènements</a></li>
+            <li><a href="#">Se connecter</a></li>
+        </ul>
+    </nav>
+</header>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
-</html>
+<main>
+    {% block body %}{% endblock %}
+</main>
+
+<footer>
+    <p>&copy; {{ "now"|date("Y") }} M'ENIfestation – Tous droits réservés</p>
+</footer>
+</body>
