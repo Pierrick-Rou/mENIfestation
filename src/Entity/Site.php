@@ -26,9 +26,6 @@ class Site
     #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'Site')]
     private Collection $participants;
 
-    #[ORM\ManyToOne(inversedBy: 'Site')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Sortie $sortie = null;
 
     public function __construct()
     {
@@ -94,15 +91,5 @@ class Site
         return $this;
     }
 
-    public function getSortie(): ?Sortie
-    {
-        return $this->sortie;
-    }
 
-    public function setSortie(?Sortie $sortie): static
-    {
-        $this->sortie = $sortie;
-
-        return $this;
-    }
 }
