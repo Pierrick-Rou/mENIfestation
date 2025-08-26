@@ -104,6 +104,8 @@ footer {
     font-size: 16px;
 }
 
+
+/*CSS pour la card du detail de l'user*/
 .form button {
     background-color: #4CAF50;
     color: white;
@@ -119,3 +121,61 @@ footer {
 .form button:hover {
     background-color: #45a049;
 }
+
+/* Conteneur principal */
+.participant-card {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background-color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+/* Titre du participant */
+.participant-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+/* Liste des infos */
+.participant-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.participant-info span {
+    font-size: 1rem;
+    color: #555;
+    padding: 8px 12px;
+    border-left: 4px solid #FD8152FF;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+/* Boutons */
+.participant-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.participant-actions a {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #FD8152FF;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.participant-actions a:hover {
+    background-color: #F9CA56FF;
+}
+
