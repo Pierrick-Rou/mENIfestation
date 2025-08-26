@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="form">
+
+        <h2>Ajouter une nouvelle sortie</h2>
+    {{ form_start(sortieForm, {'action': path('app_sortie_validForm')})}}
+    {{ form_widget(sortieForm) }}
+    <button >Envoyer !</button>
+    {{ form_end(sortieForm) }}
+    </div>
+{% endblock %}
