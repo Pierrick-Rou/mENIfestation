@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -47,6 +49,24 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $actif = null;
+
+    /**
+     * @var Collection<int, Sortie>
+     */
+    #[ORM\ManyToMany(targetEntity: Sortie::class, mappedBy: 'participant')]
+    private Collection $sorties;
+
+    /**
+     * @var Collection<int, Sortie>
+     */
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'organisateur', orphanRemoval: true)]
+    private Collection $organise;
+
+    public function __construct()
+    {
+        $this->sorties = new ArrayCollection();
+        $this->organise = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -192,6 +212,63 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActif(): static
     {
         $this->actif = true;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSorty(Sortie $sorty): static
+    {
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties->add($sorty);
+            $sorty->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSorty(Sortie $sorty): static
+    {
+        if ($this->sorties->removeElement($sorty)) {
+            $sorty->removeParticipant($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getOrganise(): Collection
+    {
+        return $this->organise;
+    }
+
+    public function addOrganise(Sortie $organise): static
+    {
+        if (!$this->organise->contains($organise)) {
+            $this->organise->add($organise);
+            $organise->setOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrganise(Sortie $organise): static
+    {
+        if ($this->organise->removeElement($organise)) {
+            // set the owning side to null (unless already changed)
+            if ($organise->getOrganisateur() === $this) {
+                $organise->setOrganisateur(null);
+            }
+        }
+
         return $this;
     }
 }
