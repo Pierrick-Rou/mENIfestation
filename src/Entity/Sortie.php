@@ -39,6 +39,10 @@ class Sortie
     #[ORM\Column(enumType: Etat::class)]
     private Etat $etat = Etat::CREATED;
 
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Lieu $idLieu = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -127,6 +131,18 @@ class Sortie
     public function setEtat(Etat $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getIdLieu(): ?Lieu
+    {
+        return $this->idLieu;
+    }
+
+    public function setIdLieu(?Lieu $idLieu): static
+    {
+        $this->idLieu = $idLieu;
 
         return $this;
     }
