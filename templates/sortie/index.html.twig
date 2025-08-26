@@ -3,5 +3,32 @@
 {% block title %}Hello SortieController!{% endblock %}
 
 {% block body %}
+    {% if sortieList is empty %}
+        <p>Pas de sortie</p>
+    {% else %}
 
+        <table style="white-space: nowrap;">
+            <tr>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Duree</th>
+                <th>Limite inscription</th>
+                <th>Max participant</th>
+                <th>info</th>
+                <th>etat</th>
+            </tr>
+            {% for sortie in sortieList %}
+                <tr>
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.dateHeureDebut|date("H:i d/m/Y") }} </td>
+                    <td>{{ sortie.duree|date("H:i") }} </td>
+                    <td>{{ sortie.dateLimiteInscription|date("H:i d/m/Y") }} </td>
+                    <td>{{ sortie.nbInscriptionMax }}</td>
+                    <td>{{ sortie.infosSortie }}</td>
+                    <td> {{ sortie.etat.value }} </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    {% endif %}
 {% endblock %}
