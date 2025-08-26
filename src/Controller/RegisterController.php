@@ -23,8 +23,8 @@ final class RegisterController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            $plainPassword = $form->get('plainPassword')->getData();
-            $user->setPassword($userPasswordHasher->hashPassword($user, $user->getPassword()));
+            $plainPassword = $form->get('password')->getData();
+            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $em->persist($user);
             $em->flush();
 

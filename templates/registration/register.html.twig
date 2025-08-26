@@ -4,18 +4,17 @@
 
 <h1>Créer un compte</h1>
 
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+    <div class="form">
     {{ form_errors(registrationType) }}
 
-    {{ form_start(registrationType) }}
-    {{ form_row(registrationType.nom) }}
-    {{ form_row(registrationType.prenom) }}
-    {{ form_row(registrationType.password) }}
-    {{ form_row(registrationType.telephone) }}
-    {{ form_row(registrationType.email) }}
 
-    <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationType) }}
+    {{ form(registrationType) }}
 
+
+    </div>
 
 
 {% endblock %}
