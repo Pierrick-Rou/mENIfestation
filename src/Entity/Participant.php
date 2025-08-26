@@ -68,6 +68,10 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         $this->organise = new ArrayCollection();
     }
 
+    #[ORM\ManyToOne(inversedBy: 'participants')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $Site = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -268,6 +272,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
                 $organise->setOrganisateur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->Site;
+    }
+
+    public function setSite(?Site $Site): static
+    {
+        $this->Site = $Site;
 
         return $this;
     }

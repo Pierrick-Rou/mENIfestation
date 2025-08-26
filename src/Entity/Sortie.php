@@ -54,6 +54,21 @@ class Sortie
         $this->participant = new ArrayCollection();
     }
 
+    /**
+     * @var Collection<int, Site>
+     */
+    #[ORM\OneToMany(targetEntity: Site::class, mappedBy: 'sortie')]
+    private Collection $Site;
+
+    public function __construct()
+    {
+        $this->Site = new ArrayCollection();
+    }
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Lieu $idLieu = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -178,6 +193,48 @@ class Sortie
     public function setOrganisateur(?Participant $organisateur): static
     {
         $this->organisateur = $organisateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Site>
+     */
+    public function getSite(): Collection
+    {
+        return $this->Site;
+    }
+
+    public function addSite(Site $site): static
+    {
+        if (!$this->Site->contains($site)) {
+            $this->Site->add($site);
+            $site->setSortie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSite(Site $site): static
+    {
+        if ($this->Site->removeElement($site)) {
+            // set the owning side to null (unless already changed)
+            if ($site->getSortie() === $this) {
+                $site->setSortie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIdLieu(): ?Lieu
+    {
+        return $this->idLieu;
+    }
+
+    public function setIdLieu(?Lieu $idLieu): static
+    {
+        $this->idLieu = $idLieu;
 
         return $this;
     }
