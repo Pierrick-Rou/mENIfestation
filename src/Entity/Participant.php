@@ -182,15 +182,16 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     public function isActif(): ?bool
     {
         return $this->actif;
     }
 
-    public function setActif(bool $actif): static
+    #[ORM\PrePersist]
+    public function setActif(): static
     {
-        $this->actif = $actif;
-
+        $this->actif = true;
         return $this;
     }
 }
