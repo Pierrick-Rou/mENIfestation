@@ -9,11 +9,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\HasLifecycleCallbacks]
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
@@ -31,8 +33,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $idparticipant = null;
+
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
@@ -130,17 +131,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
-    public function getIdparticipant(): ?string
-    {
-        return $this->idparticipant;
-    }
-
-    public function setIdparticipant(string $idparticipant): static
-    {
-        $this->idparticipant = $idparticipant;
-
-        return $this;
-    }
 
     public function getNom(): ?string
     {
@@ -178,14 +168,16 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     public function isAdministrateur(): ?bool
     {
-        return $this->administrateur;
-    }
 
-    public function setAdministrateur(bool $administrateur): static
+        return $this->administrateur = false;
+    }
+    #[ORM\PrePersist]
+    public function setAdministrateur(): static
     {
-        $this->administrateur = $administrateur;
+        $this->administrateur = false;
 
         return $this;
     }
