@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<h1>Créer un compte</h1>
+
+    {{ form_errors(registrationType) }}
+
+    {{ form_start(registrationType) }}
+    {{ form_row(registrationType.nom) }}
+    {{ form_row(registrationType.prenom) }}
+    {{ form_row(registrationType.password) }}
+    {{ form_row(registrationType.telephone) }}
+    {{ form_row(registrationType.email) }}
+
+    <button type="submit" class="btn">Register</button>
+    {{ form_end(registrationType) }}
+
+
+
+{% endblock %}
