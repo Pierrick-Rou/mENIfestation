@@ -49,10 +49,6 @@ class Sortie
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $organisateur = null;
 
-    public function __construct()
-    {
-        $this->participant = new ArrayCollection();
-    }
 
     /**
      * @var Collection<int, Site>
@@ -63,6 +59,7 @@ class Sortie
     public function __construct()
     {
         $this->Site = new ArrayCollection();
+        $this->participant = new ArrayCollection();
     }
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
