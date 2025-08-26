@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SortieController extends AbstractController
 {
     #[Route('/sortie', name: 'app_sortie')]
-    public function index(): Response
+    public function index(s): Response
     {
         return $this->render('sortie/index.html.twig', [
             'controller_name' => 'SortieController',
