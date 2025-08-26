@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+
+use App\class\Etat;
 use App\Repository\SortieRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Etat;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Sortie
