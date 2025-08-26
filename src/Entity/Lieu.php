@@ -36,13 +36,15 @@ class Lieu
 
     #[ORM\ManyToOne(inversedBy: 'lieux')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Ville $idVille = null;
+    private ?Ville $Ville = null;
 
     /**
      * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'idLieu', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'Lieu', orphanRemoval: true)]
     private Collection $sorties;
+
+
 
     public function __construct()
     {
@@ -140,6 +142,18 @@ class Lieu
                 $sorty->setIdLieu(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVille(): ?Ville
+    {
+        return $this->Ville;
+    }
+
+    public function setVille(?Ville $Ville): static
+    {
+        $this->Ville = $Ville;
 
         return $this;
     }
