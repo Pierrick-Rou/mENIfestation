@@ -15,7 +15,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
@@ -32,7 +31,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
-
 
 
     #[ORM\Column(length: 255)]
@@ -74,7 +72,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -119,8 +117,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function __serialize(): array
     {
-        $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+        $data = (array)$this;
+        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
 
         return $data;
     }
@@ -174,6 +172,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this->administrateur = false;
     }
+
     #[ORM\PrePersist]
     public function setAdministrateur(): static
     {
@@ -181,6 +180,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 
     public function isActif(): ?bool
     {
@@ -191,7 +191,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActif(): static
     {
         $this->actif = true;
-
         return $this;
     }
 }
