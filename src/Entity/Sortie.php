@@ -52,6 +52,10 @@ class Sortie
         $this->Site = new ArrayCollection();
     }
 
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Lieu $idLieu = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -170,6 +174,18 @@ class Sortie
                 $site->setSortie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIdLieu(): ?Lieu
+    {
+        return $this->idLieu;
+    }
+
+    public function setIdLieu(?Lieu $idLieu): static
+    {
+        $this->idLieu = $idLieu;
 
         return $this;
     }
