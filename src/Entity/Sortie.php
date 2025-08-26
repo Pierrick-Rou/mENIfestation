@@ -18,8 +18,6 @@ class Sortie
     #[ORM\Column]
     private ?int $id = null;
 
-
-
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
@@ -40,6 +38,21 @@ class Sortie
 
     #[ORM\Column(enumType: Etat::class)]
     private Etat $etat = Etat::CREATED;
+
+    /**
+     * @var Collection<int, Participant>
+     */
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
+    private Collection $participant;
+
+    #[ORM\ManyToOne(inversedBy: 'organise')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Participant $organisateur = null;
+
+    public function __construct()
+    {
+        $this->participant = new ArrayCollection();
+    }
 
     /**
      * @var Collection<int, Site>
@@ -144,6 +157,42 @@ class Sortie
     public function setEtat(Etat $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participant>
+     */
+    public function getParticipant(): Collection
+    {
+        return $this->participant;
+    }
+
+    public function addParticipant(Participant $participant): static
+    {
+        if (!$this->participant->contains($participant)) {
+            $this->participant->add($participant);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): static
+    {
+        $this->participant->removeElement($participant);
+
+        return $this;
+    }
+
+    public function getOrganisateur(): ?Participant
+    {
+        return $this->organisateur;
+    }
+
+    public function setOrganisateur(?Participant $organisateur): static
+    {
+        $this->organisateur = $organisateur;
 
         return $this;
     }
