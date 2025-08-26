@@ -16,8 +16,7 @@ class Sortie
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idSortie = null;
+
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
@@ -38,24 +37,15 @@ class Sortie
     private ?string $infosSortie = null;
 
     #[ORM\Column(enumType: Etat::class)]
-    private ?Etat $etat = null;
+    private Etat $etat = Etat::CREATED;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdSortie(): ?int
-    {
-        return $this->idSortie;
-    }
 
-    public function setIdSortie(int $idSortie): static
-    {
-        $this->idSortie = $idSortie;
 
-        return $this;
-    }
 
     public function getNom(): ?string
     {
