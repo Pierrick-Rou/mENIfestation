@@ -27,8 +27,9 @@ class Ville
     /**
      * @var Collection<int, Lieu>
      */
-    #[ORM\OneToMany(targetEntity: Lieu::class, mappedBy: 'idVille', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Lieu::class, mappedBy: 'Ville', orphanRemoval: true)]
     private Collection $lieux;
+
 
     public function __construct()
     {
@@ -76,7 +77,7 @@ class Ville
     {
         if (!$this->lieux->contains($lieux)) {
             $this->lieux->add($lieux);
-            $lieux->setIdVille($this);
+            $lieux->setVille($this);
         }
 
         return $this;
@@ -86,11 +87,14 @@ class Ville
     {
         if ($this->lieux->removeElement($lieux)) {
             // set the owning side to null (unless already changed)
-            if ($lieux->getIdVille() === $this) {
-                $lieux->setIdVille(null);
+            if ($lieux->getVille() === $this) {
+                $lieux->setVille(null);
             }
         }
 
         return $this;
     }
+
+
+
 }
