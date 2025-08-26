@@ -1,14 +1,16 @@
 <?php
 
-interface TestEnumInterface extends \BackedEnum {}
+namespace App\class;
 
-enum Etat: string implements TestEnumInterface
+interface BackedEnumInterface extends \BackedEnum {}
+
+enum Etat: string implements BackedEnumInterface
 {
-    case CREATE = 'Créée';
-    case OPEN = 'Ouverte';
+    case CREATED = 'Créée';
+    case OPENED = 'Ouverte';
     case CLOSED = 'Clôturée';
     case NOW = 'Activité en cours';
     case PASSED = 'Passée';
-    case CANCELED = 'Annulée';
+    case CANCELLED = 'Annulée';
 
 }
