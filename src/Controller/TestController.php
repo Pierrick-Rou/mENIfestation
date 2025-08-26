@@ -21,7 +21,23 @@ final class TestController extends AbstractController
     #[ISGranted('ROLE_ADMIN')]
     public function indexAdmin(): Response
     {
-        return $this->render('test/index.html.twig', [
+        return $this->render('test/index_admin.html.twig', [
+            'controller_name' => 'TestController',
+        ]);
+    }
+
+    #[Route('/admin', name: 'app_admin')]
+    public function admin(): Response
+    {
+        return $this->render('test/index_admin.html.twig', [
+            'controller_name' => 'TestController',
+        ]);
+    }
+
+    #[Route('/profil', name: 'app_profil')]
+    public function profil(): Response
+    {
+        return $this->render('test/index_profil.html.twig', [
             'controller_name' => 'TestController',
         ]);
     }
