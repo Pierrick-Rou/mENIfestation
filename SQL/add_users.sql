@@ -4,6 +4,8 @@ INSERT INTO Ville (nom,code_Postal) VALUES ('Saint-Herblain','44800'),
                                           ('La Roche Sur Yon','85000');
 INSERT INTO SITE (nom) VALUES ('ENI-Saint-Herblain'),('ENI-Chartres'),('ENI_LRSY');
 
+INSERT INTO ETAT (libelle) VALUES ('Créée'), ('Ouverte'),('Clôturée'),('Activité en cours'),('Passée'),('Annulée');
+
 
 INSERT INTO participant (email,site_id,roles,password,nom,prenom,telephone,administrateur,actif) VALUES
                                                                                                                ('admin@menifestation.com',1,JSON_ARRAY('ROLE_ADMIN'),'$2y$13$8OgVsX8l2cefcTYFnwkem./gL3fyqkZ/3SnA0I7va2YF9G0zoSFM2','admin','admin','0000000000',1,1),
