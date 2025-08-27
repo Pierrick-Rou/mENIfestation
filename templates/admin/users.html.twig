@@ -23,7 +23,7 @@
                 <td>{{participant.nom }}</td>
                 <td>{{participant.telephone }}</td>
                 <td><a href="{{ path('app_profil_details', {id: participant.id })}}">Détails</a></td>
-                <td><a href="{{ path('app_profil_details', {id: participant.id })}}">Bannir</a></td>
+                <td><a href="{{ path('app_profil_ban', {id: participant.id })}}">Bannir</a></td>
                 <td><a href="{{ path('app_profil_delete', {id: participant.id })}}">Supprimer</a></td>
 
 
