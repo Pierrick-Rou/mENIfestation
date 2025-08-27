@@ -117,7 +117,7 @@ final class SortieController extends AbstractController
         ]);
     }
     #[Route('/validForm', name: 'validForm', methods: ['POST'])]
-    public function validForm(Request $request, EntityManagerInterface $entityManager): Response
+    public function validForm(Request $request, EntityManagerInterface $entityManager, Security $security, EtatRepository $eR): Response
     {
         $sortie = new Sortie();
 
