@@ -18,7 +18,7 @@
                 <th>etat</th>
             </tr>
             {% for sortie in sortieList %}
-                <tr>
+                <tr style="cursor: pointer" onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
                     <td>{{ sortie.nom }}</td>
                     <td>{{ sortie.dateHeureDebut|date("H:i d/m/Y") }} </td>
                     <td>{{ sortie.duree|date("H:i") }} </td>

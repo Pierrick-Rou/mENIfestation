@@ -14,13 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/sortie', name: 'app_sortie')]
+#[Route('/sortie', name: 'app_sortie_')]
 final class SortieController extends AbstractController
 {
 
-    #[Route('', name: '_home')]
+    #[Route('', name: 'home')]
     public function index(SortieRepository $sortieRepository): Response
-
     {
         $sortieList = $sortieRepository->findAll();
 
@@ -30,17 +29,19 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/id/{id}', name: 'id', requirements: ['id' => '\d+'])]
-    public function detail(SortieRepository $sortieRepository): Response
-
+    public function detail(int $id, SortieRepository $sortieRepository): Response
     {
-        $sortieList = $sortieRepository->findAll();
+        $sortie = $sortieRepository->find($id);
 
-        return $this->render('sortie/index.html.twig', [
-            'sortieList' => $sortieList,
+        if (!$sortie) {
+            $this->addFlash('error', 'Sortie not found');
+        }
+        return $this->render('sortie/sortiePage.html.twig', [
+            'sortie' => $sortie
         ]);
     }
 
-    #[Route('/create', name: '_create', methods: ['GET','POST'])]
+    #[Route('/create', name: 'create', methods: ['GET','POST'])]
     public function create(): Response
     {
         $sortie = new Sortie();
@@ -49,7 +50,7 @@ final class SortieController extends AbstractController
             "sortieForm" => $sortieForm
         ]);
     }
-    #[Route('/validForm', name: '_validForm', methods: ['POST'])]
+    #[Route('/validForm', name: 'validForm', methods: ['POST'])]
     public function validForm(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();

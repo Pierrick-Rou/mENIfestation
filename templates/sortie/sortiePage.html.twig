@@ -3,7 +3,20 @@
 {% block body %}
 
     <div>
-        <h1></h1>
+        <h1>{{ sortie.nom }}</h1>
+        <p>{{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat}})</p>
+        <p>Durée : {{ sortie.duree|date("H:i") }}</p>
+        <p>RDV : {{ sortie.lieu.nom }}</p>
+        <p>{{ sortie.lieu.rue }}<br>
+            {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</p><br>
+        <p>{{ sortie.infosSortie }}</p>
+        <p>Inscription jusqu'au {{ sortie.dateLimiteInscription|date("d/m/Y - H:i") }}</p>
+        <p>Nombre de place : {{ sortie.nbInscriptionMax }}</p>
+
+        {% if is_granted('IS_AUTHENTICATED') %}
+            <li><a href="">S'inscrire</a></li>
+        {% endif %}
+
     </div>
 
 
