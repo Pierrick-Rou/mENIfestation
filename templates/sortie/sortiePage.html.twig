@@ -2,35 +2,37 @@
 
 {% block body %}
 
-<div>
+<div class="form participant-info">
     <h2>{{ sortie.nom }}</h2>
-    <p>Organisateur:</p><a href="{{ path("app_profil_details",  {'id': sortie.organisateur.id }) }}"><p> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }} </p></a>
-    <p>{{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat }})</p>
-    <p>Durée : {{ sortie.duree|date("H:i") }}</p>
-    <p>RDV : {{ sortie.lieu.nom }}</p>
-    <p>{{ sortie.lieu.rue }}<br>
-        {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</p><br>
-    <p>{{ sortie.infosSortie }}</p>
-    <p>Inscription jusqu'au {{ sortie.dateLimiteInscription|date("d/m/Y - H:i") }}</p>
-    <p>Nombre de place : {{ sortie.nbInscriptionMax }}</p>
-    <p>Participants:</p>
-    {% for p in sortie.participant %}
-    <a href="{{ path("app_profil_details",  {'id': p.id }) }}">
-        <p>{{ p.nom }}</p>
-    </a>
-    {% endfor %}
-
+    <p>Organisateur:</p><a href="{{ path("app_profil_details",  {'id': sortie.organisateur.id }) }}"><span> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }} </span></a>
+    <span>{{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat }})</span>
+    <span>Durée : {{ sortie.duree|date("H:i") }}</span>
+    <span>RDV : {{ sortie.lieu.nom }}</span>
+    <span>{{ sortie.lieu.rue }}<br>
+        {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</span><br>
+    <span>{{ sortie.infosSortie }}</span>
+    <span>Inscription jusqu'au {{ sortie.dateLimiteInscription|date("d/m/Y - H:i") }}</span>
+    <span>Nombre de place : {{ sortie.nbInscriptionMax }}</span>
+    <p>Participants :</p>
+    <div class="participants">
+        {% for p in sortie.participant %}
+            <a href="{{ path('app_profil_details', {'id': p.id }) }}" class="badge"
+                data-info="{{ p.nom }} - {{ p.email }}">
+                {{ p.nom }}
+            </a>
+        {% endfor %}
+    </div>
     {% if is_granted('IS_AUTHENTICATED') %}
-        <li><a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
+       <a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
         {% if not isRegistered %}
 
-        S'inscrire à l'évènement
+        <button>S'inscrire à l'évènement</button>
 
         {% else %}
-        Se déinscrire de l'évènement
+                <button>Se déinscrire de l'évènement</button>
         {% endif %}
 
-        </a></li>
+        </a>
     {% endif %}
 
 

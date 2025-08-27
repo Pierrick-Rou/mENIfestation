@@ -8,10 +8,12 @@
         <span>Adresse mail : {{ participant.email }}</span>
         <span>Téléphone : {{ participant.telephone }}</span>
     </div>
+    {% if app.user.id == participant.id %}
     <div class="participant-actions">
         <a href="{{ path('app_profil_delete', {'id': participant.id}) }}">Supprimer mon profil</a>
         <a href="{{ path('app_profil_update', {'id': participant.id}) }}">Modifier mon profil</a>
     </div>
+    {%  endif %}
 </div>
 
 
