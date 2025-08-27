@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\EtatRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,20 +18,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/sortie', name: 'app_sortie')]
+#[Route('/sortie', name: 'app_sortie_')]
 final class SortieController extends AbstractController
 {
 
-    #[Route('', name: '_home')]
+    #[Route('', name: 'home')]
     public function index(Request $request, SortieRepository $sortieRepository, SiteRepository $sR): Response
     {
-        // Récupère l'id du site choisi depuis l'URL : ?site=3
         $siteId = $request->query->get('site');
 
-        // Récupère tous les sites pour remplir le select
         $sites = $sR->findAll();
 
-        // Si un site est choisi, on filtre les sorties
         if ($siteId) {
             $sortieList = $sortieRepository->findBy(['site' => $siteId]);
         } else {
@@ -44,18 +42,71 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/id/{id}', name: 'id', requirements: ['id' => '\d+'])]
-    public function detail(SortieRepository $sortieRepository): Response
-
+    #[Route('/{id}', name: 'id', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function detail(int $id, SortieRepository $sortieRepository, Sortie $sortieEntity): Response
     {
-        $sortieList = $sortieRepository->findAll();
+        $user = $this->getUser();
+        $sortie = $sortieRepository->find($id);
 
-        return $this->render('sortie/index.html.twig', [
-            'sortieList' => $sortieList,
+        if (!$sortie) {
+            $this->addFlash('error', 'Sortie not found');
+        }
+
+        $isRegistered = false;
+        if ($user && $sortie) {
+            $isRegistered = $sortieEntity->getParticipant()->contains($user);
+        }
+
+        return $this->render('sortie/sortiePage.html.twig', [
+            'sortie' => $sortie,
+            'isRegistered' => $isRegistered
         ]);
     }
 
-    #[Route('/create', name: '_create', methods: ['GET','POST'])]
+    #[Route('/{id}/inscription', name: 'inscription', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function inscription(int $id,
+                                SortieRepository $sortieRepository,
+                                ParticipantRepository $participantRepository,
+                                Sortie $sortieEntity,
+                                EntityManagerInterface $em): Response
+    {
+
+        $user = $this->getUser();
+        $sortie = $sortieRepository->find($id);
+
+        if (!$sortie) {
+            $this->addFlash('error', 'Sortie not found');
+        }
+
+        $isRegistered = false;
+        if ($user && $sortie) {
+            $isRegistered = $sortieEntity->getParticipant()->contains($user);
+        }
+
+        $participant = $participantRepository->find($user->getId());
+        if (!$isRegistered) {
+            $sortie->addParticipant($participant);
+
+
+            $em->persist($sortie);
+            $em->flush();
+            $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+        } else if ($isRegistered) {
+            $sortie->removeParticipant($participant);
+
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success', 'Vous vous êtes désinscrit de l\'évènement');
+        }
+
+
+
+        return $this->redirectToRoute('app_sortie_id', ['id' => $id]);
+    }
+
+
+    #[Route('/create', name: 'create', methods: ['GET','POST'])]
     public function create(EtatRepository $er): Response
     {
         $sortie = new Sortie();
@@ -65,8 +116,8 @@ final class SortieController extends AbstractController
             "sortieForm" => $sortieForm
         ]);
     }
-    #[Route('/validForm', name: '_validForm', methods: ['POST'])]
-    public function validForm(Request $request, EntityManagerInterface $entityManager, EtatRepository $eR, Security $security ): Response
+    #[Route('/validForm', name: 'validForm', methods: ['POST'])]
+    public function validForm(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
 

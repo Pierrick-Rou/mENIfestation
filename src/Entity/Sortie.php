@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Etat;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -157,6 +156,7 @@ class Sortie
     {
         if (!$this->participant->contains($participant)) {
             $this->participant->add($participant);
+            $participant->addSortie($this);
         }
 
         return $this;
@@ -164,7 +164,9 @@ class Sortie
 
     public function removeParticipant(Participant $participant): static
     {
-        $this->participant->removeElement($participant);
+        if ($this->participant->removeElement($participant)) {
+            $participant->removeSortie($this);
+        };
 
         return $this;
     }
