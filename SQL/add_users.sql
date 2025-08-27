@@ -11,10 +11,12 @@ INSERT INTO Ville (nom,code_Postal) VALUES
     ('Lille', '59000');
 
 
-INSERT INTO SITE (nom) VALUES
-    ('ENI-Saint-Herblain'),
-    ('ENI-Chartres'),
-    ('ENI_LRSY');
+INSERT INTO site (id, nom) VALUES
+    (1, 'CGT'),
+    (2, 'CFDT'),
+    (3, 'FO'),
+    (4, 'Solidaires'),
+    (5, 'FSU');
 
 
 
@@ -40,13 +42,13 @@ INSERT INTO lieu (nom, rue, latitude, longitude, ville_id) VALUES
 INSERT INTO sortie (id, nom, date_heure_debut, duree, date_limite_inscription, nb_inscription_max, infos_sortie, organisateur_id, lieu_id, site_id, etat) VALUES
     (1, 'Manifestation Nationale CGT', '2025-09-15 14:00:00', '02:00:00', '2025-09-10 23:59:59', 100, 'Manifestation contre la réforme des retraites', 1, 1, 1, 'ouverte'),
     (2, 'Marche Solidaire CFDT', '2025-10-01 10:00:00', '03:00:00', '2025-09-25 23:59:59', 80, 'Marche en soutien aux travailleurs précaires', 2, 2, 2, 'en cours'),
-    (3, 'Rassemblement FO', '2025-08-25 17:00:00', '01:30:00', '2025-08-20 23:59:59', 60, 'Rassemblement pour la défense des droits syndicaux', 3, 4, 3, 'terminée'),
-    (4, 'Action Solidaires Éducation', '2025-09-20 09:00:00', '04:00:00', '2025-09-15 23:59:59', 70, 'Blocage symbolique des rectorats', 4, 5, 4, 'crée'),
-    (5, 'Grève Générale FSU', '2025-10-05 08:00:00', '08:00:00', '2025-10-01 23:59:59', 200, 'Grève nationale dans les établissements scolaires', 5, 6, 5, 'cloturée'),
+    (3, 'Rassemblement FO', '2025-08-25 17:00:00', '01:30:00', '2025-08-20 23:59:59', 60, 'Rassemblement pour la défense des droits syndicaux', 1, 4, 3, 'terminée'),
+    (4, 'Action Solidaires Éducation', '2025-09-20 09:00:00', '04:00:00', '2025-09-15 23:59:59', 70, 'Blocage symbolique des rectorats', 2, 5, 4, 'créée'),
+    (5, 'Grève Générale FSU', '2025-10-05 08:00:00', '08:00:00', '2025-10-01 23:59:59', 200, 'Grève nationale dans les établissements scolaires', 2, 6, 5, 'cloturée'),
     (6, 'Manifestation intersyndicale', '2025-09-01 15:00:00', '02:00:00', '2025-08-28 23:59:59', 150, 'Manifestation rassemblant CGT, CFDT et FO', 1, 8, 1, 'annulée'),
-    (7, 'Rassemblement pour la paix', '2025-09-10 14:00:00', '03:00:00', '2025-09-05 23:59:59', 120, 'Rassemblement intersyndical pour la paix dans le monde.', 6, 1, 1, 'ouverte'),
+    (7, 'Rassemblement pour la paix', '2025-09-10 14:00:00', '03:00:00', '2025-09-05 23:59:59', 120, 'Rassemblement intersyndical pour la paix dans le monde.', 1, 1, 1, 'ouverte'),
     (8, 'Débat public sur les retraites', '2025-08-28 18:00:00', '02:30:00', '2025-08-25 23:59:59', 50, 'Débat ouvert aux citoyens sur la réforme des retraites.', 2, 9, 2, 'cloturée'),
-    (9, 'Opération "Ville morte"', '2025-09-03 06:00:00', '06:00:00', '2025-08-30 23:59:59', 200, 'Blocage des axes routiers pour protester contre la précarité.', 3, 7, 3, 'annulée'),
-    (10, 'AG intersyndicale enseignants', '2025-09-05 17:30:00', '02:00:00', '2025-09-01 23:59:59', 100, 'Assemblée Générale pour discuter des revendications enseignants.', 5, 6, 5, 'créée'),
-    (11, 'Marche des soignants', '2025-08-26 09:00:00', '04:00:00', '2025-08-22 23:59:59', 150, 'Marche de soutien aux personnels soignants.', 4, 3, 4, 'terminée'),
-    (12, 'Distribution de tracts', '2025-08-27 08:30:00', '01:00:00', '2025-08-26 23:00:00', 30, 'Action symbolique dans les gares.', 7, 10, 2, 'en cours');
+    (9, 'Opération "Ville morte"', '2025-09-03 06:00:00', '06:00:00', '2025-08-30 23:59:59', 200, 'Blocage des axes routiers pour protester contre la précarité.', 1, 7, 3, 'annulée'),
+    (10, 'AG intersyndicale enseignants', '2025-09-05 17:30:00', '02:00:00', '2025-09-01 23:59:59', 100, 'Assemblée Générale pour discuter des revendications enseignants.', 1, 6, 5, 'créée'),
+    (11, 'Marche des soignants', '2025-08-26 09:00:00', '04:00:00', '2025-08-22 23:59:59', 150, 'Marche de soutien aux personnels soignants.', 2, 3, 4, 'terminée'),
+    (12, 'Distribution de tracts', '2025-08-27 08:30:00', '01:00:00', '2025-08-26 23:00:00', 30, 'Action symbolique dans les gares.', 1, 10, 2, 'en cours');
