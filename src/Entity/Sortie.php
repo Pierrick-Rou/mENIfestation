@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-
-use App\Class\Etat;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -65,7 +63,6 @@ class Sortie
 
     public function __construct()
     {
-        $this->Site = new ArrayCollection();
         $this->participant = new ArrayCollection();
     }
 
