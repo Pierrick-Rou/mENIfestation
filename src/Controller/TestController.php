@@ -26,13 +26,7 @@ final class TestController extends AbstractController
         ]);
     }
 
-    #[Route('/admin', name: 'app_admin')]
-    public function admin(): Response
-    {
-        return $this->render('test/index_admin.html.twig', [
-            'controller_name' => 'TestController',
-        ]);
-    }
+
 
     #[Route('/profil', name: 'app_profil')]
     public function profil(): Response
@@ -42,5 +36,24 @@ final class TestController extends AbstractController
         ]);
     }
 
+
+    #[Route('/calendrier', name: 'app_cal')]
+    public function calendrier(): Response
+    {
+        $dateDuJour=new \DateTime();
+
+        $dateDuJour =  new \DateTime();
+        $mois=$dateDuJour->format('m');
+
+        $joursDansLeMois = $dateDuJour->format('t');
+        $moisArr=range(1,$joursDansLeMois);
+
+
+
+//        dd($month);
+
+        return $this->render('test/calendrier.html.twig', ['moisArr'=>$moisArr,'dateDuJour'=>$dateDuJour, 'nbJours'=>$joursDansLeMois, 'mois'=>$mois
+        ]);
+    }
 
 }
