@@ -7,7 +7,7 @@
     <div class="participant-info">
         <span>Adresse mail : {{ participant.email }}</span>
         <span>Téléphone : {{ participant.telephone }}</span>
-        <img src="{{ asset('/uploads' ~ participant.imageProfil) }}" width="250px" alt="Photo de profil de {{ participant.nom }}" loading="lazy">
+        <img src="{{ asset('uploads/' ~ participant.imageProfil) }}" width="250px" alt="Photo de profil de {{ participant.nom }}" loading="lazy">
     </div>
     <div class="participant-actions">
         <a href="{{ path('app_profil_delete', {'id': participant.id}) }}">Supprimer mon profil</a>
