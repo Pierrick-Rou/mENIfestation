@@ -3,18 +3,22 @@
 {% block title %}Hello AdminController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Téléphone</th>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    </tr>
+    {% for participant in listeParticipants %}
+        <tr>
+            <td>{{participant.id }}</td>
+            <td>{{participant.prenom }}</td>
+            <td>{{participant.nom }}</td>
+            <td>{{participant.telephone }}</td>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>D:/Projets/mENIfestation/src/Controller/AdminController.php</code></li>
-        <li>Your template at <code>D:/Projets/mENIfestation/templates/admin/index.html.twig</code></li>
-    </ul>
-</div>
+        </tr>
+    {%  endfor %}
+</table>
 {% endblock %}
