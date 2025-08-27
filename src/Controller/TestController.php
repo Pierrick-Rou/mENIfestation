@@ -26,13 +26,7 @@ final class TestController extends AbstractController
         ]);
     }
 
-    #[Route('/admin', name: 'app_admin')]
-    public function admin(): Response
-    {
-        return $this->render('test/index_admin.html.twig', [
-            'controller_name' => 'TestController',
-        ]);
-    }
+
 
     #[Route('/profil', name: 'app_profil')]
     public function profil(): Response
