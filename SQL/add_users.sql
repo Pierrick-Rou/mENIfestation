@@ -1,8 +1,10 @@
-INSERT INTO Ville (nom,codePostal) VALUES ('Saint-Herblain','44800'),
+INSERT INTO Ville (nom,code_Postal) VALUES ('Saint-Herblain','44800'),
                                           ('Nantes','44100'),
                                           ('Chartres De Bretagne', '35131'),
                                           ('La Roche Sur Yon','85000');
-INSERT INTO SITE (nom) VALUES ('ENI-Saint-Herblain'),('ENI-Chartres'),('ENI_LRSY')
+INSERT INTO SITE (nom) VALUES ('ENI-Saint-Herblain'),('ENI-Chartres'),('ENI_LRSY');
+
+INSERT INTO ETAT (libelle) VALUES ('Créée'), ('Ouverte'),('Clôturée'),('Activité en cours'),('Passée'),('Annulée');
 
 
 INSERT INTO participant (email,site_id,roles,password,nom,prenom,telephone,administrateur,actif) VALUES

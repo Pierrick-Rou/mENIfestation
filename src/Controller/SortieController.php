@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\EtatRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\SortieRepository;
@@ -41,9 +42,10 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/create', name: '_create', methods: ['GET','POST'])]
-    public function create(): Response
+    public function create(EtatRepository $er): Response
     {
         $sortie = new Sortie();
+        $sortie->setEtat($er->find(1));
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         return $this->render("sortie/sortieForm.html.twig", [
             "sortieForm" => $sortieForm
