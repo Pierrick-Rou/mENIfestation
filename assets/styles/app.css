@@ -84,6 +84,9 @@ footer {
     background-image: linear-gradient( 111.6deg,  rgba(114,167,232,1) 9.4%, rgba(253,129,82,1) 43.9%, rgba(253,129,82,1) 54.8%, rgba(249,202,86,1) 86.3% );
     padding: 1em;
     border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
 }
 
@@ -202,6 +205,7 @@ footer {
     padding: 5px;
 }
 
+
 table {
     border-collapse: collapse;
 }
@@ -235,4 +239,47 @@ tr:nth-child(even) {
     background-color: #cfa558;
 }
 
+
+.participants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* espace entre les badges */
+}
+
+.participants .badge {
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #e0f0ff;   /* bleu clair */
+    color: #004080;              /* bleu foncé */
+    border-radius: 20px;         /* forme "pilule" */
+    text-decoration: none;       /* enlève le soulignement */
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+.participants .badge::after {
+    content: attr(data-info);
+    position: absolute;
+    bottom: 120%; /* au-dessus du badge */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 1000;
+}
+.participants .badge:hover {
+    background-color: #cce5ff;
+    color: #00264d;
+}
+.participants .badge:hover::after {
+    opacity: 1;
+}
 
