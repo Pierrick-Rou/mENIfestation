@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page Administrateur{% endblock %}
+
+{% block body %}
+    <div>
+        <h2>Liste des Utilisateurs</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Téléphone</th>
+
+        </tr>
+        {% for participant in listeParticipants %}
+            <tr>
+                <td>{{participant.id }}</td>
+                <td>{{participant.prenom }}</td>
+                <td>{{participant.nom }}</td>
+                <td>{{participant.telephone }}</td>
+
+            </tr>
+        {%  endfor %}
+    </table>
+    </div>
+{% endblock %}

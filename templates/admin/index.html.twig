@@ -1,24 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Page Administrateur{% endblock %}
 
 {% block body %}
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Prénom</th>
-        <th>Nom</th>
-        <th>Téléphone</th>
-
-    </tr>
-    {% for participant in listeParticipants %}
-        <tr>
-            <td>{{participant.id }}</td>
-            <td>{{participant.prenom }}</td>
-            <td>{{participant.nom }}</td>
-            <td>{{participant.telephone }}</td>
-
-        </tr>
-    {%  endfor %}
-</table>
+    <div class="admin-link">
+    <a href="{{ path('app_admin_users') }}">Gestion des Utilisateurs</a>
+    </div>
+    <div class="admin-link">
+    <a href="{{ path('app_admin_sites') }}">Gestion des Sites</a>
+    </div>
+    <div class="admin-link">
+    <a href="{{ path('app_admin_lieux') }}">Gestion des Lieux</a>
+    </div>
 {% endblock %}
