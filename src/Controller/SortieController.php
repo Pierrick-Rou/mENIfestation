@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Sortie;
+use App\Enum\EtatSortie;
 use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
@@ -119,14 +120,13 @@ final class SortieController extends AbstractController
     public function create(EtatRepository $er): Response
     {
         $sortie = new Sortie();
-        $sortie->setEtat($er->find(1));
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         return $this->render("sortie/sortieForm.html.twig", [
             "sortieForm" => $sortieForm
         ]);
     }
     #[Route('/validForm', name: 'validForm', methods: ['POST'])]
-    public function validForm(Request $request, EntityManagerInterface $entityManager): Response
+    public function validForm(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $sortie = new Sortie();
 
@@ -144,7 +144,7 @@ final class SortieController extends AbstractController
             $userSite = $user->getSite();
             $sortie->setOrganisateur($user);
             $sortie->setSite($userSite);
-            $etat = $eR->find(1);
+            $etat = EtatSortie::CREEE;
             $sortie->setEtat($etat);
 
 

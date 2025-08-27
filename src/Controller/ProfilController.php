@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\EditProfilType;
 use App\Form\RegistrationType;
+use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use App\Entity\Participant;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route('/profil', name : 'app_profil')]
@@ -34,6 +36,20 @@ final class ProfilController extends AbstractController
         $em->flush();
 
         $this->addFlash('success','le profil à été supprimé ');
+        return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/ban/{id}', name: '_ban', requirements: ['id' => '\d+'])]
+    #[ISGranted('ROLE_ADMIN')]
+    public function ban(EntityManagerInterface $em,ParticipantRepository $pr, Request $request): Response
+    {
+        $participant=$pr->findOneBy(['id'=>$request->get('id')]);
+        $participant->setInactif();
+//        dd($participant);
+        $em->persist($participant);
+        $em->flush();
+
+        $this->addFlash('success','le profil à été banni ');
         return $this->redirectToRoute('app_home');
     }
 
