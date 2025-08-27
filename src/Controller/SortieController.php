@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\EtatRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,13 +24,10 @@ final class SortieController extends AbstractController
     #[Route('', name: 'home')]
     public function index(Request $request, SortieRepository $sortieRepository, SiteRepository $sR): Response
     {
-        // Récupère l'id du site choisi depuis l'URL : ?site=3
         $siteId = $request->query->get('site');
 
-        // Récupère tous les sites pour remplir le select
         $sites = $sR->findAll();
 
-        // Si un site est choisi, on filtre les sorties
         if ($siteId) {
             $sortieList = $sortieRepository->findBy(['site' => $siteId]);
         } else {
@@ -38,20 +36,72 @@ final class SortieController extends AbstractController
 
         return $this->render('sortie/index.html.twig', [
             'sortieList' => $sortieList,
+            'sites' => $sites,
+            'siteId' => $siteId,
         ]);
     }
 
-    #[Route('/id/{id}', name: 'id', requirements: ['id' => '\d+'])]
-    public function detail(int $id, SortieRepository $sortieRepository): Response
+    #[Route('/{id}', name: 'id', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function detail(int $id, SortieRepository $sortieRepository, Sortie $sortieEntity): Response
     {
+        $user = $this->getUser();
         $sortie = $sortieRepository->find($id);
 
         if (!$sortie) {
             $this->addFlash('error', 'Sortie not found');
         }
+
+        $isRegistered = false;
+        if ($user && $sortie) {
+            $isRegistered = $sortieEntity->getParticipant()->contains($user);
+        }
+
         return $this->render('sortie/sortiePage.html.twig', [
-            'sortie' => $sortie
+            'sortie' => $sortie,
+            'isRegistered' => $isRegistered
         ]);
+    }
+
+    #[Route('/{id}/inscription', name: 'inscription', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function inscription(int $id,
+                                SortieRepository $sortieRepository,
+                                ParticipantRepository $participantRepository,
+                                Sortie $sortieEntity,
+                                EntityManagerInterface $em): Response
+    {
+
+        $user = $this->getUser();
+        $sortie = $sortieRepository->find($id);
+
+        if (!$sortie) {
+            $this->addFlash('error', 'Sortie not found');
+        }
+
+        $isRegistered = false;
+        if ($user && $sortie) {
+            $isRegistered = $sortieEntity->getParticipant()->contains($user);
+        }
+
+        $participant = $participantRepository->find($user->getId());
+        if (!$isRegistered) {
+            $sortie->addParticipant($participant);
+
+
+            $em->persist($sortie);
+            $em->flush();
+            $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+        } else if ($isRegistered) {
+            $sortie->removeParticipant($participant);
+
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success', 'Vous vous êtes désinscrit de l\'évènement');
+        }
+
+
+
+        return $this->redirectToRoute('app_sortie_id', ['id' => $id]);
     }
 
 
