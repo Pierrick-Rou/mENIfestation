@@ -35,7 +35,7 @@
                     <td>{{ sortie.dateLimiteInscription|date("H:i d/m/Y") }} </td>
                     <td>{{ sortie.nbInscriptionMax }}</td>
                     <td>{{ sortie.infosSortie }}</td>
-                    <td>{{ sortie.etat }}</td>
+                    <td>{{ sortie.etat.value }}</td>
                 </tr>
             {% endfor %}
         </table>

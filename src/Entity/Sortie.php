@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\EtatSortie;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -34,6 +35,11 @@ class Sortie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $infosSortie = null;
 
+    #[ORM\Column(type: 'string', enumType: EtatSortie::class)]
+    private EtatSortie $etat;
+
+
+
     /**
      * @var Collection<int, Participant>
      */
@@ -55,10 +61,6 @@ class Sortie
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Site $site = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Etat $etat = null;
 
     public function __construct()
     {
@@ -143,6 +145,16 @@ class Sortie
         return $this;
     }
 
+    public function getEtat(): EtatSortie
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(EtatSortie $etat): void
+    {
+        $this->etat = $etat;
+    }
+
 
     /**
      * @return Collection<int, Participant>
@@ -185,7 +197,6 @@ class Sortie
 
 
 
-
     public function getLieu(): ?Lieu
     {
         return $this->lieu;
@@ -210,15 +221,4 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?Etat
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(?Etat $etat): static
-    {
-        $this->etat = $etat;
-
-        return $this;
-    }
 }

@@ -5,7 +5,7 @@
 <div class="form participant-info">
     <h2>{{ sortie.nom }}</h2>
     <p>Organisateur:</p><a href="{{ path("app_profil_details",  {'id': sortie.organisateur.id }) }}"><span> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }} </span></a>
-    <span>{{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat }})</span>
+    <span>{{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat.value }})</span>
     <span>Durée : {{ sortie.duree|date("H:i") }}</span>
     <span>RDV : {{ sortie.lieu.nom }}</span>
     <span>{{ sortie.lieu.rue }}<br>
