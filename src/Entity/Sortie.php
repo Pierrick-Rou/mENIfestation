@@ -36,8 +36,8 @@ class Sortie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $infosSortie = null;
 
-    #[ORM\Column(enumType: Etat::class)]
-    private Etat $etat = Etat::CREATED;
+    #[ORM\Column]
+    private ?string $etat;
 
     /**
      * @var Collection<int, Participant>
