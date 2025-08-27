@@ -58,6 +58,15 @@ final class SortieController extends AbstractController
             $isRegistered = $sortieEntity->getParticipant()->contains($user);
         }
 
+//        $now = new \DateTime('now');
+//        switch ($now){
+//            case $now->format('Y-m-d') === $sortie->getDateHeureDebut()->format('Y-m-d'):
+//
+//        }
+
+
+
+
         return $this->render('sortie/sortiePage.html.twig', [
             'sortie' => $sortie,
             'isRegistered' => $isRegistered
