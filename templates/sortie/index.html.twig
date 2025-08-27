@@ -6,39 +6,43 @@
     {% if sortieList is empty %}
         <p>Pas de sortie</p>
     {% else %}
-        <form method="get" action="{{ path('app_sortie_home') }}">
-            <label for="site">Filtrer par site :</label>
-            <select name="site" id="site" onchange="this.form.submit()">
-                <option value="">-- Tous les sites --</option>
-                {% for site in sites %}
-                    <option value="{{ site.id }}" {% if siteId == site.id %}selected{% endif %}>
-                        {{ site.nom }}
-                    </option>
-                {% endfor %}
-            </select>
-        </form>
-        <table style="white-space: nowrap;">
-            <tr>
-                <th>Nom</th>
-                <th>Date</th>
-                <th>Duree</th>
-                <th>Limite inscription</th>
-                <th>Max participant</th>
-                <th>info</th>
-                <th>etat</th>
-            </tr>
-            {% for sortie in sortieList %}
-                <tr style="cursor: pointer" onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
-                    <td>{{ sortie.nom }}</td>
-                    <td>{{ sortie.dateHeureDebut|date("H:i d/m/Y") }} </td>
-                    <td>{{ sortie.duree|date("H:i") }} </td>
-                    <td>{{ sortie.dateLimiteInscription|date("H:i d/m/Y") }} </td>
-                    <td>{{ sortie.nbInscriptionMax }}</td>
-                    <td>{{ sortie.infosSortie }}</td>
-                    <td>{{ sortie.etat }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+        <div class="table-container">
+            <div class="filter-bar">
+                <form method="get" action="{{ path('app_sortie_home') }}">
+                    <label for="site">Filtrer par site :</label>
+                    <select name="site" id="site" onchange="this.form.submit()">
+                        <option value="">-- Tous les sites --</option>
+                        {% for site in sites %}
+                            <option value="{{ site.id }}" {% if siteId == site.id %}selected{% endif %}>
+                                {{ site.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
 
+            <table>
+                <tr>
+                    <th>Nom</th>
+                    <th>Date</th>
+                    <th>Durée</th>
+                    <th>Limite inscription</th>
+                    <th>Max participant</th>
+                    <th>Info</th>
+                    <th>État</th>
+                </tr>
+                {% for sortie in sortieList %}
+                    <tr onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
+                        <td>{{ sortie.nom }}</td>
+                        <td>{{ sortie.dateHeureDebut|date("H:i d/m/Y") }}</td>
+                        <td>{{ sortie.duree|date("H:i") }}</td>
+                        <td>{{ sortie.dateLimiteInscription|date("H:i d/m/Y") }}</td>
+                        <td>{{ sortie.nbInscriptionMax }}</td>
+                        <td>{{ sortie.infosSortie }}</td>
+                        <td>{{ sortie.etat }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     {% endif %}
 {% endblock %}
