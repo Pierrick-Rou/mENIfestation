@@ -14,13 +14,22 @@
     <p>Nombre de place : {{ sortie.nbInscriptionMax }}</p>
 
     {% if is_granted('IS_AUTHENTICATED') %}
-        <li><a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
-        {% if not isRegistered %}
-        S'inscrire à l'évènement
+
+    {% set now = 'now'|date %}
+
+    {% if now > sortie.dateLimiteInscription|date %}
+        <li>Date limite d'inscription dépassée</li>
         {% else %}
-        Se déinscrire de l'évènement
-        {% endif %}
+        <li><a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
+
+        {% if not isRegistered %}
+            S'inscrire à l'évènement
+            {% else %}
+            Se déinscrire de l'évènement
+            {% endif %}
+
         </a></li>
+            {% endif %}
     {% endif %}
 
     </div>
