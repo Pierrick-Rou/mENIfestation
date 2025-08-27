@@ -54,7 +54,6 @@ class Sortie
 
     public function __construct()
     {
-        $this->Site = new ArrayCollection();
         $this->participant = new ArrayCollection();
     }
 
@@ -72,9 +71,6 @@ class Sortie
     {
         return $this->id;
     }
-
-
-
 
     public function getNom(): ?string
     {
