@@ -204,6 +204,42 @@ footer {
     border-radius: 5px;
     padding: 5px;
 }
+
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    background-color: rgba(253, 162, 125, 0.24);
+}
+
+tr {
+    border: 1px solid black;
+}
+
+tr:nth-child(even) {
+    border-radius: 5px;
+}
+
+.admin-link > a:link, a:visited {
+    background-color: rgb(45, 127, 239);
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+    margin: 15px;
+}
+
+.admin-link > a:hover, a:active {
+    background-color: #cfa558;
+}
+
+
 .participants {
     display: flex;
     flex-wrap: wrap;
@@ -246,3 +282,4 @@ footer {
 .participants .badge:hover::after {
     opacity: 1;
 }
+
