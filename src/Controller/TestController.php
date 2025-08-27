@@ -28,13 +28,6 @@ final class TestController extends AbstractController
 
 
 
-    #[Route('/profil', name: 'app_profil')]
-    public function profil(): Response
-    {
-        return $this->render('test/index_profil.html.twig', [
-            'controller_name' => 'TestController',
-        ]);
-    }
 
 
     #[Route('/calendrier', name: 'app_cal')]

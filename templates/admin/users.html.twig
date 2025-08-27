@@ -11,6 +11,9 @@
             <th>Prénom</th>
             <th>Nom</th>
             <th>Téléphone</th>
+            <td>Détails</td>
+            <td>Bannir</td>
+            <td>Supprimer</td>
 
         </tr>
         {% for participant in listeParticipants %}
@@ -19,6 +22,11 @@
                 <td>{{participant.prenom }}</td>
                 <td>{{participant.nom }}</td>
                 <td>{{participant.telephone }}</td>
+                <td><a href="{{ path('app_profil_details', {id: participant.id })}}">Détails</a></td>
+                <td><a href="{{ path('app_profil_details', {id: participant.id })}}">Bannir</a></td>
+                <td><a href="{{ path('app_profil_delete', {id: participant.id })}}">Supprimer</a></td>
+
+
 
             </tr>
         {%  endfor %}
