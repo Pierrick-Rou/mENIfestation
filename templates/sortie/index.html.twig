@@ -6,7 +6,17 @@
     {% if sortieList is empty %}
         <p>Pas de sortie</p>
     {% else %}
-
+        <form method="get" action="{{ path('app_sortie_home') }}">
+            <label for="site">Filtrer par site :</label>
+            <select name="site" id="site" onchange="this.form.submit()">
+                <option value="">-- Tous les sites --</option>
+                {% for site in sites %}
+                    <option value="{{ site.id }}" {% if siteId == site.id %}selected{% endif %}>
+                        {{ site.nom }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
         <table style="white-space: nowrap;">
             <tr>
                 <th>Nom</th>
