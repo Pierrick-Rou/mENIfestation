@@ -230,3 +230,7 @@ tr:nth-child(even) {
     border-radius: 5px;
     margin: 15px;
 }
+
+.admin-link > a:hover, a:active {
+    background-color: #cfa558;
+}
