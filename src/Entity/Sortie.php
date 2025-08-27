@@ -36,9 +36,6 @@ class Sortie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $infosSortie = null;
 
-    #[ORM\Column]
-    private ?string $etat;
-
     /**
      * @var Collection<int, Participant>
      */
@@ -52,28 +49,30 @@ class Sortie
 
 
 
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Lieu $Lieu = null;
+
+
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $Site = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Etat $etat = null;
+
     public function __construct()
     {
         $this->Site = new ArrayCollection();
         $this->participant = new ArrayCollection();
     }
 
-
-
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Lieu $Lieu = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Site $Site = null;
-
     public function getId(): ?int
     {
         return $this->id;
     }
-
-
 
 
     public function getNom(): ?string
@@ -148,17 +147,6 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?Etat
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(Etat $etat): static
-    {
-        $this->etat = $etat;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Participant>
@@ -229,6 +217,18 @@ class Sortie
     public function setSite(?Site $Site): static
     {
         $this->Site = $Site;
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?Etat $etat): static
+    {
+        $this->etat = $etat;
 
         return $this;
     }
