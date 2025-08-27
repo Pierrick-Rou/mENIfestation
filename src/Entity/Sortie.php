@@ -49,13 +49,13 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Lieu $Lieu = null;
+    private ?Lieu $lieu = null;
 
 
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Site $Site = null;
+    private ?Site $site = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
