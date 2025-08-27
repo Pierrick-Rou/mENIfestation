@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="form">
+    <h2> {{ participant.prenom }} {{ participant.nom }}</h2>
+    <div class="participant-info">
+        <span>Adresse mail : {{ participant.email }}</span>
+        <span>Téléphone : {{ participant.telephone }}</span>
+    </div>
+    <div class="participant-actions">
+        <a href="#">Supprimer mon profil</a>
+        <a href="#">Modifier mon profil</a>
+    </div>
+</div>
+
+
+
+{% endblock %}
