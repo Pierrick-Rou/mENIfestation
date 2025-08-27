@@ -19,8 +19,19 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SortieController extends AbstractController
 {
 
-    #[Route('/', name: '_home')]
+    #[Route('', name: '_home')]
     public function index(SortieRepository $sortieRepository): Response
+
+    {
+        $sortieList = $sortieRepository->findAll();
+
+        return $this->render('sortie/index.html.twig', [
+            'sortieList' => $sortieList,
+        ]);
+    }
+
+    #[Route('/id/{id}', name: 'id', requirements: ['id' => '\d+'])]
+    public function detail(SortieRepository $sortieRepository): Response
 
     {
         $sortieList = $sortieRepository->findAll();
