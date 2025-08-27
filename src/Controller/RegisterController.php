@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Entity\Site;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,8 @@ final class RegisterController extends AbstractController
     {
 
         $user = new Participant();
+
+
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
 

@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Participant;
+use App\Entity\Site;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -55,6 +57,12 @@ class RegistrationType extends AbstractType
                         'message' => 'Numéro de téléphone non valide'
                     ])
             ]])
+            ->add('site', EntityType::class, [
+                'class' => Site::class,          // ton entité
+                'choice_label' => 'nom',         // propriété à afficher dans le select
+                'placeholder' => 'Choisissez un site', // optionnel
+                'required' => true,
+            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passes doivent être identiques.',
