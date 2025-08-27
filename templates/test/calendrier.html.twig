@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+    <h1>Calendrier</h1>
+    <div class="calendar">
+        {% for day in moisArr %}
+            <div class="cal-day">
+                {{ day }}
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

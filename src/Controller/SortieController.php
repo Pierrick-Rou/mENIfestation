@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\SortieRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -129,6 +130,15 @@ final class SortieController extends AbstractController
         // 4. Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
             // 5. Enregistre en base de données
+            $user = $security->getUser();
+
+            $userSite = $user->getSite();
+            $sortie->setOrganisateur($user);
+            $sortie->setSite($userSite);
+            $etat = $eR->find(1);
+            $sortie->setEtat($etat);
+
+
             $entityManager->persist($sortie);
             $entityManager->flush();
 

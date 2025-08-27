@@ -9,8 +9,8 @@
         <span>Téléphone : {{ participant.telephone }}</span>
     </div>
     <div class="participant-actions">
-        <a href="#">Supprimer mon profil</a>
-        <a href="#">Modifier mon profil</a>
+        <a href="{{ path('app_profil_delete', {'id': participant.id}) }}">Supprimer mon profil</a>
+        <a href="{{ path('app_profil_update', {'id': participant.id}) }}">Modifier mon profil</a>
     </div>
 </div>
 

@@ -42,7 +42,7 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'organise')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Participant $organisateur = null;
+    private ?Participant $organisateur;
 
 
 
@@ -184,17 +184,7 @@ class Sortie
     }
 
 
-    public function getIdLieu(): ?Lieu
-    {
-        return $this->idLieu;
-    }
 
-    public function setIdLieu(?Lieu $idLieu): static
-    {
-        $this->idLieu = $idLieu;
-
-        return $this;
-    }
 
     public function getLieu(): ?Lieu
     {

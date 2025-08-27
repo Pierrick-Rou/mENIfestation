@@ -183,3 +183,21 @@ footer {
     background-color: #F9CA56FF;
 }
 
+.calendar {
+    background-color: white;
+    border: #1a1d20 1px solid;
+    display: grid;
+    min-height: 80vh;
+    min-width: 60vw;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 5px;
+    border-radius: 10px;
+    padding:10px;
+}
+
+.calendar > * {
+    border: #1a1d20 1px dashed;
+    border-radius: 5px;
+    padding: 5px;
+}
