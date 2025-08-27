@@ -2,10 +2,7 @@
 
 namespace App\Entity;
 
-
-
 use App\Entity\Etat;
-
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -50,17 +47,6 @@ class Sortie
 
 
 
-
-
-    public function __construct()
-    {
-        $this->participant = new ArrayCollection();
-    }
-
-
-
-
-
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Lieu $Lieu = null;
@@ -84,8 +70,6 @@ class Sortie
     {
         return $this->id;
     }
-
-
 
 
     public function getNom(): ?string
