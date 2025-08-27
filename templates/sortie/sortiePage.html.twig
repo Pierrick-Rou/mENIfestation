@@ -4,7 +4,7 @@
 
 <div>
     <h1>{{ sortie.nom }}</h1>
-    <p>{{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat }})</p>
+    <p>{{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat.value }})</p>
     <p>Durée : {{ sortie.duree|date("H:i") }}</p>
     <p>RDV : {{ sortie.lieu.nom }}</p>
     <p>{{ sortie.lieu.rue }}<br>
