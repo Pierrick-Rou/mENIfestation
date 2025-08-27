@@ -26,7 +26,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem ;
+    padding: 0.5rem ;
     box-shadow: 0px 12px 13px -6px rgba(0,0,0,0.89);
 }
 
@@ -51,10 +51,12 @@ body {
     color: white;
     text-decoration: none;
     font-weight: 500;
+    padding: 1em;
 }
 
 .navbar .nav-links a:hover {
     text-decoration: underline;
+    background-color:  rgba(114,167,232,1);
 }
 
 /* --- Main --- */
@@ -77,10 +79,12 @@ footer {
 
 .form{
     width: 40vw;
-    border: solid 0.2em black;
+    border: solid 0.2em  rgba(114,167,232,1);
     align-content: center;
     background-image: linear-gradient( 111.6deg,  rgba(114,167,232,1) 9.4%, rgba(253,129,82,1) 43.9%, rgba(253,129,82,1) 54.8%, rgba(249,202,86,1) 86.3% );
     padding: 1em;
+    border-radius: 1em;
+
 }
 
 
@@ -107,7 +111,7 @@ footer {
 
 /*CSS pour la card du detail de l'user*/
 .form button {
-    background-color: #4CAF50;
+    background-color:  rgba(114,167,232,1);
     color: white;
     padding: 12px 20px;
     border: none;
@@ -119,7 +123,7 @@ footer {
 }
 
 .form button:hover {
-    background-color: #45a049;
+    background-color: rgb(45, 127, 239);
 }
 
 /* Conteneur principal */
