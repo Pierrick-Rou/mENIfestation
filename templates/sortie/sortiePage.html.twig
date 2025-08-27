@@ -3,7 +3,8 @@
 {% block body %}
 
 <div>
-    <h1>{{ sortie.nom }}</h1>
+    <h2>{{ sortie.nom }}</h2>
+    <p>Organisateur:</p><a href="{{ path("app_profil_details",  {'id': sortie.organisateur.id }) }}"><p> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }} </p></a>
     <p>{{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat.value }})</p>
     <p>Durée : {{ sortie.duree|date("H:i") }}</p>
     <p>RDV : {{ sortie.lieu.nom }}</p>
@@ -12,16 +13,26 @@
     <p>{{ sortie.infosSortie }}</p>
     <p>Inscription jusqu'au {{ sortie.dateLimiteInscription|date("d/m/Y - H:i") }}</p>
     <p>Nombre de place : {{ sortie.nbInscriptionMax }}</p>
+    <p>Participants:</p>
+    {% for p in sortie.participant %}
+    <a href="{{ path("app_profil_details",  {'id': p.id }) }}">
+        <p>{{ p.nom }}</p>
+    </a>
+    {% endfor %}
 
     {% if is_granted('IS_AUTHENTICATED') %}
         <li><a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
         {% if not isRegistered %}
+
         S'inscrire à l'évènement
+
         {% else %}
         Se déinscrire de l'évènement
         {% endif %}
+
         </a></li>
     {% endif %}
+
 
     </div>
 
