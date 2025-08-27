@@ -201,3 +201,17 @@ footer {
     border-radius: 5px;
     padding: 5px;
 }
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(134, 255, 141, 0.13);
+    border: 1px solid black;
+}
