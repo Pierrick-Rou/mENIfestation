@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page Administrateur{% endblock %}
+
+{% block body %}
+
+    <div>
+        <h2>Liste des Lieux</h2>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>nom</th>
+                <th>rue</th>
+            </tr>
+            {% for lieu in listeLieux %}
+                <tr>
+                    <td>{{lieu.id }}</td>
+                    <td>{{lieu.nom }}</td>
+                    <td>{{lieu.rue }}</td>
+                </tr>
+            {%  endfor %}
+        </table>
+    </div>
+
+{% endblock %}

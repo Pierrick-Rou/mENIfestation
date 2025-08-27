@@ -16,6 +16,7 @@
 
             <li><a href="{{path('app_test')}}">Accueil</a></li>
 
+
             {% if is_granted('IS_AUTHENTICATED') %}
                 <li><a href="{{path('app_sortie_home')}}">Sorties</a></li>
                 <li><a href="{{path('app_logout')}}">Se déconnecter</a></li>
@@ -23,6 +24,9 @@
             {% else %}
                 <li><a href="{{path('app_login')}}">Se connecter</a></li>
                 <li><a href="{{path('app_register')}}">S'inscrire</a></li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{path('app_admin_index')}}">Administration</a></li>
             {% endif %}
 
 

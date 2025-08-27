@@ -219,6 +219,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function setInactif(): static
+    {
+        $this->actif = false;
+        return $this;
+    }
+
     /**
      * @return Collection<int, Sortie>
      */

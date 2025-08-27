@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page Administrateur{% endblock %}
+
+{% block body %}
+
+    <div>
+        <h2>Liste des Sites</h2>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+            </tr>
+            {% for site in listeSites %}
+                <tr>
+                    <td>{{site.id }}</td>
+                    <td>{{site.nom }}</td>
+                </tr>
+            {%  endfor %}
+        </table>
+    </div>
+
+{% endblock %}

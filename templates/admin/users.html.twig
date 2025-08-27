@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page Administrateur{% endblock %}
+
+{% block body %}
+    <div>
+        <h2>Liste des Utilisateurs</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Téléphone</th>
+            <td>Détails</td>
+            <td>Bannir</td>
+            <td>Supprimer</td>
+
+        </tr>
+        {% for participant in listeParticipants %}
+            <tr>
+                <td>{{participant.id }}</td>
+                <td>{{participant.prenom }}</td>
+                <td>{{participant.nom }}</td>
+                <td>{{participant.telephone }}</td>
+                <td><a href="{{ path('app_profil_details', {id: participant.id })}}">Détails</a></td>
+                <td><a class="admin-link danger" href="{{ path('app_profil_ban', {id: participant.id })}}">Bannir</a></td>
+                <td><a href="{{ path('app_profil_delete', {id: participant.id })}}">Supprimer</a></td>
+            </tr>
+        {%  endfor %}
+    </table>
+    </div>
+{% endblock %}
