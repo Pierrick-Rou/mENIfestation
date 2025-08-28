@@ -7,12 +7,14 @@ use App\Form\RegistrationType;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Entity\Participant;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 #[Route('/profil', name : 'app_profil')]
@@ -54,7 +56,7 @@ final class ProfilController extends AbstractController
     }
 
     #[Route('/update/{id}', name: '_update', requirements: ['id' => '\d+'])]
-    public function update(Participant $participant, Request $request, EntityManagerInterface $em): Response
+    public function update(Participant $participant, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
 
         $form = $this->createForm(EditProfilType::class, $participant);
@@ -62,7 +64,14 @@ final class ProfilController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('poster_file')->getData();
 
+            if ($file instanceof UploadedFile) {
+                $name = $slugger->slug($participant->getNom()).'-'. uniqid().'.'.$file->guessExtension();
+                $file->move('D:\mENIfestation\public\uploads', $name);
+                $participant->setImageProfil($name);
+
+            }
             $em->persist($participant);
             $em->flush();
 
