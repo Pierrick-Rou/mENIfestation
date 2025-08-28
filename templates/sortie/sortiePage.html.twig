@@ -21,7 +21,7 @@
         </span><br>
         <span>
             {{ sortie.infosSortie }}<br><br>
-            Inscription jusqu'au {{ sortie.dateLimiteInscription|date("d/m/Y - H:i") }}<br>
+            Inscription jusqu'au {{ sortie.dateLimiteInscription|date("d/m/Y à H:i") }}<br>
         Nombre de place : {{ sortie.nbInscriptionMax }}
         </span>
         <p>Participants : {{ nbParticipant }}</p>
@@ -35,18 +35,18 @@
         </div>
         {% if is_granted('IS_AUTHENTICATED') %}
 
-            {% if etat ==  constant('App\\Enum\\EtatSortie::OUVERTE') %}
+            {% if etat ==  constant('App\\Enum\\EtatSortie::OUVERTE') and placeRestante  %}
                 <a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
                     {% if not isRegistered %}
 
                         <button>S'inscrire à l'évènement</button>
 
                     {% else %}
-                        <button>Se déinscrire de l'évènement</button>
+                        <button>Se désinscrire de l'évènement</button>
                     {% endif %}
                 </a>
             {% else %}
-                <p>Vous ne pouvez pas vous inscrire à cet évènement</p>
+
             {% endif %}
 
 

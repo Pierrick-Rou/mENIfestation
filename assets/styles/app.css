@@ -301,7 +301,7 @@ table tr {
 .table-container {
     margin: 20px auto;
     width: 95%;
-    max-width: 1200px;
+    max-width: fit-content;
     font-family: Arial, sans-serif;
     border: 1px solid #ddd;
     border-radius: 10px;
