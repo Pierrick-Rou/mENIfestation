@@ -222,6 +222,9 @@ footer {
     font-weight: 500;
     transition: 0.2s;
 }
+.participants .badge .img{
+    max-width: 30%;
+}
 .participants .badge::after {
     content: attr(data-info);
     position: absolute;
@@ -300,7 +303,7 @@ table tr {
 
 .table-container {
     margin: 20px auto;
-    width: 95%;
+    width: 100%;
     max-width: fit-content;
     font-family: Arial, sans-serif;
     border: 1px solid #ddd;
@@ -323,7 +326,12 @@ table tr {
     font-family: Arial, sans-serif;
     margin-top: 20px;
 }
-
+.infos-sortie {
+    max-width: 200px;       /* largeur max */
+    white-space: nowrap;    /* empêche le retour à la ligne */
+    overflow: hidden;       /* cache le texte qui dépasse */
+    text-overflow: ellipsis; /* ajoute "..." */
+}
 /* Label des filtres */
 .filters-bar label {
     font-weight: 600;

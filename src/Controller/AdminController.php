@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Participant;
+use App\Form\RegistrationType;
+use App\Form\UserFileType;
 use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -19,12 +24,30 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/utilisateurs', name: '_users')]
-    public function users(ParticipantRepository $pr, SiteRepository $sr, LieuRepository $lr,): Response
+    public function users(Request $request,ParticipantRepository $pr, SiteRepository $sr, LieuRepository $lr,): Response
     {
         $listeParticipants=$pr->findAll();
-        return $this->render('admin/users.html.twig',['listeParticipants'=>$listeParticipants]);
+
+//      $users[] = new Participant();
+        $form=$this->createForm(UserFileType::class);
+        $form->handleRequest($request);
+
+        return $this->render('admin/users.html.twig',['listeParticipants'=>$listeParticipants,'userfileType'=>$form]);
 
     }
+
+    #[Route('/utilisateurs/fichier', name: '_users_file', methods: ['GET'])]
+    public function usersfile(Request $request){
+        $users[] = new Participant();
+        return $this->render('admin/fileToUsers.html.twig');
+    }
+
+    #[Route('/utilisateurs/fichier/submit', name: '_users_file_submit', methods: ['POST'])]
+    public function usersfilepost(Request $request){
+        $users[] = new Participant();
+        return $this->render('admin/fileToUsers.html.twig');
+    }
+
 
     #[Route('/sites', name: '_sites')]
     public function sites(SiteRepository $sr): Response

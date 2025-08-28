@@ -3,13 +3,17 @@
 {% block title %}Page Administrateur{% endblock %}
 
 {% block body %}
+    <div class="form">
     <div class="admin-link">
-    <a href="{{ path('app_admin_users') }}">Gestion des Utilisateurs</a>
+    <a href="{{ path('app_admin_users') }}"><button>Gestion des Utilisateurs</button></a>
     </div>
     <div class="admin-link">
-    <a href="{{ path('app_admin_sites') }}">Gestion des Sites</a>
+    <a href="{{ path('app_admin_sites') }}"><button>Gestion des Sites</button></a>
     </div>
     <div class="admin-link">
-    <a href="{{ path('app_admin_lieux') }}">Gestion des Lieux</a>
+    <a href="{{ path('app_admin_lieux') }}"><button>Gestion des Lieux</button></a>
+    </div>
+    <div class="admin-link">
+        <a href="{{ path('app_admin_users_file') }}"><button>Ajouter des utilisateurs par fichier</button></a>
     </div>
 {% endblock %}

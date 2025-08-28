@@ -39,7 +39,7 @@
                     <td>{{ sortie.duree|date("H:i") }}</td>
                     <td>{{ sortie.dateLimiteInscription|date("d/m/y") }}</td>
                     <td>{{ sortie.nbInscriptionMax }}</td>
-                    <td>{{ sortie.infosSortie }}</td>
+                    <td  class="infos-sortie" title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
                     <td>{{ sortie.etat.value }}</td>
                     <td>
                         {% if app.user in sortie.participant %}
