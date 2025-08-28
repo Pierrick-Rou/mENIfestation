@@ -11,10 +11,11 @@
             </a>
         </p>
 
+
         <p>
             {{ sortie.dateHeureDebut|date('d/m/Y - H:i') }} ({{ sortie.etat.value }})<br>
             Durée : {{ sortie.duree|date('H:i') }}
-        </p>
+             </p>
         <p>
             RDV : {{ sortie.lieu.nom }}<br><br>
             {{ sortie.lieu.rue }}<br>
@@ -36,10 +37,16 @@
             {% endfor %}
         </div>
 
-        {% if is_granted('IS_AUTHENTICATED') %}
-            {% if app.user.id != sortie.organisateur.id %}
-                {% if etat == constant('App\\Enum\\EtatSortie::OUVERTE') %}
-                    {% if not isRegistered %}
+    </div>
+    {% if is_granted('IS_AUTHENTICATED') and app.user.id != sortie.organisateur.id%}
+
+        {% if sortie.etat.value === %}
+       <a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
+        {% if not isRegistered %}
+
+
+       
+
                         <a href="{{ path('app_sortie_inscription', {'id': sortie.id}) }}">
                             <button>S'inscrire à l'évènement</button>
                         </a>
