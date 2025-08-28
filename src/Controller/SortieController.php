@@ -33,7 +33,7 @@ final class SortieController extends AbstractController
         if ($siteId) {
             $sortieList = $sortieRepository->findBy(['site' => $siteId]);
         } else {
-            $sortieList = $sortieRepository->findAll();
+            $sortieList = $sortieRepository->findAllNotArchive();
         }
         foreach ($sortieList as $sortie) {
             //gestion des états des sorties
@@ -116,6 +116,7 @@ final class SortieController extends AbstractController
 
         $nbParticipant = $sortie->getParticipant()->count();
         $etat = $sortie->getEtat();
+        $placeRestante = $sortie->getNbInscriptionMax() - $nbParticipant;
 
 
         return $this->render('sortie/sortiePage.html.twig', [
@@ -123,6 +124,7 @@ final class SortieController extends AbstractController
             'isRegistered' => $isRegistered,
             'etat' => $etat,
             'nbParticipant' => $nbParticipant,
+            'placeRestante' => $placeRestante,
         ]);
     }
 
@@ -150,12 +152,17 @@ final class SortieController extends AbstractController
 
             $participant = $participantRepository->find($user->getId());
             if (!$isRegistered) {
-                $sortie->addParticipant($participant);
+                if ($sortie->getParticipant()->count() < $sortie->getNbInscriptionMax()) {
+                    $sortie->addParticipant($participant);
+
+                    $em->persist($sortie);
+                    $em->flush();
+                    $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+                } else {
+                    $this->addFlash('error', 'Nombre limite de participant atteint');
+                }
 
 
-                $em->persist($sortie);
-                $em->flush();
-                $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
             } else if ($isRegistered) {
                 $sortie->removeParticipant($participant);
 
