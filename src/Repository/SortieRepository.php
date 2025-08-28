@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use _PHPStan_781aefaf6\Nette\Utils\DateTime;
+use App\DTO\FiltrageSortieDTO;
+use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,9 +22,6 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findAllNotArchive(): array
     {
-
-
-
         return $this->createQueryBuilder('s')
             ->andWhere('s.dateHeureDebut > :date')
             ->setParameter('date', new \DateTime('-1 month'))
@@ -30,6 +30,55 @@ class SortieRepository extends ServiceEntityRepository
             ->getResult();
 
 
+    }
+
+    public function findFilteredEvents(FiltrageSortieDTO $filtreDTO, Participant $user): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.dateHeureDebut > :oneMonthAgo')
+            ->setParameter('oneMonthAgo', new \DateTime('-1 month'));
+
+        if ($filtreDTO->getDateDebut()) {
+            $qb->andWhere('s.dateHeureDebut >= :dateDebut')
+                ->setParameter('dateDebut', $filtreDTO->getDateDebut());
+        }
+
+        if ($filtreDTO->getNomSortie()) {
+            $qb->andWhere('s.nom LIKE :nom')
+                ->setParameter('nom', "%{$filtreDTO->getNomSortie()}%");
+        }
+
+        if ($filtreDTO->getDateFin()) {
+            $qb->andWhere('s.dateHeureDebut <= :dateFin')
+                ->setParameter('dateFin', $filtreDTO->getDateFin());
+        }
+
+        if ($filtreDTO->getSite()) {
+            $qb->andWhere('s.site = :site')
+                ->setParameter('site', $filtreDTO->getSite());
+        }
+        if ($filtreDTO->getOrganisateur()) {
+            $qb->andWhere('s.organisateur = :organisateur')
+                ->setParameter('organisateur', $user);
+        }
+
+        if ($filtreDTO->getInscrit() && !$filtreDTO->getNonInscrit()) {
+            $qb->leftJoin('s.participant', 'p')
+                ->andWhere(':participant MEMBER OF s.participant')
+                ->setParameter('participant', $user);
+        } elseif (!$filtreDTO->getInscrit() && $filtreDTO->getNonInscrit()) {
+            $qb->leftJoin('s.participant', 'p2')
+                ->andWhere(':participant NOT MEMBER OF s.participant')
+                ->setParameter('participant', $user);
+        }
+
+        if ($filtreDTO->getEtat()) {
+            $qb->andWhere('s.etat = :etat')
+                ->setParameter('etat', $filtreDTO->getEtat());
+        }
+
+        $qb->orderBy('s.dateHeureDebut', 'ASC');
+        return $qb->getQuery()->getResult();
     }
 
     //    /**

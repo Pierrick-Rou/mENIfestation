@@ -5,17 +5,20 @@
 {% block body %}
     <div class="table-container">
     <div class="filter-bar">
-        <form method="get" action="{{ path('app_sortie_home') }}">
-            <label for="site">Filtrer par site :</label>
-            <select name="site" id="site" onchange="this.form.submit()">
-                <option value="">-- Tous les sites --</option>
-                {% for site in sites %}
-                    <option value="{{ site.id }}" {% if siteId == site.id %}selected{% endif %}>
-                        {{ site.nom }}
-                    </option>
-                {% endfor %}
-            </select>
-        </form>
+{#        <form method="get" action="{{ path('app_sortie_home') }}">#}
+{#            <label for="site">Filtrer par site :</label>#}
+{#            <select name="site" id="site" onchange="this.form.submit()">#}
+{#                <option value="">-- Tous les sites --</option>#}
+{#                {% for site in sites %}#}
+{#                    <option value="{{ site.id }}" {% if siteId == site.id %}selected{% endif %}>#}
+{#                        {{ site.nom }}#}
+{#                    </option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+{#        </form>#}
+    <div class="form filter">
+        {{ form(filtreForm) }}
+    </div>
     </div>
     {% if sortieList is empty %}
         <p>Pas de sortie</p>
@@ -27,7 +30,7 @@
                 <th>Date</th>
                 <th>Durée</th>
                 <th>Limite inscription</th>
-                <th>Max participant</th>
+                <th>Participants</th>
                 <th>Info</th>
                 <th>État</th>
                 <th>Inscrit</th>
@@ -38,8 +41,8 @@
                     <td>{{ sortie.dateHeureDebut|date("H:i - d/m/y") }}</td>
                     <td>{{ sortie.duree|date("H:i") }}</td>
                     <td>{{ sortie.dateLimiteInscription|date("d/m/y") }}</td>
-                    <td>{{ sortie.nbInscriptionMax }}</td>
-                    <td  class="infos-sortie" title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
+                    <td>{{ sortie.participant|length }}/{{ sortie.nbInscriptionMax }}</td>
+                    <td class="infos-sortie" title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
                     <td>{{ sortie.etat.value }}</td>
                     <td>
                         {% if app.user in sortie.participant %}

@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 
+use App\DTO\FiltrageSortieDTO;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Enum\EtatSortie;
+use App\Form\FiltreSortieType;
+use App\Form\RegistrationType;
 use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
@@ -24,17 +28,21 @@ final class SortieController extends AbstractController
 {
 
     #[Route('', name: 'home')]
-    public function index(Request $request, SortieRepository $sortieRepository, SiteRepository $sR, EntityManagerInterface $em): Response
+    public function index(Request $request,
+                          SortieRepository $sortieRepository,
+                          SiteRepository $sR,
+                          EntityManagerInterface $em): Response
     {
-        $siteId = $request->query->get('site');
+        $filtrageSortieDTO = new FiltrageSortieDTO();
+        $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO);
+        $form->handleRequest($request);
 
-        $sites = $sR->findAll();
+        /* @var Participant $user*/
+        $user = $this->getUser();
 
-        if ($siteId) {
-            $sortieList = $sortieRepository->findBy(['site' => $siteId]);
-        } else {
-            $sortieList = $sortieRepository->findAllNotArchive();
-        }
+
+        $sortieList = $sortieRepository->findFilteredEvents($filtrageSortieDTO, $user);
+
         foreach ($sortieList as $sortie) {
             //gestion des états des sorties
 
@@ -67,8 +75,7 @@ final class SortieController extends AbstractController
 
         return $this->render('sortie/index.html.twig', [
             'sortieList' => $sortieList,
-            'sites' => $sites,
-            'siteId' => $siteId,
+            'filtreForm'=>$form->createView()
         ]);
     }
 
