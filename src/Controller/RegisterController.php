@@ -8,15 +8,17 @@ use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class RegisterController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $em): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $em,SluggerInterface $slugger): Response
     {
 
         $user = new Participant();
@@ -28,6 +30,16 @@ final class RegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('password')->getData();
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+
+
+            $file = $form->get('poster_file')->getData();
+
+            if ($file instanceof UploadedFile) {
+                    $name = $slugger->slug($user->getNom()).'-'. uniqid().'. '.$file->guessExtension();
+                    $file->move('public/uploads', $name);
+                    $user->setImageProfil($name);
+
+            }
             $em->persist($user);
             $em->flush();
 

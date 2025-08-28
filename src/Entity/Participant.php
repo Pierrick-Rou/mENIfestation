@@ -72,6 +72,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Site $Site = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageProfil = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -219,6 +222,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function setInactif(): static
+    {
+        $this->actif = false;
+        return $this;
+    }
+
     /**
      * @return Collection<int, Sortie>
      */
@@ -284,6 +293,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSite(?Site $Site): static
     {
         $this->Site = $Site;
+
+        return $this;
+    }
+
+    public function getImageProfil(): ?string
+    {
+        return $this->imageProfil;
+    }
+
+    public function setImageProfil(?string $imageProfil): static
+    {
+        $this->imageProfil = $imageProfil;
 
         return $this;
     }
