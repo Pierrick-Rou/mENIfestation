@@ -9,6 +9,13 @@
             <a href="{{ path("app_profil_details",  {'id': sortie.organisateur.id }) }}">
                  {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}
             </a>
+
+    </div>
+    {% if is_granted('IS_AUTHENTICATED') and app.user.id != sortie.organisateur.id%}
+
+       <a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
+        {% if not isRegistered %}
+
         </p>
         <span>
             {{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat.value }})<br>
@@ -50,7 +57,19 @@
             {% endif %}
 
 
+
         {% endif %}
+
+
+        </a>
+
+    {% endif %}
+    {% if app.user.id == sortie.organisateur.id  %}
+    <a href="{{ path('app_sortie_delete', {'id' : sortie.id}) }}">
+    <button>Supprimer sortie</button>
+    </a>
+    {% endif %}
+
 
 
     </div>
