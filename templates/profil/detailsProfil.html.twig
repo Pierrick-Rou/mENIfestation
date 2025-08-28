@@ -7,7 +7,9 @@
     <div class="participant-info">
         <span>Adresse mail : {{ participant.email }}</span>
         <span>Téléphone : {{ participant.telephone }}</span>
+        {% if participant.imageprofil !=null %}
         <img src="{{ asset('uploads/' ~ participant.imageProfil) }}" width="250px" alt="Photo de profil de {{ participant.nom }}" loading="lazy">
+        {% endif %}
     </div>
     {% if app.user.id == participant.id %}
     <div class="participant-actions">
