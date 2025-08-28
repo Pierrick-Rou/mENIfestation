@@ -7,13 +7,18 @@
     <div class="admin-link">
     <a href="{{ path('app_admin_users') }}"><button>Gestion des Utilisateurs</button></a>
     </div>
+        <div class="admin-link">
+            <a href="{{ path('app_register') }}"><button>Ajouter un Utilisateur</button></a>
+        </div>
     <div class="admin-link">
     <a href="{{ path('app_admin_sites') }}"><button>Gestion des Sites</button></a>
     </div>
     <div class="admin-link">
     <a href="{{ path('app_admin_lieux') }}"><button>Gestion des Lieux</button></a>
     </div>
+
     <div class="admin-link">
         <a href="{{ path('app_admin_users_file') }}"><button>Ajouter des utilisateurs par fichier</button></a>
+
     </div>
 {% endblock %}
