@@ -3,12 +3,17 @@
 
 
 {% block body %}
-    <h1>Calendrier</h1>
-
     <div class="calendar">
         {% for day in moisArr %}
             <div class="cal-day">
                 {{ day }}
+                {%if events[day-1]!=day %}
+                    <div class="admin-link">
+                    <a>
+                        {{ events[day-1] }}
+                    </a>
+                    </div>
+                {% endif %}
             </div>
         {% endfor %}
     </div>
