@@ -64,12 +64,14 @@ final class SortieController extends AbstractController
 //
 //        }
 
-
-
+        $nbParticipant = $sortie->getParticipant()->count();
+        $etat = $sortie->getEtat();
 
         return $this->render('sortie/sortiePage.html.twig', [
             'sortie' => $sortie,
-            'isRegistered' => $isRegistered
+            'isRegistered' => $isRegistered,
+            'etat' => $etat,
+            'nbParticipant' => $nbParticipant,
         ]);
     }
 
@@ -88,29 +90,32 @@ final class SortieController extends AbstractController
             $this->addFlash('error', 'Sortie not found');
         }
 
-        $isRegistered = false;
-        if ($user && $sortie) {
-            $isRegistered = $sortieEntity->getParticipant()->contains($user);
+        if ($sortie->getEtat() === EtatSortie::OUVERTE) {
+
+            $isRegistered = false;
+            if ($user && $sortie) {
+                $isRegistered = $sortieEntity->getParticipant()->contains($user);
+            }
+
+            $participant = $participantRepository->find($user->getId());
+            if (!$isRegistered) {
+                $sortie->addParticipant($participant);
+
+
+                $em->persist($sortie);
+                $em->flush();
+                $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+            } else if ($isRegistered) {
+                $sortie->removeParticipant($participant);
+
+                $em->persist($sortie);
+                $em->flush();
+
+                $this->addFlash('success', 'Vous vous êtes désinscrit de l\'évènement');
+            }
+        } else {
+            $this->addFlash('error', 'Vous ne pouvez pas vous inscrire a cet évènement');
         }
-
-        $participant = $participantRepository->find($user->getId());
-        if (!$isRegistered) {
-            $sortie->addParticipant($participant);
-
-
-            $em->persist($sortie);
-            $em->flush();
-            $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
-        } else if ($isRegistered) {
-            $sortie->removeParticipant($participant);
-
-            $em->persist($sortie);
-            $em->flush();
-
-            $this->addFlash('success', 'Vous vous êtes désinscrit de l\'évènement');
-        }
-
-
 
         return $this->redirectToRoute('app_sortie_id', ['id' => $id]);
     }
