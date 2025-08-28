@@ -146,7 +146,7 @@ final class SortieController extends AbstractController
             $sortie->setSite($userSite);
             $etat = EtatSortie::CREEE;
             $sortie->setEtat($etat);
-
+            $sortie->addParticipant($user);
 
             $entityManager->persist($sortie);
             $entityManager->flush();
@@ -159,6 +159,13 @@ final class SortieController extends AbstractController
         return $this->render('sortie/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+    #[Route('/{id}/delete', name: 'delete', methods: ['GET'])]
+    public function delete(Sortie $sortie, EntityManagerInterface $em): Response
+    {
+        $em->remove($sortie);
+        $em->flush();
+        return $this->redirectToRoute('app_sortie_home');
     }
 
 }

@@ -22,7 +22,7 @@
             </a>
         {% endfor %}
     </div>
-    {% if is_granted('IS_AUTHENTICATED') %}
+    {% if is_granted('IS_AUTHENTICATED') and app.user.id != sortie.organisateur.id%}
 
        <a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
         {% if not isRegistered %}
@@ -35,6 +35,11 @@
 
         </a>
 
+    {% endif %}
+    {% if app.user.id == sortie.organisateur.id  %}
+    <a href="{{ path('app_sortie_delete', {'id' : sortie.id}) }}">
+    <button>Supprimer sortie</button>
+    </a>
     {% endif %}
 
 
