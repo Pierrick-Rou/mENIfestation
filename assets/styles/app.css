@@ -204,42 +204,6 @@ footer {
     border-radius: 5px;
     padding: 5px;
 }
-
-
-table {
-    border-collapse: collapse;
-}
-
-th, td {
-    text-align: left;
-    padding: 8px;
-    background-color: rgba(253, 162, 125, 0.24);
-}
-
-tr {
-    border: 1px solid black;
-}
-
-tr:nth-child(even) {
-    border-radius: 5px;
-}
-
-.admin-link > a:link, a:visited {
-    background-color: rgb(45, 127, 239);
-    color: white;
-    padding: 14px 25px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-radius: 5px;
-    margin: 15px;
-}
-
-.admin-link > a:hover, a:active {
-    background-color: #cfa558;
-}
-
-
 .participants {
     display: flex;
     flex-wrap: wrap;
@@ -283,3 +247,100 @@ tr:nth-child(even) {
     opacity: 1;
 }
 
+/* Conteneur global pour bien centrer */
+table {
+    width: 100%;
+    border-collapse: collapse; /* supprime les doubles bordures */
+    margin: 20px 0;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden; /* arrondi propre */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    table-layout: auto;
+}
+
+/* En-têtes */
+table th {
+    background-color: rgba(114,167,232,1); /* bleu foncé */
+    color: #fff;
+    text-align: left;
+    padding: 12px 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Lignes */
+table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap; /* garde ton style initial */
+}
+
+/* Lignes alternées */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover interactif */
+table tr:hover {
+    background-color: rgba(249, 202, 86, 0.64);
+}
+
+/* Rend le curseur visible quand clic */
+table tr {
+
+    transition: background 0.2s ease-in-out;
+}
+.table-container tbody tr {
+    transition: background 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.table-container {
+    margin: 20px auto;
+    width: 95%;
+    max-width: 1200px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden; /* arrondis propres */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    padding:2em;
+}
+/* Conteneur de la barre de filtres */
+.filters-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* espace entre les filtres */
+    background-color: #f5f7fa; /* gris clair neutre */
+    padding: 12px 20px;
+    border-radius: 8px 8px 0 0; /* arrondi du haut */
+    border: 1px solid #ddd;
+    border-bottom: none; /* fusionne visuellement avec le tableau */
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+}
+
+/* Label des filtres */
+.filters-bar label {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Select stylisé */
+.filters-bar select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border 0.2s ease-in-out;
+}
+
+.filters-bar select:hover {
+    border-color: #004080; /* bleu foncé au hover */
+}
