@@ -35,6 +35,32 @@ final class SortieController extends AbstractController
         } else {
             $sortieList = $sortieRepository->findAll();
         }
+        foreach ($sortieList as $sortie) {
+            //gestion des états des sorties
+
+            //convertion de toutes les dates/durée en "strtotime"
+            $now = time();
+            $debut = strtotime($sortie->getDateHeureDebut()->format('y-m-d H:i:s'));
+            $duree = $sortie->getDuree()->format('H:i:s');
+            $dateLimiteInscription = strtotime($sortie->getDateLimiteInscription()->format('y-m-d H:i:s'));
+            $fin = strtotime("+$duree",$debut);
+
+            //ne rentrer dans la boucle seulement si la sortie n'est pas terminée ou annullée
+            if ($sortie->getEtat() !== EtatSortie::TERMINEE && $sortie->getEtat() !== EtatSortie::ANNULEE){
+
+                if ($now < $dateLimiteInscription) {
+                    $sortie->setEtat(EtatSortie::OUVERTE);
+                }elseif ($now > $dateLimiteInscription && $now < $debut) {
+                    $sortie->setEtat(EtatSortie::CLOTUREE);
+                }elseif ( $now > $debut && $now < $fin){
+                    $sortie->setEtat(EtatSortie::EN_COURS);
+                }elseif ($now > $fin){
+                    $sortie->setEtat(EtatSortie::TERMINEE);
+                }
+
+            }
+        }
+
 
         return $this->render('sortie/index.html.twig', [
             'sortieList' => $sortieList,
@@ -58,13 +84,30 @@ final class SortieController extends AbstractController
             $isRegistered = $sortieEntity->getParticipant()->contains($user);
         }
 
-//        $now = new \DateTime('now');
-//        switch ($now){
-//            case $now->format('Y-m-d') === $sortie->getDateHeureDebut()->format('Y-m-d'):
-//
-//        }
 
+        //gestion des états des sorties
 
+        //convertion de toutes les dates/durée en "strtotime"
+        $now = time();
+        $debut = strtotime($sortie->getDateHeureDebut()->format('y-m-d H:i:s'));
+        $duree = $sortie->getDuree()->format('H:i:s');
+        $dateLimiteInscription = strtotime($sortie->getDateLimiteInscription()->format('y-m-d H:i:s'));
+        $fin = strtotime("+$duree",$debut);
+
+        //ne rentrer dans la boucle seulement si la sortie n'est pas terminée ou annullée
+        if ($sortie->getEtat() !== EtatSortie::TERMINEE && $sortie->getEtat() !== EtatSortie::ANNULEE){
+
+            if ($now < $dateLimiteInscription) {
+                $sortie->setEtat(EtatSortie::OUVERTE);
+            }elseif ($now > $dateLimiteInscription && $now < $debut) {
+                $sortie->setEtat(EtatSortie::CLOTUREE);
+            }elseif ( $now > $debut && $now < $fin){
+                $sortie->setEtat(EtatSortie::EN_COURS);
+            }elseif ($now > $fin){
+                $sortie->setEtat(EtatSortie::TERMINEE);
+            }
+
+        }
 
 
         return $this->render('sortie/sortiePage.html.twig', [

@@ -24,6 +24,7 @@
     </div>
     {% if is_granted('IS_AUTHENTICATED') %}
 
+        {% if sortie.etat.value === %}
        <a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
         {% if not isRegistered %}
 
