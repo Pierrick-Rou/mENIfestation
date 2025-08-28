@@ -24,7 +24,7 @@ final class SortieController extends AbstractController
 {
 
     #[Route('', name: 'home')]
-    public function index(Request $request, SortieRepository $sortieRepository, SiteRepository $sR): Response
+    public function index(Request $request, SortieRepository $sortieRepository, SiteRepository $sR, EntityManagerInterface $em): Response
     {
         $siteId = $request->query->get('site');
 
@@ -57,6 +57,9 @@ final class SortieController extends AbstractController
                 }elseif ($now > $fin){
                     $sortie->setEtat(EtatSortie::TERMINEE);
                 }
+
+                $em->persist($sortie);
+                $em->flush();
 
             }
         }
