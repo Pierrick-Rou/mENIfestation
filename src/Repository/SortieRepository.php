@@ -26,8 +26,19 @@ class SortieRepository extends ServiceEntityRepository
             ->orderBy('s.dateHeureDebut', 'ASC')
             ->getQuery()
             ->getResult();
+    }
 
+    public function findByMonth(): array
+    {
 
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.dateHeureDebut > :dateDebut')
+            ->andWhere('s.dateHeureDebut < :dateFin')
+            ->setParameter('dateDebut', date('Y-m-01'))
+            ->setParameter('dateFin', date('Y-m-01',strtotime('+1 month')))
+            ->orderBy('s.dateHeureDebut', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findFilteredEvents(FiltrageSortieDTO $filtreDTO, Participant $user): array
