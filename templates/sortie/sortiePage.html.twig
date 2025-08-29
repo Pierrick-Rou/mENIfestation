@@ -13,7 +13,7 @@
     </div>
     {% if is_granted('IS_AUTHENTICATED') and app.user.id != sortie.organisateur.id%}
 
-        {% if sortie.etat.value === %}
+        {% if sortie.etat.value ===  %}
        <a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
         {% if not isRegistered %}
 
