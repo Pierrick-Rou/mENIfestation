@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+ini_set('date.timezone', 'Europe/Paris');
 
 
 use App\DTO\FiltrageSortieDTO;
@@ -13,7 +14,11 @@ use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\EtatRepository;
+
+use App\service\SortieService;
+
 use App\Service\MailService;
+
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\SortieRepository;
@@ -29,10 +34,9 @@ final class SortieController extends AbstractController
 {
 
     #[Route('', name: 'home')]
-    public function index(Request $request,
-                          SortieRepository $sortieRepository,
-                          SiteRepository $sR,
-                          EntityManagerInterface $em): Response
+
+    public function index(Request $request, SortieRepository $sortieRepository, SiteRepository $sR, EntityManagerInterface $em, SortieService $sortieService): Response
+
     {
         $filtrageSortieDTO = new FiltrageSortieDTO();
         $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO);
@@ -46,32 +50,9 @@ final class SortieController extends AbstractController
 
         foreach ($sortieList as $sortie) {
             //gestion des états des sorties
-
-            //convertion de toutes les dates/durée en "strtotime"
-            $now = time();
-            $debut = strtotime($sortie->getDateHeureDebut()->format('y-m-d H:i:s'));
-            $duree = $sortie->getDuree()->format('H:i:s');
-            $dateLimiteInscription = strtotime($sortie->getDateLimiteInscription()->format('y-m-d H:i:s'));
-            $fin = strtotime("+$duree",$debut);
-
-            //ne rentrer dans la boucle seulement si la sortie n'est pas terminée ou annullée
-            if ($sortie->getEtat() !== EtatSortie::TERMINEE && $sortie->getEtat() !== EtatSortie::ANNULEE){
-
-                if ($now < $dateLimiteInscription) {
-                    $sortie->setEtat(EtatSortie::OUVERTE);
-                }elseif ($now > $dateLimiteInscription && $now < $debut) {
-                    $sortie->setEtat(EtatSortie::CLOTUREE);
-                }elseif ( $now > $debut && $now < $fin){
-                    $sortie->setEtat(EtatSortie::EN_COURS);
-                }elseif ($now > $fin){
-                    $sortie->setEtat(EtatSortie::TERMINEE);
-                }
-
-                $em->persist($sortie);
-                $em->flush();
-
-            }
+            $sortieService->changementEtat($sortie, $em);
         }
+
 
 
         return $this->render('sortie/index.html.twig', [
@@ -81,7 +62,7 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/{id}', name: 'id', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function detail(int $id, SortieRepository $sortieRepository, Sortie $sortieEntity): Response
+    public function detail(int $id, SortieRepository $sortieRepository, Sortie $sortieEntity, SortieService $sortieService, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
         $sortie = $sortieRepository->find($id);
@@ -98,28 +79,8 @@ final class SortieController extends AbstractController
 
 
         //gestion des états des sorties
+        $sortieService->changementEtat($sortie, $em);
 
-        //convertion de toutes les dates/durée en "strtotime"
-        $now = time();
-        $debut = strtotime($sortie->getDateHeureDebut()->format('y-m-d H:i:s'));
-        $duree = $sortie->getDuree()->format('H:i:s');
-        $dateLimiteInscription = strtotime($sortie->getDateLimiteInscription()->format('y-m-d H:i:s'));
-        $fin = strtotime("+$duree",$debut);
-
-        //ne rentrer dans la boucle seulement si la sortie n'est pas terminée ou annullée
-        if ($sortie->getEtat() !== EtatSortie::TERMINEE && $sortie->getEtat() !== EtatSortie::ANNULEE){
-
-            if ($now < $dateLimiteInscription) {
-                $sortie->setEtat(EtatSortie::OUVERTE);
-            }elseif ($now > $dateLimiteInscription && $now < $debut) {
-                $sortie->setEtat(EtatSortie::CLOTUREE);
-            }elseif ( $now > $debut && $now < $fin){
-                $sortie->setEtat(EtatSortie::EN_COURS);
-            }elseif ($now > $fin){
-                $sortie->setEtat(EtatSortie::TERMINEE);
-            }
-
-        }
 
 
         $nbParticipant = $sortie->getParticipant()->count();
