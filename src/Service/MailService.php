@@ -31,4 +31,18 @@ class MailService
 
         $this->mailer->send($email);
     }
+    public function sendReminderMail(string $to, string $eventName): void
+    {
+        $email = (new Email())
+            ->from('noreply@monsite.fr')
+            ->to($to)
+            ->subject('Rappel : votre sortie approche !')
+            ->text("Petit rappel : la sortie \"$eventName\" commence dans 48h ou moins" . ".")
+            ->html("<p>Bonjour,</p>
+                <p>Petit rappel : la sortie <strong>$eventName</strong> commence dans 48h ou moins <strong>" . "</strong>.</p>");
+
+        $this->mailer->send($email);
+    }
+
+
 }
