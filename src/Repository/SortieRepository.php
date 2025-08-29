@@ -2,11 +2,9 @@
 
 namespace App\Repository;
 
-use _PHPStan_781aefaf6\Nette\Utils\DateTime;
 use App\DTO\FiltrageSortieDTO;
 use App\Entity\Participant;
 use App\Entity\Sortie;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -36,27 +34,34 @@ class SortieRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s')
             ->where('s.dateHeureDebut > :oneMonthAgo')
-            ->setParameter('oneMonthAgo', new \DateTime('-1 month'));
-
-        if ($filtreDTO->getDateDebut()) {
-            $qb->andWhere('s.dateHeureDebut >= :dateDebut')
-                ->setParameter('dateDebut', $filtreDTO->getDateDebut());
-        }
+            ->setParameter('oneMonthAgo', new \DateTime('-1 month'))
+            ->orderBy('s.dateHeureDebut', 'ASC');
 
         if ($filtreDTO->getNomSortie()) {
             $qb->andWhere('s.nom LIKE :nom')
                 ->setParameter('nom', "%{$filtreDTO->getNomSortie()}%");
         }
 
-        if ($filtreDTO->getDateFin()) {
-            $qb->andWhere('s.dateHeureDebut <= :dateFin')
-                ->setParameter('dateFin', $filtreDTO->getDateFin());
-        }
-
         if ($filtreDTO->getSite()) {
             $qb->andWhere('s.site = :site')
                 ->setParameter('site', $filtreDTO->getSite());
         }
+
+        if ($filtreDTO->getDateDebut()) {
+            $qb->andWhere('s.dateHeureDebut >= :dateDebut')
+                ->setParameter('dateDebut', $filtreDTO->getDateDebut());
+        }
+
+        if ($filtreDTO->getDateFin()) {
+            $qb->andWhere('s.dateHeureDebut <= :dateFin')
+                ->setParameter('dateFin', "%{$filtreDTO->getDateFin()}%");
+        }
+
+        if ($filtreDTO->getVille()) {
+            $qb->andWhere('s.lieu = :ville')
+                ->setParameter('ville', $filtreDTO->getVille());
+        }
+
         if ($filtreDTO->getOrganisateur()) {
             $qb->andWhere('s.organisateur = :organisateur')
                 ->setParameter('organisateur', $user);

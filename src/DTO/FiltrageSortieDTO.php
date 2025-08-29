@@ -4,6 +4,7 @@ namespace App\DTO;
 
 use App\Entity\Participant;
 use App\Entity\Site;
+use App\Entity\Ville;
 use App\Enum\EtatSortie;
 
 class FiltrageSortieDTO
@@ -12,7 +13,7 @@ class FiltrageSortieDTO
     private ?Site $site;
     private ?\DateTime $dateDebut;
     private ?\DateTime $dateFin;
-    private ?string $ville;
+    private ?Ville $ville;
     private ?bool $organisateur;
     private ?bool $inscrit;
     private ?bool $nonInscrit;
@@ -76,12 +77,12 @@ class FiltrageSortieDTO
     }
 
 
-    public function getVille(): ?string
+    public function getVille(): ?Ville
     {
         return $this->ville;
     }
 
-    public function setVille(?string $ville): FiltrageSortieDTO
+    public function setVille(?Ville $ville): FiltrageSortieDTO
     {
         $this->ville = $ville;
         return $this;

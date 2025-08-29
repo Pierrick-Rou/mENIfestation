@@ -14,8 +14,7 @@ enum EtatSortie: string implements BackedEnumInterface
     case TERMINEE = 'terminée';
 
 
-
-    // Méthode statique pour générer le tableau 'label => value' pour le formulaire
+    // Méthode pour créer la liste des choix dans le formulaire
     public static function choices(): array
     {
         $choices = [];
