@@ -49,8 +49,12 @@ class RegistrationType extends AbstractType
                     ]),
                     new Assert\NotBlank([
                         'message' => 'Veuillez saisir un email',
-                    ])
-                ]
+                    ]),
+                    new Assert\Regex([
+                        'pattern' => '/^[A-Za-z0-9._%+-]+@menif\.fr$/',
+                        'message' => 'L’adresse email doit se terminer par @menif.fr',
+                    ]),
+                ],
             ])
             ->add('telephone', TelType::class, [
                 'label' => 'Telephone',
