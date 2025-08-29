@@ -4,13 +4,21 @@ namespace App\Controller;
 ini_set('date.timezone', 'Europe/Paris');
 
 
+use App\DTO\FiltrageSortieDTO;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Enum\EtatSortie;
+use App\Form\FiltreSortieType;
+use App\Form\RegistrationType;
 use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\EtatRepository;
+
 use App\service\SortieService;
+
+use App\Service\MailService;
+
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\SortieRepository;
@@ -26,17 +34,20 @@ final class SortieController extends AbstractController
 {
 
     #[Route('', name: 'home')]
+
     public function index(Request $request, SortieRepository $sortieRepository, SiteRepository $sR, EntityManagerInterface $em, SortieService $sortieService): Response
+
     {
-        $siteId = $request->query->get('site');
+        $filtrageSortieDTO = new FiltrageSortieDTO();
+        $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO);
+        $form->handleRequest($request);
 
-        $sites = $sR->findAll();
+        /* @var Participant $user*/
+        $user = $this->getUser();
 
-        if ($siteId) {
-            $sortieList = $sortieRepository->findBy(['site' => $siteId]);
-        } else {
-            $sortieList = $sortieRepository->findAll();
-        }
+
+        $sortieList = $sortieRepository->findFilteredEvents($filtrageSortieDTO, $user);
+
         foreach ($sortieList as $sortie) {
             //gestion des états des sorties
             $sortieService->changementEtat($sortie, $em);
@@ -46,8 +57,7 @@ final class SortieController extends AbstractController
 
         return $this->render('sortie/index.html.twig', [
             'sortieList' => $sortieList,
-            'sites' => $sites,
-            'siteId' => $siteId,
+            'filtreForm'=>$form->createView()
         ]);
     }
 
@@ -75,6 +85,7 @@ final class SortieController extends AbstractController
 
         $nbParticipant = $sortie->getParticipant()->count();
         $etat = $sortie->getEtat();
+        $placeRestante = $sortie->getNbInscriptionMax() - $nbParticipant;
 
 
         return $this->render('sortie/sortiePage.html.twig', [
@@ -82,6 +93,7 @@ final class SortieController extends AbstractController
             'isRegistered' => $isRegistered,
             'etat' => $etat,
             'nbParticipant' => $nbParticipant,
+            'placeRestante' => $placeRestante,
         ]);
     }
 
@@ -90,7 +102,9 @@ final class SortieController extends AbstractController
                                 SortieRepository $sortieRepository,
                                 ParticipantRepository $participantRepository,
                                 Sortie $sortieEntity,
-                                EntityManagerInterface $em): Response
+                                EntityManagerInterface $em,
+
+                                MailService $mailService): Response
     {
 
         $user = $this->getUser();
@@ -109,12 +123,18 @@ final class SortieController extends AbstractController
 
             $participant = $participantRepository->find($user->getId());
             if (!$isRegistered) {
-                $sortie->addParticipant($participant);
+                if ($sortie->getParticipant()->count() < $sortie->getNbInscriptionMax()) {
+                    $sortie->addParticipant($participant);
+
+                    $em->persist($sortie);
+                    $em->flush();
+                    $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+                    $mailService->sendRegistrationMail($user->getEmail(), $sortie->getNom());
+                } else {
+                    $this->addFlash('error', 'Nombre limite de participant atteint');
+                }
 
 
-                $em->persist($sortie);
-                $em->flush();
-                $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
             } else if ($isRegistered) {
                 $sortie->removeParticipant($participant);
 
@@ -122,6 +142,7 @@ final class SortieController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success', 'Vous vous êtes désinscrit de l\'évènement');
+                $mailService->sendUnregistrationMail($user->getEmail(), $sortie->getNom());
             }
         } else {
             $this->addFlash('error', 'Vous ne pouvez pas vous inscrire a cet évènement');

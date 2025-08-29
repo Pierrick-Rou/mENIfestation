@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\SortieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,21 +32,25 @@ final class TestController extends AbstractController
 
 
     #[Route('/calendrier', name: 'app_cal')]
-    public function calendrier(): Response
+    public function calendrier(SortieRepository $sr): Response
     {
-        $dateDuJour=new \DateTime();
-
         $dateDuJour =  new \DateTime();
         $mois=$dateDuJour->format('m');
-
         $joursDansLeMois = $dateDuJour->format('t');
         $moisArr=range(1,$joursDansLeMois);
+        $sortiesDuMois=$sr->findByMonth();
+        $arr=$moisArr;
+        foreach ($sortiesDuMois as $sortie) {
+//            $event=[];
+//            $event['nom']=$sortie->getNom();
+//            $event['id']=$sortie->getId();
+            $arr[$sortie->getDateHeureDebut()->format('d')]=$sortie->getNom();
+//            $moisArr[$sortie->getDateHeureDebut()->format('d')-1]=$arr;
+        }
+//        dd($arr);
 
 
-
-//        dd($month);
-
-        return $this->render('test/calendrier.html.twig', ['moisArr'=>$moisArr,'dateDuJour'=>$dateDuJour, 'nbJours'=>$joursDansLeMois, 'mois'=>$mois
+        return $this->render('test/calendrier.html.twig', ['moisArr'=>$moisArr,'dateDuJour'=>$dateDuJour, 'nbJours'=>$joursDansLeMois, 'mois'=>$mois, 'events'=>$arr
         ]);
     }
 

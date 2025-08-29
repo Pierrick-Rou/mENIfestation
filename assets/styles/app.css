@@ -1,11 +1,9 @@
-
 @font-face {
     font-family: "Break";
     font-style: normal;
     font-weight: 400;
     src: url("../font/Break.ttf") format("truetype");
 }
-
 
 
 body {
@@ -21,22 +19,22 @@ body {
 /* --- Navbar --- */
 .navbar {
 
-    background-image: linear-gradient( 111.6deg,  rgba(114,167,232,1) 9.4%, rgba(253,129,82,1) 43.9%, rgba(253,129,82,1) 54.8%, rgba(249,202,86,1) 86.3% );
+    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem ;
-    box-shadow: 0px 12px 13px -6px rgba(0,0,0,0.89);
+    padding: 0.5rem;
+    box-shadow: 0px 12px 13px -6px rgba(0, 0, 0, 0.89);
 }
 
 .navbar .logo {
     padding: 1.5em;
-    font-family: "Break","Helvetica", sans-serif;
+    font-family: "Break", "Helvetica", sans-serif;
     font-weight: bold;
-    font-size:2em;
+    font-size: 2em;
 
-    background-image: linear-gradient( 111.6deg,  rgba(114,167,232,1) 9.4%, rgba(253,129,82,1) 43.9%, rgba(253,129,82,1) 54.8%, rgba(249,202,86,1) 86.3% );
+    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
 }
 
 .navbar .nav-links {
@@ -56,7 +54,7 @@ body {
 
 .navbar .nav-links a:hover {
     text-decoration: underline;
-    background-color:  rgba(114,167,232,1);
+    background-color: rgba(114, 167, 232, 1);
 }
 
 /* --- Main --- */
@@ -70,23 +68,28 @@ main {
 
 /* --- Footer --- */
 footer {
-    background-image: linear-gradient( 111.6deg,  rgba(114,167,232,1) 9.4%, rgba(253,129,82,1) 43.9%, rgba(253,129,82,1) 54.8%, rgba(249,202,86,1) 86.3% );
+    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
     color: #eee;
     text-align: center;
     padding: 1rem;
     font-size: 0.9rem;
 }
 
-.form{
+.form {
     width: 40vw;
-    border: solid 0.2em  rgba(114,167,232,1);
+    border: solid 0.2em rgba(114, 167, 232, 1);
     align-content: center;
-    background-image: linear-gradient( 111.6deg,  rgba(114,167,232,1) 9.4%, rgba(253,129,82,1) 43.9%, rgba(253,129,82,1) 54.8%, rgba(249,202,86,1) 86.3% );
+    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
     padding: 1em;
     border-radius: 1em;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+}
+
+.filter {
+    width: inherit;
 
 }
 
@@ -114,7 +117,7 @@ footer {
 
 /*CSS pour la card du detail de l'user*/
 .form button {
-    background-color:  rgba(114,167,232,1);
+    background-color: rgba(114, 167, 232, 1);
     color: white;
     padding: 12px 20px;
     border: none;
@@ -135,7 +138,7 @@ footer {
     margin: 40px auto;
     padding: 20px 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     background-color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
@@ -196,7 +199,7 @@ footer {
     grid-template-rows: repeat(5, 1fr);
     gap: 5px;
     border-radius: 10px;
-    padding:10px;
+    padding: 10px;
 }
 
 .calendar > * {
@@ -204,6 +207,7 @@ footer {
     border-radius: 5px;
     padding: 5px;
 }
+
 .participants {
     display: flex;
     flex-wrap: wrap;
@@ -211,21 +215,22 @@ footer {
 }
 
 .participants .badge {
-
     position: relative;
     display: inline-block;
     padding: 6px 12px;
-    background-color: #e0f0ff;   /* bleu clair */
-    color: #004080;              /* bleu foncé */
-    border-radius: 20px;         /* forme "pilule" */
-    text-decoration: none;       /* enlève le soulignement */
+    background-color: #e0f0ff; /* bleu clair */
+    color: #004080; /* bleu foncé */
+    border-radius: 20px; /* forme "pilule" */
+    text-decoration: none; /* enlève le soulignement */
     font-size: 14px;
     font-weight: 500;
     transition: 0.2s;
 }
-.participants .badge .img{
+
+.participants .badge .img {
     max-width: 30%;
 }
+
 .participants .badge::after {
     content: attr(data-info);
     position: absolute;
@@ -243,10 +248,12 @@ footer {
     transition: opacity 0.2s ease-in-out;
     z-index: 1000;
 }
+
 .participants .badge:hover {
     background-color: #cce5ff;
     color: #00264d;
 }
+
 .participants .badge:hover::after {
     opacity: 1;
 }
@@ -267,7 +274,7 @@ table {
 
 /* En-têtes */
 table th {
-    background-color: rgba(114,167,232,1); /* bleu foncé */
+    background-color: rgba(114, 167, 232, 1); /* bleu foncé */
     color: #fff;
     text-align: left;
     padding: 12px 15px;
@@ -297,6 +304,7 @@ table tr {
 
     transition: background 0.2s ease-in-out;
 }
+
 .table-container tbody tr {
     transition: background 0.2s ease-in-out;
     cursor: pointer;
@@ -305,15 +313,16 @@ table tr {
 .table-container {
     margin: 20px auto;
     width: 100%;
-    max-width: 1200px;
+    max-width: fit-content;
     font-family: Arial, sans-serif;
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden; /* arrondis propres */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     background: #fff;
-    padding:2em;
+    padding: 2em;
 }
+
 /* Conteneur de la barre de filtres */
 .filters-bar {
     display: flex;
@@ -327,12 +336,14 @@ table tr {
     font-family: Arial, sans-serif;
     margin-top: 20px;
 }
+
 .infos-sortie {
-    max-width: 200px;       /* largeur max */
-    white-space: nowrap;    /* empêche le retour à la ligne */
-    overflow: hidden;       /* cache le texte qui dépasse */
+    max-width: 200px; /* largeur max */
+    white-space: nowrap; /* empêche le retour à la ligne */
+    overflow: hidden; /* cache le texte qui dépasse */
     text-overflow: ellipsis; /* ajoute "..." */
 }
+
 /* Label des filtres */
 .filters-bar label {
     font-weight: 600;
