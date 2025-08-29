@@ -3,14 +3,22 @@
 
 
 {% block body %}
+    <div>
+        <h1>{{ mois }}</h1>
+    </div>
     <div class="calendar">
+        {% for i in range(1,premierJour-1) %}
+        <div class="cal-day-greyed">
+        </div>
+        {% endfor %}
         {% for day in moisArr %}
             <div class="cal-day">
                 {{ day }}
+                {{ jours[day-1] }}
                 {%if events[day-1]!=day %}
                     <div class="admin-link">
-                    <a>
-                        {{ events[day-1] }}
+                    <a href="{{ path('app_sortie_id',{id: eventsId[day-1]}) }}">
+                        <button>{{ events[day-1] }}</button>
                     </a>
                     </div>
                 {% endif %}
