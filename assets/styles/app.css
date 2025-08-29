@@ -208,6 +208,10 @@ footer {
     padding: 5px;
 }
 
+.cal-day-greyed {
+    background: rgba(15, 99, 184, 0.17);
+}
+
 .participants {
     display: flex;
     flex-wrap: wrap;
