@@ -31,7 +31,8 @@ final class ProfilController extends AbstractController
 
     #[Route('/delete/{id}', name: '_delete', requirements: ['id' => '\d+'])]
 
-    public function delete(Participant $participant, EntityManagerInterface $em, Request $request): Response
+
+    public function delete(Participant $participant, EntityManagerInterface $em, Request $request, TokenStorageInterface $tokenStorage): Response
     {
         $this->isCsrfTokenValid('delete'.$participant->getId(), $request->get('token'));
         $em->remove($participant);

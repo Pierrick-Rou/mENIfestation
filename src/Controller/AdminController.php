@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/admin', name: 'app_admin')]
@@ -36,7 +37,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/utilisateurs/fichier', name: '_users_file')]
-    public function usersfile(Request $request,ParticipantRepository $pr,EntityManagerInterface $em,SiteRepository $sr){
+    public function usersfile(Request $request,UserPasswordHasherInterface $userPasswordHasher,ParticipantRepository $pr,EntityManagerInterface $em,SiteRepository $sr){
 
         $form = $this->createFormBuilder()
             ->add('file', FileType::class, [])
@@ -60,7 +61,7 @@ final class AdminController extends AbstractController
                 $participant->setPrenom($data['prenom']);
                 $participant->setEmail($data['email']);
                 $participant->setSite($sr->find($data['site_id']));
-                $participant->setPassword($data['password']);
+                $participant->setPassword($userPasswordHasher->hashPassword($participant, $data['password']));
                 $participant->setTelephone($data['telephone']);
                 $em->persist($participant);
                 $em->flush();
