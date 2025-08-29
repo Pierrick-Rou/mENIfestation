@@ -63,7 +63,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
-    align-content: center;
+    justify-content: center;
     font-family: var(--font-system);
     background-color: var(--color-bg);
     color: var(--color-text);
@@ -75,6 +75,7 @@ main {
     flex: 1;
     padding: var(--space-5) var(--space-4);
     display: block;
+    justify-content: center;
     max-width: var(--container-max);
     width: 100%;
     margin-inline: auto;
