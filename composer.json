@@ -38,6 +38,8 @@
         "symfony/string": "7.3.*",
         "symfony/translation": "7.3.*",
         "symfony/twig-bundle": "7.3.*",
+        "symfony/ux-leaflet-map": "^2.30",
+        "symfony/ux-map": "^2.30",
         "symfony/ux-turbo": "^2.29",
         "symfony/validator": "7.3.*",
         "symfony/web-link": "7.3.*",

@@ -97,6 +97,29 @@ class SortieRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getInfoForMap(): array {
+        return $this->createQueryBuilder('s')
+            ->select(
+                's.id,
+                        s.nom,
+                        s.dateHeureDebut as date,
+                        s.duree,
+                        s.infosSortie as infos,
+                        l.latitude,
+                        l.longitude,
+                        l.nom as lieu,
+                        l.rue,
+                        v.codePostal,
+                        v.nom as ville
+                        '
+            )
+            ->join('s.lieu', 'l')
+            ->join('l.Ville', 'v')
+            ->getQuery()
+            ->getResult();
+
+    }
+
     //    /**
     //     * @return Sortie[] Returns an array of Sortie objects
     //     */
