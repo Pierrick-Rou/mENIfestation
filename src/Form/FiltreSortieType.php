@@ -56,11 +56,31 @@ class FiltreSortieType extends AbstractType
             ->add('organisateur', CheckboxType::class, [
                 'required' => false,
                 'attr' => [
-                    'class' => 'checkbox'
+                    'class' => 'checkbox',
+                    'style' => 'display: inline;'
+                ],
+                'label_attr' => [
+                    'style' => 'display: inline;'
                 ]
             ])
-            ->add('inscrit', CheckboxType::class, ['required' => false])
-            ->add('nonInscrit', CheckboxType::class, ['required' => false])
+            ->add('inscrit', CheckboxType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'checkbox'
+                ],
+                'label_attr' => [
+                    'style' => 'display: inline;'
+                ]
+            ])
+            ->add('nonInscrit', CheckboxType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'checkbox'
+                ],
+                'label_attr' => [
+                    'style' => 'display: inline;'
+                ]
+            ])
             ->add('etat', ChoiceType::class, [
                 'required' => false,
                 'choices' => EtatSortie::choices(),
