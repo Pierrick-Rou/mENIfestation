@@ -14,12 +14,12 @@ use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
-use App\Repository\EtatRepository;
 
-use App\service\SortieService;
+use App\Service\SortieService;
 
 use App\Service\MailService;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -174,6 +174,7 @@ final class SortieController extends AbstractController
         // 4. Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
             // 5. Enregistre en base de données
+            /* @var Participant $user */
             $user = $security->getUser();
 
             $userSite = $user->getSite();
