@@ -13,4 +13,15 @@ enum EtatSortie: string implements BackedEnumInterface
     case ANNULEE = 'annulée';
     case TERMINEE = 'terminée';
 
+
+    // Méthode pour créer la liste des choix dans le formulaire
+    public static function choices(): array
+    {
+        $choices = [];
+        foreach (self::cases() as $case) {
+            $choices[$case->value] = $case->value;
+        }
+        return $choices;
+    }
+
 }
