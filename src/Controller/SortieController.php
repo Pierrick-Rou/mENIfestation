@@ -13,6 +13,7 @@ use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\EtatRepository;
+use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\SortieRepository;
@@ -140,7 +141,9 @@ final class SortieController extends AbstractController
                                 SortieRepository $sortieRepository,
                                 ParticipantRepository $participantRepository,
                                 Sortie $sortieEntity,
-                                EntityManagerInterface $em): Response
+                                EntityManagerInterface $em,
+
+                                MailService $mailService): Response
     {
 
         $user = $this->getUser();
@@ -165,6 +168,7 @@ final class SortieController extends AbstractController
                     $em->persist($sortie);
                     $em->flush();
                     $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+                    $mailService->sendRegistrationMail($user->getEmail(), $sortie->getNom());
                 } else {
                     $this->addFlash('error', 'Nombre limite de participant atteint');
                 }
@@ -177,6 +181,7 @@ final class SortieController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success', 'Vous vous êtes désinscrit de l\'évènement');
+                $mailService->sendUnregistrationMail($user->getEmail(), $sortie->getNom());
             }
         } else {
             $this->addFlash('error', 'Vous ne pouvez pas vous inscrire a cet évènement');
