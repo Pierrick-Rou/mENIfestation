@@ -8,16 +8,13 @@ use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Enum\EtatSortie;
 use App\Form\FiltreSortieType;
-use App\Form\RegistrationType;
 use App\Form\SortieType;
+use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
-use App\Repository\EtatRepository;
+use App\Repository\SortieRepository;
 use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
-
-use App\Repository\SortieRepository;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,16 +26,16 @@ final class SortieController extends AbstractController
 {
 
     #[Route('', name: 'home')]
-    public function index(Request $request,
-                          SortieRepository $sortieRepository,
-                          SiteRepository $sR,
+    public function index(Request                $request,
+                          SortieRepository       $sortieRepository,
+                          SiteRepository         $sR,
                           EntityManagerInterface $em): Response
     {
         $filtrageSortieDTO = new FiltrageSortieDTO();
         $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO);
         $form->handleRequest($request);
 
-        /* @var Participant $user*/
+        /* @var Participant $user */
         $user = $this->getUser();
 
 
@@ -52,18 +49,18 @@ final class SortieController extends AbstractController
             $debut = strtotime($sortie->getDateHeureDebut()->format('y-m-d H:i:s'));
             $duree = $sortie->getDuree()->format('H:i:s');
             $dateLimiteInscription = strtotime($sortie->getDateLimiteInscription()->format('y-m-d H:i:s'));
-            $fin = strtotime("+$duree",$debut);
+            $fin = strtotime("+$duree", $debut);
 
             //ne rentrer dans la boucle seulement si la sortie n'est pas terminée ou annullée
-            if ($sortie->getEtat() !== EtatSortie::TERMINEE && $sortie->getEtat() !== EtatSortie::ANNULEE){
+            if ($sortie->getEtat() !== EtatSortie::TERMINEE && $sortie->getEtat() !== EtatSortie::ANNULEE) {
 
                 if ($now < $dateLimiteInscription) {
                     $sortie->setEtat(EtatSortie::OUVERTE);
-                }elseif ($now > $dateLimiteInscription && $now < $debut) {
+                } elseif ($now > $dateLimiteInscription && $now < $debut) {
                     $sortie->setEtat(EtatSortie::CLOTUREE);
-                }elseif ( $now > $debut && $now < $fin){
+                } elseif ($now > $debut && $now < $fin) {
                     $sortie->setEtat(EtatSortie::EN_COURS);
-                }elseif ($now > $fin){
+                } elseif ($now > $fin) {
                     $sortie->setEtat(EtatSortie::TERMINEE);
                 }
 
@@ -74,9 +71,9 @@ final class SortieController extends AbstractController
         }
 
 
-        return $this->render('sortie/index.html.twig', [
+        return $this->render('sortie/creer-ville.html.twig', [
             'sortieList' => $sortieList,
-            'filtreForm'=>$form->createView()
+            'filtreForm' => $form->createView()
         ]);
     }
 
@@ -96,7 +93,6 @@ final class SortieController extends AbstractController
         }
 
 
-
         //gestion des états des sorties
 
         //convertion de toutes les dates/durée en "strtotime"
@@ -104,18 +100,18 @@ final class SortieController extends AbstractController
         $debut = strtotime($sortie->getDateHeureDebut()->format('y-m-d H:i:s'));
         $duree = $sortie->getDuree()->format('H:i:s');
         $dateLimiteInscription = strtotime($sortie->getDateLimiteInscription()->format('y-m-d H:i:s'));
-        $fin = strtotime("+$duree",$debut);
+        $fin = strtotime("+$duree", $debut);
 
         //ne rentrer dans la boucle seulement si la sortie n'est pas terminée ou annullée
-        if ($sortie->getEtat() !== EtatSortie::TERMINEE && $sortie->getEtat() !== EtatSortie::ANNULEE){
+        if ($sortie->getEtat() !== EtatSortie::TERMINEE && $sortie->getEtat() !== EtatSortie::ANNULEE) {
 
             if ($now < $dateLimiteInscription) {
                 $sortie->setEtat(EtatSortie::OUVERTE);
-            }elseif ($now > $dateLimiteInscription && $now < $debut) {
+            } elseif ($now > $dateLimiteInscription && $now < $debut) {
                 $sortie->setEtat(EtatSortie::CLOTUREE);
-            }elseif ( $now > $debut && $now < $fin){
+            } elseif ($now > $debut && $now < $fin) {
                 $sortie->setEtat(EtatSortie::EN_COURS);
-            }elseif ($now > $fin){
+            } elseif ($now > $fin) {
                 $sortie->setEtat(EtatSortie::TERMINEE);
             }
 
@@ -137,13 +133,12 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/{id}/inscription', name: 'inscription', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function inscription(int $id,
-                                SortieRepository $sortieRepository,
-                                ParticipantRepository $participantRepository,
-                                Sortie $sortieEntity,
+    public function inscription(int                    $id,
+                                SortieRepository       $sortieRepository,
+                                ParticipantRepository  $participantRepository,
+                                Sortie                 $sortieEntity,
                                 EntityManagerInterface $em,
-
-                                MailService $mailService): Response
+                                MailService            $mailService): Response
     {
 
         $user = $this->getUser();
@@ -191,7 +186,7 @@ final class SortieController extends AbstractController
     }
 
 
-    #[Route('/create', name: 'create', methods: ['GET','POST'])]
+    #[Route('/creer', name: 'create', methods: ['GET', 'POST'])]
     public function create(EtatRepository $er): Response
     {
         $sortie = new Sortie();
@@ -200,6 +195,7 @@ final class SortieController extends AbstractController
             "sortieForm" => $sortieForm
         ]);
     }
+
     #[Route('/validForm', name: 'validForm', methods: ['POST'])]
     public function validForm(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
@@ -235,6 +231,7 @@ final class SortieController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route('/{id}/delete', name: 'delete', methods: ['GET'])]
     public function delete(Sortie $sortie, EntityManagerInterface $em): Response
     {

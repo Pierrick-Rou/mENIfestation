@@ -2,17 +2,16 @@
 
 namespace App\DTO;
 
-use App\Entity\Participant;
 use App\Entity\Site;
 use App\Entity\Ville;
-use App\Enum\EtatSortie;
+use DateTime;
 
 class FiltrageSortieDTO
 {
     private ?string $nomSortie;
     private ?Site $site;
-    private ?\DateTime $dateDebut;
-    private ?\DateTime $dateFin;
+    private ?DateTime $dateDebut;
+    private ?DateTime $dateFin;
     private ?Ville $ville;
     private ?bool $organisateur;
     private ?bool $inscrit;
@@ -20,7 +19,8 @@ class FiltrageSortieDTO
     private ?string $etat;
 
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->nomSortie = null;
         $this->site = null;
         $this->dateDebut = null;
@@ -54,23 +54,23 @@ class FiltrageSortieDTO
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTime
+    public function getDateDebut(): ?DateTime
     {
         return $this->dateDebut;
     }
 
-    public function setDateDebut(?\DateTime $dateDebut): FiltrageSortieDTO
+    public function setDateDebut(?DateTime $dateDebut): FiltrageSortieDTO
     {
         $this->dateDebut = $dateDebut;
         return $this;
     }
 
-    public function getDateFin(): ?\DateTime
+    public function getDateFin(): ?DateTime
     {
         return $this->dateFin;
     }
 
-    public function setDateFin(?\DateTime $dateFin): FiltrageSortieDTO
+    public function setDateFin(?DateTime $dateFin): FiltrageSortieDTO
     {
         $this->dateFin = $dateFin;
         return $this;
