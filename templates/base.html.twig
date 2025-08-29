@@ -40,6 +40,67 @@
 
 <main>
     {% block body %}{% endblock %}
+    <!-- Bouton rond flottant -->
+    <div id="chat-toggle">💬</div>
+
+    <!-- Fenêtre du chat (masquée au départ) -->
+    <div id="chat-widget" style="display: none;">
+        <div id="chat-header">Chatbot</div>
+        <div id="chat-messages"></div>
+        <div id="chat-input">
+            <input type="text" id="chat-text" placeholder="Écrivez un message..." />
+            <button id="chat-send">➤</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggle = document.getElementById("chat-toggle");
+            const widget = document.getElementById("chat-widget");
+            const messages = document.getElementById("chat-messages");
+            const input = document.getElementById("chat-text");
+            const sendBtn = document.getElementById("chat-send");
+
+            // Ouvrir / fermer le chat
+            toggle.addEventListener("click", () => {
+                widget.style.display = widget.style.display === "none" ? "flex" : "none";
+            });
+
+            function addMessage(text, sender) {
+                const msg = document.createElement("div");
+                msg.textContent = text;
+                msg.style.margin = "5px 0";
+                msg.style.padding = "5px 10px";
+                msg.style.borderRadius = "10px";
+                msg.style.maxWidth = "80%";
+                msg.style.background = sender === "user" ? "#e0f7fa" : "#f1f1f1";
+                msg.style.alignSelf = sender === "user" ? "flex-end" : "flex-start";
+                messages.appendChild(msg);
+                messages.scrollTop = messages.scrollHeight;
+            }
+
+            async function sendMessage() {
+                const text = input.value.trim();
+                if (!text) return;
+
+                addMessage(text, "user");
+                input.value = "";
+
+                const response = await fetch("/chatbot", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: text })
+                });
+
+                const data = await response.json();
+                addMessage(data.reply, "bot");
+            }
+
+            sendBtn.addEventListener("click", sendMessage);
+            input.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") sendMessage();
+            });
+        });
+    </script>
 </main>
 
 <footer>
