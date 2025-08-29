@@ -13,8 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 use App\Entity\Participant;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use function Webmozart\Assert\Tests\StaticAnalysis\null;
 
 
 #[Route('/profil', name : 'app_profil')]
@@ -31,10 +33,13 @@ final class ProfilController extends AbstractController
 
     #[Route('/delete/{id}', name: '_delete', requirements: ['id' => '\d+'])]
 
-
     public function delete(Participant $participant, EntityManagerInterface $em, Request $request, TokenStorageInterface $tokenStorage): Response
     {
         $this->isCsrfTokenValid('delete'.$participant->getId(), $request->get('token'));
+
+        $tokenStorage->setToken(null);
+        $request->getSession()->invalidate();
+
         $em->remove($participant);
         $em->flush();
 
