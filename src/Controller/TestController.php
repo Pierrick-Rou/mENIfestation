@@ -37,12 +37,9 @@ final class TestController extends AbstractController
     {
         setlocale(LC_TIME, 'fr_FR');
         $dateDuJour =  new \DateTime();
-        $mois=$dateDuJour->format('M');
+        $mois=$dateDuJour->format('F');
         $joursDansLeMois = $dateDuJour->format('t');
         $moisArr=range(1,$joursDansLeMois);
-
-
-
 
 
         $dayfunction=function($d): string
@@ -51,7 +48,6 @@ final class TestController extends AbstractController
             $date=new \DateTime();
             $m=$date->format('m');
             $y=$date->format('Y');
-
             return date('l',mktime(0,0,0,$m,$d,$y));
         };
 

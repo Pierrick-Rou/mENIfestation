@@ -194,22 +194,41 @@ footer {
     border: #1a1d20 1px solid;
     display: grid;
     min-height: 80vh;
-    min-width: 60vw;
+    min-width: 10vw;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(5, 1fr);
     gap: 5px;
     border-radius: 10px;
-    padding: 10px;
+    padding: 5px;
+    margin-top: 5%;
 }
 
-.calendar > * {
+.calendar > .cal-day {
     border: #1a1d20 1px dashed;
     border-radius: 5px;
     padding: 5px;
 }
 
 .cal-day-greyed {
+    border: #1a1d20 1px dashed;
+    border-radius: 5px;
     background: rgba(15, 99, 184, 0.17);
+}
+
+.calendar button {
+    background-color: rgba(114, 167, 232, 1);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.calendar button:hover {
+    background-color: rgb(45, 127, 239);
 }
 
 .participants {
