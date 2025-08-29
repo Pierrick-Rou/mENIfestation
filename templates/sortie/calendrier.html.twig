@@ -1,8 +1,9 @@
-{% extends '../base.html.twig' %}
+{% extends './base.html.twig' %}
 
 
 
 {% block body %}
+    <div class="calcontainer">
     <div>
         <h1>{{ mois }}</h1>
     </div>
@@ -13,17 +14,17 @@
         {% endfor %}
         {% for day in moisArr %}
             <div class="cal-day">
-                {{ day }}
-                {{ jours[day-1] }}
+                <p>{{ day }}-{{ jours[day-1] }}</p>
                 {%if events[day-1]!=day %}
                     <div class="admin-link">
                     <a href="{{ path('app_sortie_id',{id: eventsId[day-1]}) }}">
-                        <button>{{ events[day-1] }}</button>
+                        <button >{{ events[day-1] }}</button>
                     </a>
                     </div>
                 {% endif %}
             </div>
         {% endfor %}
+    </div>
     </div>
 
 {% endblock %}

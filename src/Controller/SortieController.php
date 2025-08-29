@@ -252,7 +252,7 @@ final class SortieController extends AbstractController
         return $this->redirectToRoute('app_sortie_home');
     }
 
-    #[Route('/calendrier', name: '_cal')]
+    #[Route('/calendrier', name: 'cal')]
     public function calendrier(SortieRepository $sr): Response
     {
         setlocale(LC_TIME, 'fr_FR');
