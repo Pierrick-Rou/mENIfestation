@@ -36,7 +36,7 @@ final class RegisterController extends AbstractController
 
             if ($file instanceof UploadedFile) {
                     $name = $slugger->slug($user->getNom()).'-'. uniqid().'. '.$file->guessExtension();
-                    $file->move('D:\mENIfestation\public\uploads', $name);
+                    $file->move('\public\uploads', $name);
                     $user->setImageProfil($name);
 
             }

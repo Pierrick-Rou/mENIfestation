@@ -82,17 +82,36 @@
                 const text = input.value.trim();
                 if (!text) return;
 
+                // Message de l’utilisateur
                 addMessage(text, "user");
                 input.value = "";
 
-                const response = await fetch("/chatbot", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: text })
-                });
+                // Ajouter l'animation de chargement
+                const loading = document.createElement("div");
+                loading.classList.add("typing-indicator");
+                loading.innerHTML = "<span></span><span></span><span></span>";
+                messages.appendChild(loading);
+                messages.scrollTop = messages.scrollHeight;
 
-                const data = await response.json();
-                addMessage(data.reply, "bot");
+                try {
+                    const response = await fetch("/chatbot", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ message: text })
+                    });
+
+                    const data = await response.json();
+
+                    // Retirer l'animation
+                    messages.removeChild(loading);
+
+                    // Réponse du bot
+                    addMessage(data.reply, "bot");
+
+                } catch (error) {
+                    messages.removeChild(loading);
+                    addMessage("⚠️ Erreur de connexion au chatbot.", "bot");
+                }
             }
 
             sendBtn.addEventListener("click", sendMessage);
@@ -100,6 +119,7 @@
                 if (e.key === "Enter") sendMessage();
             });
         });
+
     </script>
 </main>
 

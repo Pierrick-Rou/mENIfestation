@@ -5,12 +5,13 @@
 <div class="form-profile">
 
     {% if participant.imageprofil !=null %}
-        <img src="{{ asset('uploads/' ~ participant.imageProfil) }}" class="profil-pic" width="250px" alt="Photo de profil de {{ participant.nom }}" loading="lazy">
+        <img src="{{ asset('uploads/' ~ participant.imageProfil) }}" class="profil-pic" width="150px" alt="Photo de profil de {{ participant.nom }}" loading="lazy">
     {% endif %}
     <div class="participant-info">
         <span>Nom Prénom: {{ participant.prenom }} {{ participant.nom }}</span>
         <span>Adresse mail : {{ participant.email }}</span>
         <span>Téléphone : {{ participant.telephone }}</span>
+        <span>Site : {{ participant.site }}</span>
 
     </div>
     {% if app.user.id == participant.id %}
