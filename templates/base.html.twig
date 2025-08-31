@@ -40,7 +40,7 @@
 
 <main>
     {% block body %}{% endblock %}
-
+    {% if is_granted('IS_AUTHENTICATED') %}
     <!-- Bouton rond flottant -->
     <div id="chat-toggle">💬</div>
 
@@ -125,6 +125,7 @@
         });
 
     </script>
+    {% endif %}
 
 </main>
 
