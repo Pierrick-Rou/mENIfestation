@@ -40,6 +40,7 @@
 
 <main>
     {% block body %}{% endblock %}
+
     <!-- Bouton rond flottant -->
     <div id="chat-toggle">💬</div>
 
@@ -52,6 +53,7 @@
             <button id="chat-send">➤</button>
         </div>
     </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const toggle = document.getElementById("chat-toggle");
@@ -62,6 +64,7 @@
 
             // Ouvrir / fermer le chat
             toggle.addEventListener("click", () => {
+                console.log("200");
                 widget.style.display = widget.style.display === "none" ? "flex" : "none";
             });
 
@@ -79,6 +82,7 @@
             }
 
             async function sendMessage() {
+                console.log("200")
                 const text = input.value.trim();
                 if (!text) return;
 
@@ -121,6 +125,7 @@
         });
 
     </script>
+
 </main>
 
 <footer>
