@@ -152,7 +152,9 @@ footer {
     width: 100%;
     margin-top: 10px;
 }
-
+.form h2{
+    color: white;
+}
 .form button:hover {
     background-color: rgb(45, 127, 239);
 }
@@ -183,8 +185,7 @@ footer {
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
-    width: 100%;
-    display: flex;
+
 
 }
 
