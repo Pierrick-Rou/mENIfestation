@@ -10,6 +10,7 @@ use App\Repository\VilleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -47,7 +48,7 @@ class SortieType extends AbstractType
             ->add('duree')
             ->add('dateLimiteInscription')
             ->add('nbInscriptionMax')
-            ->add('infosSortie');
+            ->add('infosSortie', textareaType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -20,7 +20,7 @@
 
             {% if is_granted('IS_AUTHENTICATED') %}
                 <li><a href="{{path('app_sortie_home')}}">Sorties</a></li>
-                <li><a href="{{path('app_logout')}}">Se déconnecter</a></li>
+                <li><a href="{{path('app_logout')}}">Se deconnecter</a></li>
 
                 <li><a href="{{path('app_profil_details',{'id' :app.user.id}) }}">Mon profil</a></li>
 
@@ -138,6 +138,6 @@
 </main>
 
 <footer>
-    <p>&copy; {{ "now"|date("Y") }} M'ENIfestation – Tous droits réservés</p>
+    <p>&copy; {{ "now"|date("Y") }} M'ENIfestation – Tous droits reserves</p>
 </footer>
 </body>

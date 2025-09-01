@@ -17,9 +17,9 @@
         <div class="mb-3">
             <label for="sortie_lieu">Lieu</label>
             <div style="display: flex; align-items: center; gap: 5px;">
-                {{ form_widget(sortieForm.lieu, {'attr': {'id': 'sortie_lieu', 'class': 'form-select'}}) }}
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addLieuModal">+</button>
-            </div>
+                {{ form_widget(sortieForm.lieu, {'attr': {'id': 'sortie_lieu', 'class': 'form-select'}}) }}</div>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addLieuModal">Ajouter un lieu</button>
+
             {{ form_errors(sortieForm.lieu) }}
         </div>
 
