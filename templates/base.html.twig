@@ -42,6 +42,7 @@
 <main>
     {% block body %}{% endblock %}
     {% if is_granted('IS_AUTHENTICATED') %}
+
     <!-- Bouton rond flottant -->
         <a href="{{ path('app_sortie_create') }}"  id="add-toggle">
     <div>+</div>
@@ -131,10 +132,11 @@
                 if (e.key === "Enter") sendMessage();
             });
         });
-
     </script>
     {% endif %}
 
+    {% block javascripts %}{% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
 </main>
 
 <footer>

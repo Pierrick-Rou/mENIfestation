@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\DTO\FiltrageSortieDTO;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,16 +19,6 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function findAllNotArchive(): array
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.dateHeureDebut > :date')
-            ->setParameter('date', new \DateTime('-1 month'))
-            ->orderBy('s.dateHeureDebut', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
     public function findByMonth(): array
     {
 
@@ -35,7 +26,7 @@ class SortieRepository extends ServiceEntityRepository
             ->andWhere('s.dateHeureDebut > :dateDebut')
             ->andWhere('s.dateHeureDebut < :dateFin')
             ->setParameter('dateDebut', date('Y-m-01'))
-            ->setParameter('dateFin', date('Y-m-01',strtotime('+1 month')))
+            ->setParameter('dateFin', date('Y-m-01', strtotime('+1 month')))
             ->orderBy('s.dateHeureDebut', 'ASC')
             ->getQuery()
             ->getResult();
@@ -45,7 +36,7 @@ class SortieRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s')
             ->where('s.dateHeureDebut > :oneMonthAgo')
-            ->setParameter('oneMonthAgo', new \DateTime('-1 month'))
+            ->setParameter('oneMonthAgo', new DateTime('-1 month'))
             ->orderBy('s.dateHeureDebut', 'ASC');
 
         if ($filtreDTO->getNomSortie()) {
@@ -96,6 +87,90 @@ class SortieRepository extends ServiceEntityRepository
         $qb->orderBy('s.dateHeureDebut', 'ASC');
         return $qb->getQuery()->getResult();
     }
+
+    public function getInfoForMap(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select(
+                's.id,
+                        s.nom,
+                        s.dateHeureDebut as date,
+                        s.duree,
+                        s.infosSortie as infos,
+                        l.latitude,
+                        l.longitude,
+                        l.nom as lieu,
+                        l.rue,
+                        v.codePostal,
+                        v.nom as ville
+                        '
+            )
+            ->join('s.lieu', 'l')
+            ->join('l.Ville', 'v')
+            ->join('s.participant', 'p')
+            ->getQuery()
+            ->getResult();
+
+    }
+
+    public function findFilteredEventsWithMapData(FiltrageSortieDTO $filtreDTO, Participant $user): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->join('s.lieu', 'l')
+            ->join('l.Ville', 'v')
+            ->where('s.dateHeureDebut > :oneMonthAgo')
+            ->setParameter('oneMonthAgo', new \DateTime('-1 month'))
+            ->orderBy('s.dateHeureDebut', 'ASC');
+
+        // Filtres
+        if ($filtreDTO->getNomSortie()) {
+            $qb->andWhere('s.nom LIKE :nom')
+                ->setParameter('nom', "%{$filtreDTO->getNomSortie()}%");
+        }
+
+        if ($filtreDTO->getSite()) {
+            $qb->andWhere('s.site = :site')
+                ->setParameter('site', $filtreDTO->getSite());
+        }
+
+        if ($filtreDTO->getDateDebut()) {
+            $qb->andWhere('s.dateHeureDebut >= :dateDebut')
+                ->setParameter('dateDebut', $filtreDTO->getDateDebut());
+        }
+
+        if ($filtreDTO->getDateFin()) {
+            $qb->andWhere('s.dateHeureDebut <= :dateFin')
+                ->setParameter('dateFin', $filtreDTO->getDateFin());
+        }
+
+        if ($filtreDTO->getVille()) {
+            $qb->andWhere('l.ville = :ville')
+                ->setParameter('ville', $filtreDTO->getVille());
+        }
+
+        if ($filtreDTO->getOrganisateur()) {
+            $qb->andWhere('s.organisateur = :organisateur')
+                ->setParameter('organisateur', $user);
+        }
+
+        if ($filtreDTO->getInscrit() && !$filtreDTO->getNonInscrit()) {
+            $qb->leftJoin('s.participant', 'p')
+                ->andWhere(':participant MEMBER OF s.participant')
+                ->setParameter('participant', $user);
+        } elseif (!$filtreDTO->getInscrit() && $filtreDTO->getNonInscrit()) {
+            $qb->leftJoin('s.participant', 'p2')
+                ->andWhere(':participant NOT MEMBER OF s.participant')
+                ->setParameter('participant', $user);
+        }
+
+        if ($filtreDTO->getEtat()) {
+            $qb->andWhere('s.etat = :etat')
+                ->setParameter('etat', $filtreDTO->getEtat());
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 
     //    /**
     //     * @return Sortie[] Returns an array of Sortie objects

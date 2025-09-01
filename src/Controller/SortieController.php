@@ -16,18 +16,14 @@ use App\Form\SortieType;
 use App\Repository\LieuRepository;
 
 use App\Message\ReminderEmailMessage;
-
 use App\Repository\EtatRepository;
-
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
-
-use App\Service\SortieService;
-
 use App\Service\MailService;
-
-use Doctrine\ORM\EntityManager;
+use App\Service\SortieService;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -37,17 +33,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Map\Bridge\Leaflet\LeafletOptions;
+use Symfony\UX\Map\Bridge\Leaflet\Option\TileLayer;
+use Symfony\UX\Map\InfoWindow;
+use Symfony\UX\Map\Map;
+use Symfony\UX\Map\Marker;
+use Symfony\UX\Map\Point;
 
 #[Route('/sortie', name: 'app_sortie_')]
 final class SortieController extends AbstractController
 {
 
     #[Route('', name: 'home')]
-
     public function index(Request                $request,
                           SortieRepository       $sortieRepository,
                           SiteRepository         $sR,
-                          SortieService $sortieService,
+                          SortieService          $sortieService,
                           EntityManagerInterface $em): Response
 
     {
@@ -60,7 +61,46 @@ final class SortieController extends AbstractController
         $user = $this->getUser();
 
 
-        $sortieList = $sortieRepository->findFilteredEvents($filtrageSortieDTO, $user);
+        $sortieList = $sortieRepository->findFilteredEventsWithMapData($filtrageSortieDTO, $user);
+
+        $map = (new Map('default'))
+            ->center(new Point(45.7534031, 4.8295061))
+            ->zoom(6);
+
+        foreach ($sortieList as $sortie) {
+            if ($sortie->getLieu()->getLatitude() === null || $sortie->getLieu()->getLongitude() === null) {
+                continue; // Protection si certains lieux sont mal définis
+            }
+
+
+            $position = new Point($sortie->getLieu()->getLatitude(), $sortie->getLieu()->getLongitude());
+            $title = $sortie->getNom();
+
+            $content = sprintf(
+                '<h3>%s</h3><p>%s</p><p><strong>Lieu:</strong> %s, %s %s</p><p><strong>Date:</strong> %s</p>',
+                htmlspecialchars("{$sortie->getNom()}"),
+                nl2br(htmlspecialchars($sortie->getInfosSortie())),
+                htmlspecialchars($sortie->getLieu()->getNom()),
+                htmlspecialchars($sortie->getLieu()->getVille()->getCodePostal()),
+                htmlspecialchars($sortie->getLieu()->getVille()->getNom()),
+                $sortie->getDateHeureDebut()->format('d/m/Y H:i')
+            );
+
+            $map->addMarker(new Marker(
+                position: $position,
+                title: $title,
+                infoWindow: new InfoWindow(content: $content)
+            ));
+        }
+
+        $map->options((new LeafletOptions())
+            ->tileLayer(new TileLayer(
+                url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                options: ['maxZoom' => 19]
+            ))
+        );
+
 
         foreach ($sortieList as $sortie) {
             //gestion des états des sorties
@@ -68,10 +108,10 @@ final class SortieController extends AbstractController
         }
 
 
-
         return $this->render('sortie/index.html.twig', [
             'sortieList' => $sortieList,
-            'filtreForm'=>$form->createView()
+            'filtreForm' => $form->createView(),
+            'map' => $map,
         ]);
     }
 
@@ -95,7 +135,6 @@ final class SortieController extends AbstractController
         $sortieService->changementEtat($sortie, $em);
 
 
-
         $nbParticipant = $sortie->getParticipant()->count();
         $etat = $sortie->getEtat();
         $placeRestante = $sortie->getNbInscriptionMax() - $nbParticipant;
@@ -111,16 +150,16 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/{id}/inscription', name: 'inscription', requirements: ['id' => '\d+'], methods: ['GET'])]
-
     public function inscription(
-        int $id,
-        SortieRepository $sortieRepository,
-        ParticipantRepository $participantRepository,
-        Sortie $sortieEntity,
+        int                    $id,
+        SortieRepository       $sortieRepository,
+        ParticipantRepository  $participantRepository,
+        Sortie                 $sortieEntity,
         EntityManagerInterface $em,
-        MessageBusInterface $bus,
-        MailService $mailService
-    ): Response {
+        MessageBusInterface    $bus,
+        MailService            $mailService
+    ): Response
+    {
 
 
         $user = $this->getUser();
@@ -150,11 +189,11 @@ final class SortieController extends AbstractController
 
                 $startDate = $sortie->getDateHeureDebut(); // DateTimeInterface (souvent DateTimeImmutable)
                 // Aligner le fuseau de "now" sur celui de la date de début
-                $nowTz = $startDate->getTimezone() ?? new \DateTimeZone(date_default_timezone_get());
-                $now = new \DateTimeImmutable('now', $nowTz);
+                $nowTz = $startDate->getTimezone() ?? new DateTimeZone(date_default_timezone_get());
+                $now = new DateTimeImmutable('now', $nowTz);
 
                 // Calcul sécurisé du délai (en secondes), borné à >= 0 et casté en int
-                $delaySeconds = (int) max(
+                $delaySeconds = (int)max(
                     0,
                     $startDate->getTimestamp() - $now->getTimestamp() - (48 * 3600)
                 );
@@ -199,8 +238,7 @@ final class SortieController extends AbstractController
     }
 
 
-    #[Route('/create', name: 'create', methods: ['GET','POST'])]
-
+    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     public function create(EtatRepository $er): Response
     {
         $sortie = new Sortie();
@@ -228,6 +266,7 @@ final class SortieController extends AbstractController
         // 4. Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
             // 5. Enregistre en base de données
+            /* @var Participant $user */
             $user = $security->getUser();
 
             $userSite = $user->getSite();
@@ -249,6 +288,7 @@ final class SortieController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route('/{id}/delete', name: 'delete', methods: ['GET'])]
     public function delete(Sortie $sortie, EntityManagerInterface $em): Response
     {

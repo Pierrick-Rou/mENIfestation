@@ -5,6 +5,9 @@ framework:
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             async:
+                'doctrine://default',
+                routing:
+                    'App\Message\ReminderEmailMessage': async
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     use_notify: true
