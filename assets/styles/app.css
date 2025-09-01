@@ -243,12 +243,19 @@ main {
 }
 
 label {
-    display: block;
+    display: inline-block;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--space-sm);
     font-size: 0.875rem;
     letter-spacing: 0.025em;
+}
+
+input[type="checkbox"] {
+    padding-left: 10px;
+    width: 150px;
+    cursor: pointer;
+
 }
 
 input,
