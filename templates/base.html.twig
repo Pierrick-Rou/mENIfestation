@@ -42,6 +42,13 @@
     {% block body %}{% endblock %}
     {% if is_granted('IS_AUTHENTICATED') %}
     <!-- Bouton rond flottant -->
+        <a href="{{ path('app_sortie_create') }}"  id="add-toggle">
+    <div>+</div>
+            <span>Créer une sortie</span>
+        </a>
+    {% endif %}
+    {% if is_granted('IS_AUTHENTICATED') %}
+    <!-- Bouton rond flottant -->
     <div id="chat-toggle">💬</div>
 
     <!-- Fenêtre du chat (masquée au départ) -->
