@@ -86,6 +86,30 @@ footer {
     flex-direction: column;
     justify-content: center;
 
+
+}
+.form-profile {
+    width: 40vw;
+    border: solid 0.2em rgba(114, 167, 232, 1);
+    align-content: center;
+    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    padding: 1em;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.filter {
+    width: inherit;
+
+    gap: var(--space-3);
+    margin-inline: auto;
+    justify-content: center;
+
 }
 
 .filter {
@@ -93,6 +117,7 @@ footer {
 
 }
 
+.filter { width: 100%; }
 
 .form label {
     display: block;
@@ -127,7 +152,9 @@ footer {
     width: 100%;
     margin-top: 10px;
 }
-
+.form h2{
+    color: white;
+}
 .form button:hover {
     background-color: rgb(45, 127, 239);
 }
@@ -158,6 +185,8 @@ footer {
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
+
+
 }
 
 .participant-info span {
@@ -172,6 +201,9 @@ footer {
 /* Boutons */
 .participant-actions {
     display: flex;
+    flex-direction: row;
+    width: 80%;
+    margin-right: 1em;
     justify-content: space-between;
 }
 
@@ -181,6 +213,11 @@ footer {
     border-radius: 8px;
     background-color: #FD8152FF;
     color: #fff;
+
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-right: 1em;
+    max-width: 40%;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
@@ -194,30 +231,55 @@ footer {
     border: #1a1d20 1px solid;
     display: grid;
     min-height: 80vh;
-    min-width: 60vw;
+    min-width: 10vw;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(5, 1fr);
     gap: 5px;
     border-radius: 10px;
-    padding: 10px;
+    padding: 5px;
+    margin-top: 5%;
 }
 
-.calendar > * {
+.calendar > .cal-day {
     border: #1a1d20 1px dashed;
     border-radius: 5px;
     padding: 5px;
 }
 
+.cal-day-greyed {
+    border: #1a1d20 1px dashed;
+    border-radius: 5px;
+    background: rgba(15, 99, 184, 0.17);
+}
+
+.calendar button {
+    background-color: rgba(114, 167, 232, 1);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.calendar button:hover {
+    background-color: rgb(45, 127, 239);
+}
+
 .participants {
     display: flex;
+
     flex-wrap: wrap;
-    gap: 8px; /* espace entre les badges */
+    gap: 2px; /* espace entre les badges */
 }
 
 .participants .badge {
     position: relative;
     display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 6px;
+
     background-color: #e0f0ff; /* bleu clair */
     color: #004080; /* bleu foncé */
     border-radius: 20px; /* forme "pilule" */
@@ -225,6 +287,8 @@ footer {
     font-size: 14px;
     font-weight: 500;
     transition: 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 100px;
 }
 
 .participants .badge .img {
@@ -344,7 +408,6 @@ table tr {
     text-overflow: ellipsis; /* ajoute "..." */
 }
 
-/* Label des filtres */
 .filters-bar label {
     font-weight: 600;
     color: #333;
@@ -363,4 +426,121 @@ table tr {
 
 .filters-bar select:hover {
     border-color: #004080; /* bleu foncé au hover */
+}
+.profil-pic{
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    margin-bottom: 6em;
+}
+.profil-bu{
+    width: 100%;
+    border: 1px solid #ddd;
+
+}
+/* Bouton rond flottant */
+#chat-toggle {
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-image:linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border: solid 0.1em white;
+
+}
+
+
+/* Fenêtre de chat */
+#chat-widget {
+    position: fixed;
+    bottom: 110px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+#chat-header {
+    background-image:linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    color: white;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+}
+#chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 200px;
+}
+#chat-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+}
+#chat-input input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+}
+#chat-input button {
+    background: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 6px 12px;
+    border-radius: 15px;
+    background: #f1f1f1;
+    max-width: fit-content;
+    margin: 5px 0;
+}
+
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    margin: 0 2px;
+    background-color: #555;
+    border-radius: 50%;
+    display: inline-block;
+    animation: blink 1.4s infinite both;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    20% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.2; transform: scale(0.8); }
+}
+.user-card{
+    width:100%;
+    max-width: 10%;
+    display: flex;
+
+
+
 }

@@ -53,7 +53,12 @@ class FiltreSortieType extends AbstractType
                         ->orderBy('v.nom', 'ASC');
                 }
             ])
-            ->add('organisateur', CheckboxType::class, ['required' => false])
+            ->add('organisateur', CheckboxType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'checkbox'
+                ]
+            ])
             ->add('inscrit', CheckboxType::class, ['required' => false])
             ->add('nonInscrit', CheckboxType::class, ['required' => false])
             ->add('etat', ChoiceType::class, [

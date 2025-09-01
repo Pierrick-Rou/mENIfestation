@@ -14,9 +14,14 @@ use App\Form\LieuType;
 use App\Form\RegistrationType;
 use App\Form\SortieType;
 use App\Repository\LieuRepository;
+
+use App\Message\ReminderEmailMessage;
+
+use App\Repository\EtatRepository;
+
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
-use App\Repository\EtatRepository;
+use App\Repository\SortieRepository;
 
 use App\Service\SortieService;
 
@@ -24,14 +29,13 @@ use App\Service\MailService;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-
-use App\Repository\SortieRepository;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/sortie', name: 'app_sortie_')]
@@ -40,14 +44,19 @@ final class SortieController extends AbstractController
 
     #[Route('', name: 'home')]
 
-    public function index(Request $request, SortieRepository $sortieRepository, SiteRepository $sR, EntityManagerInterface $em, SortieService $sortieService): Response
+    public function index(Request                $request,
+                          SortieRepository       $sortieRepository,
+                          SiteRepository         $sR,
+                          SortieService $sortieService,
+                          EntityManagerInterface $em): Response
 
     {
+
         $filtrageSortieDTO = new FiltrageSortieDTO();
         $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO);
         $form->handleRequest($request);
 
-        /* @var Participant $user*/
+        /* @var Participant $user */
         $user = $this->getUser();
 
 
@@ -82,7 +91,6 @@ final class SortieController extends AbstractController
         }
 
 
-
         //gestion des états des sorties
         $sortieService->changementEtat($sortie, $em);
 
@@ -103,54 +111,88 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/{id}/inscription', name: 'inscription', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function inscription(int $id,
-                                SortieRepository $sortieRepository,
-                                ParticipantRepository $participantRepository,
-                                Sortie $sortieEntity,
-                                EntityManagerInterface $em,
 
-                                MailService $mailService): Response
-    {
+    public function inscription(
+        int $id,
+        SortieRepository $sortieRepository,
+        ParticipantRepository $participantRepository,
+        Sortie $sortieEntity,
+        EntityManagerInterface $em,
+        MessageBusInterface $bus,
+        MailService $mailService
+    ): Response {
+
 
         $user = $this->getUser();
         $sortie = $sortieRepository->find($id);
 
         if (!$sortie) {
             $this->addFlash('error', 'Sortie not found');
+            return $this->redirectToRoute('app_sortie_id', ['id' => $id]);
         }
 
-        if ($sortie->getEtat() === EtatSortie::OUVERTE) {
+        if ($sortie->getEtat() !== EtatSortie::OUVERTE) {
+            $this->addFlash('error', 'Vous ne pouvez pas vous inscrire à cet évènement');
+            return $this->redirectToRoute('app_sortie_id', ['id' => $id]);
+        }
 
-            $isRegistered = false;
-            if ($user && $sortie) {
-                $isRegistered = $sortieEntity->getParticipant()->contains($user);
-            }
+        $isRegistered = $user && $sortieEntity->getParticipant()->contains($user);
+        $participant = $participantRepository->find($user->getId());
 
-            $participant = $participantRepository->find($user->getId());
-            if (!$isRegistered) {
-                if ($sortie->getParticipant()->count() < $sortie->getNbInscriptionMax()) {
-                    $sortie->addParticipant($participant);
+        // INSCRIPTION
+        if (!$isRegistered) {
+            if ($sortie->getParticipant()->count() < $sortie->getNbInscriptionMax()) {
+                $sortie->addParticipant($participant);
+                $em->flush();
 
-                    $em->persist($sortie);
-                    $em->flush();
-                    $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
-                    $mailService->sendRegistrationMail($user->getEmail(), $sortie->getNom());
+                $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+                $mailService->sendRegistrationMail($user->getEmail(), $sortie->getNom());
+
+                $startDate = $sortie->getDateHeureDebut(); // DateTimeInterface (souvent DateTimeImmutable)
+                // Aligner le fuseau de "now" sur celui de la date de début
+                $nowTz = $startDate->getTimezone() ?? new \DateTimeZone(date_default_timezone_get());
+                $now = new \DateTimeImmutable('now', $nowTz);
+
+                // Calcul sécurisé du délai (en secondes), borné à >= 0 et casté en int
+                $delaySeconds = (int) max(
+                    0,
+                    $startDate->getTimestamp() - $now->getTimestamp() - (48 * 3600)
+                );
+
+                if ($delaySeconds > 0) {
+
+                    $bus->dispatch(
+                        new ReminderEmailMessage(
+                            $user->getEmail(),
+                            $sortie->getNom(),
+                            $sortie->getId(),
+                            $user->getId()
+                        ),
+                        // Messenger attend des millisecondes (int)
+                        [new DelayStamp($delaySeconds * 1000)]
+                    );
                 } else {
-                    $this->addFlash('error', 'Nombre limite de participant atteint');
+                    // Moins de 48h avant -> envoyer immédiatement
+                    $mailService->sendReminderMail($user->getEmail(), $sortie->getNom(), $startDate);
                 }
 
 
-            } else if ($isRegistered) {
-                $sortie->removeParticipant($participant);
-
-                $em->persist($sortie);
-                $em->flush();
-
-                $this->addFlash('success', 'Vous vous êtes désinscrit de l\'évènement');
-                $mailService->sendUnregistrationMail($user->getEmail(), $sortie->getNom());
+            } else {
+                $this->addFlash('error', 'Nombre limite de participants atteint');
             }
-        } else {
-            $this->addFlash('error', 'Vous ne pouvez pas vous inscrire a cet évènement');
+        }
+
+        // DESINSCRIPTION
+        else {
+            $sortie->removeParticipant($participant);
+            $em->flush();
+
+            $this->addFlash('success', 'Vous vous êtes désinscrit de l\'évènement');
+            $mailService->sendUnregistrationMail($user->getEmail(), $sortie->getNom());
+
+            // Note : Messenger ne permet pas d'annuler un message déjà dispatché.
+            // Solution simple : le handler de ReminderEmailMessage peut vérifier que
+            // l'utilisateur est toujours inscrit avant d'envoyer le mail.
         }
 
         return $this->redirectToRoute('app_sortie_id', ['id' => $id]);
@@ -158,6 +200,7 @@ final class SortieController extends AbstractController
 
 
     #[Route('/create', name: 'create', methods: ['GET','POST'])]
+
     public function create(EtatRepository $er): Response
     {
         $sortie = new Sortie();
@@ -170,6 +213,7 @@ final class SortieController extends AbstractController
 
         ]);
     }
+
     #[Route('/validForm', name: 'validForm', methods: ['POST'])]
     public function validForm(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
