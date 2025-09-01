@@ -5,11 +5,15 @@ ini_set('date.timezone', 'Europe/Paris');
 
 
 use App\DTO\FiltrageSortieDTO;
+use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Enum\EtatSortie;
 use App\Form\FiltreSortieType;
+use App\Form\LieuType;
+use App\Form\RegistrationType;
 use App\Form\SortieType;
+use App\Repository\LieuRepository;
 
 use App\Message\ReminderEmailMessage;
 
@@ -27,6 +31,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -200,8 +205,12 @@ final class SortieController extends AbstractController
     {
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $lieu = new Lieu();
+        $lieuForm = $this->createForm(LieuType::class, $lieu);
         return $this->render("sortie/sortieForm.html.twig", [
-            "sortieForm" => $sortieForm
+            "sortieForm" => $sortieForm,
+            "lieuForm" => $lieuForm,
+
         ]);
     }
 
@@ -219,7 +228,6 @@ final class SortieController extends AbstractController
         // 4. Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
             // 5. Enregistre en base de données
-            /* @var Participant $user */
             $user = $security->getUser();
 
             $userSite = $user->getSite();
@@ -241,13 +249,34 @@ final class SortieController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
     #[Route('/{id}/delete', name: 'delete', methods: ['GET'])]
     public function delete(Sortie $sortie, EntityManagerInterface $em): Response
     {
         $em->remove($sortie);
         $em->flush();
         return $this->redirectToRoute('app_sortie_home');
+    }
+
+    #[Route('/ajoutLieu', name: 'ajoutLieu', methods: ['GET', 'POST'])]
+    public function ajoutLieu(LieuRepository $er, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $lieu = new Lieu();
+        $form = $this->createForm(LieuType::class, $lieu);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($lieu);
+            $em->flush();
+
+            return new JsonResponse([
+                'id' => $lieu->getId(),
+                'nom' => $lieu->getNom(),
+                'latitude' => $lieu->getLatitude(),
+                'longitude' => $lieu->getLongitude(),
+            ]);
+
+        }
+        return new JsonResponse([]);
     }
 
 }
