@@ -1,6 +1,6 @@
 <?php
 
-namespace App\service;
+namespace App\Service;
 use App\Entity\Sortie;
 use App\Enum\EtatSortie;
 use Doctrine\ORM\EntityManager;
