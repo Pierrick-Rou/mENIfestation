@@ -5,6 +5,32 @@
     src: url("../font/Break.ttf") format("truetype");
 }
 
+:root {
+    /* 🎨 Couleurs principales */
+    --blue: rgba(2, 0, 36, 1) ;
+    --blue-dark:rgba(121, 9, 9, 1);
+    --orange: rgba(255, 221, 0, 1);
+    --yellow: rgba(249, 202, 86, 1);
+
+    /* Couleurs de texte */
+    --text-dark: #222;
+    --text-light: #eee;
+
+    /* Dégradé principal */
+    --gradient-main: linear-gradient(
+        111.6deg,
+        var(--blue) 9.4%,
+        var(--blue) 43.9%,
+        var(--blue-dark) 54.8%,
+        var(--orange) 86.3%
+    );
+
+    /* Autres couleurs récurrentes */
+    --border-grey: #ddd;
+    --bg-light: #fafafa;
+    --bg-hover: rgba(249, 202, 86, 0.64);
+}
+
 
 body {
     display: flex;
@@ -19,7 +45,7 @@ body {
 /* --- Navbar --- */
 .navbar {
 
-    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    background-image: var(--gradient-main);
     color: white;
     display: flex;
     justify-content: space-between;
@@ -34,8 +60,7 @@ body {
     font-weight: bold;
     font-size: 2em;
 
-    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
-}
+    background-image: var(--gradient-main);}
 
 .navbar .nav-links {
     list-style: none;
@@ -68,7 +93,7 @@ main {
 
 /* --- Footer --- */
 footer {
-    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    background-image: var(--gradient-main);
     color: #eee;
     text-align: center;
     padding: 1rem;
@@ -79,7 +104,7 @@ footer {
     width: 40vw;
     border: solid 0.2em rgba(114, 167, 232, 1);
     align-content: center;
-    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    background-image: var(--gradient-main);
     padding: 1em;
     border-radius: 1em;
     display: flex;
@@ -92,7 +117,7 @@ footer {
     width: 40vw;
     border: solid 0.2em rgba(114, 167, 232, 1);
     align-content: center;
-    background-image: linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    background-image: var(--gradient-main);
     padding: 1em;
     border-radius: 1em;
     display: flex;
@@ -437,6 +462,54 @@ table tr {
     border: 1px solid #ddd;
 
 }
+#add-toggle {
+    position: fixed;
+    bottom: 120px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-image: var(--gradient-main);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border: solid 0.1em white;
+    text-decoration: none;
+}
+
+#add-toggle:hover {
+    box-shadow: 0 8px 18px rgba(114, 167, 232, 1);
+    font-size: 3.8em;
+}
+/*#add-toggle:hover > span {*/
+/*    display: block;*/
+/*}*/
+
+#add-toggle span {
+    display: none;
+    width: 100%;
+    background-color: #1b1b1e;
+    border-radius: 20%;
+    padding: 0.5em;
+    color: #efd4d4;
+    font-size: 0.5em;
+    position: absolute;
+    top: -100%;
+    z-index: 1000;
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+/* 🔥 Ajout pour afficher le span au hover */
+/*#add-toggle:hover span {*/
+/*    display: block;*/
+/*}*/
+
 /* Bouton rond flottant */
 #chat-toggle {
     position: fixed;
@@ -445,17 +518,22 @@ table tr {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-image:linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    background-image:var(--gradient-main);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    text-decoration: none;
+    box-shadow: 0 8px 8px rgba(0,0,0,0.2);
     z-index: 1000;
     border: solid 0.1em white;
 
+}
+#chat-toggle:hover {
+    box-shadow: 0 8px 18px  rgba(114, 167, 232, 1);
+    font-size:2em;
 }
 
 
@@ -475,7 +553,7 @@ table tr {
     z-index: 1000;
 }
 #chat-header {
-    background-image:linear-gradient(111.6deg, rgba(114, 167, 232, 1) 9.4%, rgba(253, 129, 82, 1) 43.9%, rgba(253, 129, 82, 1) 54.8%, rgba(249, 202, 86, 1) 86.3%);
+    background-image:var(--gradient-main);
     color: white;
     padding: 10px;
     border-radius: 10px 10px 0 0;
