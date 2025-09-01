@@ -19,10 +19,10 @@
 
 :root {
     /* 🎨 Couleurs principales */
-    --blue: rgb(62, 73, 213);
-    --blue-dark: rgb(232, 158, 8);
-    --orange: rgb(99, 21, 129);
-    --yellow: rgb(19, 104, 189);
+    --blue: #2A3454;
+    --blue-dark: #8EAB6A;
+    --orange: #7E6AAB;
+    --yellow: #d3c97b;
 
     /* Couleurs de texte */
     --text-dark: #222;
@@ -33,14 +33,14 @@
         111.6deg,
         var(--blue) 9.4%,
         var(--orange) 43.9%,
-        var(--blue-dark) 54.8%,
-        var(--orange) 86.3%
+        var(--orange) 54.8%,
+        var(--blue-dark) 86.3%
     );
 
     /* Autres couleurs récurrentes */
     --border-grey: #9c9696;
-    --bg-light: #fafafa;
-    --bg-hover: rgba(249, 202, 86, 0.64);
+    --bg-light: #1E306B;
+    --bg-hover: #817A91;
 }
 
 
@@ -99,9 +99,9 @@ body {
 main {
     flex: 1; /* prend tout l'espace restant */
     padding: 2rem;
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-content: center;*/
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 /* --- Footer --- */
@@ -140,6 +140,27 @@ footer {
     align-items: center;
 
 
+}
+.form-profile label {
+    font-family: "Coco", "Helvetica", sans-serif;
+    display: block;
+    padding-top: 0.5em;
+    font-weight: 600;
+    color:var(--border-grey);
+}
+.form-profile button {
+    background-color: var(--yellow);
+    color: var(--blue);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+.form-profile button:hover {
+    background-color: var(--blue-dark);
 }
 
 .filter {
@@ -183,7 +204,7 @@ footer {
 /*CSS pour la card du detail de l'user*/
 .form button {
     background-color: var(--yellow);
-    color: white;
+    color: var(--blue);
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
@@ -197,7 +218,7 @@ footer {
     color: white;
 }
 .form button:hover {
-    background-color: rgb(45, 127, 239);
+    background-color: var(--blue-dark);
 }
 
 /* Conteneur principal */
@@ -226,6 +247,7 @@ footer {
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
+    width: 60%;
 
 
 }
@@ -234,38 +256,25 @@ footer {
     font-size: 1rem;
     color: #555;
     padding: 8px 12px;
-    border-left: 4px solid #FD8152FF;
+    border-left: 4px solid var(--blue-dark);;
     background-color: #f9f9f9;
     border-radius: 6px;
 }
 
-/* Boutons */
 .participant-actions {
     display: flex;
-    flex-direction: row;
-    width: 80%;
-    margin-right: 1em;
+    flex-direction: column;
     justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.participant-actions a{
+    width: 60%;
 }
 
-.participant-actions a {
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    background-color: #FD8152FF;
-    color: #fff;
 
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    margin-right: 1em;
-    max-width: 40%;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
 
-.participant-actions a:hover {
-    background-color: #F9CA56FF;
-}
+
 
 .calendar {
     background-color: white;
@@ -295,7 +304,7 @@ footer {
 
 .calendar button {
     background-color: var(--yellow);
-    color: white;
+    color: var(--blue);
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
@@ -306,7 +315,7 @@ footer {
 }
 
 .calendar button:hover {
-    background-color: rgb(45, 127, 239);
+    background-color: var(--blue-dark);
 }
 
 .participants {
@@ -365,6 +374,7 @@ footer {
 
 /* Conteneur global pour bien centrer */
 table {
+    color:var(--blue);
     width: 100%;
     border-collapse: collapse; /* supprime les doubles bordures */
     margin: 20px 0;
@@ -380,7 +390,7 @@ table {
 /* En-têtes */
 table th {
     background-color: var(--yellow); /* bleu foncé */
-    color: #fff;
+    color:var(--blue);
     text-align: left;
     padding: 12px 15px;
     font-weight: 600;
@@ -501,6 +511,7 @@ table tr {
 #add-toggle:hover {
     box-shadow: 0 8px 18px var(--yellow);
     font-size: 3.8em;
+    transition-duration: 0.2s , 1s;
 }
 /*#add-toggle:hover > span {*/
 /*    display: block;*/
@@ -550,6 +561,7 @@ table tr {
 #chat-toggle:hover {
     box-shadow: 0 8px 18px  var(--yellow);
     font-size:2em;
+    transition-duration: 0.2s , 1s;
 }
 
 
@@ -591,8 +603,8 @@ table tr {
     padding: 10px;
 }
 #chat-input button {
-    background: #4a90e2;
-    color: white;
+    background: var(--yellow);
+    color: var(--blue);
     border: none;
     padding: 10px 15px;
     cursor: pointer;
