@@ -77,7 +77,8 @@ final class SortieController extends AbstractController
             $title = $sortie->getNom();
 
             $content = sprintf(
-                '<h3>%s</h3><p>%s</p><p><strong>Lieu:</strong> %s, %s %s</p><p><strong>Date:</strong> %s</p>',
+                '<h3><a href="%s">%s</a></h3><p>%s</p><p><strong>Lieu:</strong> %s, %s %s</p><p><strong>Date:</strong> %s</p>',
+                htmlspecialchars('sortie/' . $sortie->getId()),
                 htmlspecialchars("{$sortie->getNom()}"),
                 nl2br(htmlspecialchars($sortie->getInfosSortie())),
                 htmlspecialchars($sortie->getLieu()->getNom()),

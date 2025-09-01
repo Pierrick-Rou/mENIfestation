@@ -85,10 +85,11 @@ body {
 /* --- Main --- */
 main {
     flex: 1; /* prend tout l'espace restant */
-    padding: 2rem;
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-content: center;*/
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    justify-content: center;
+    align-content: center;
 }
 
 /* --- Footer --- */
