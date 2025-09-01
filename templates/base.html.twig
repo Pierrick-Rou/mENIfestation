@@ -40,6 +40,7 @@
 
 <main>
     {% block body %}{% endblock %}
+    {% if is_granted('IS_AUTHENTICATED') %}
 
     <!-- Bouton rond flottant -->
     <div id="chat-toggle">💬</div>
@@ -53,6 +54,7 @@
             <button id="chat-send">➤</button>
         </div>
     </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const toggle = document.getElementById("chat-toggle");
@@ -63,6 +65,7 @@
 
             // Ouvrir / fermer le chat
             toggle.addEventListener("click", () => {
+                console.log("200");
                 widget.style.display = widget.style.display === "none" ? "flex" : "none";
             });
 
@@ -80,20 +83,40 @@
             }
 
             async function sendMessage() {
+                console.log("200")
                 const text = input.value.trim();
                 if (!text) return;
 
+                // Message de l’utilisateur
                 addMessage(text, "user");
                 input.value = "";
 
-                const response = await fetch("/chatbot", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: text })
-                });
+                // Ajouter l'animation de chargement
+                const loading = document.createElement("div");
+                loading.classList.add("typing-indicator");
+                loading.innerHTML = "<span></span><span></span><span></span>";
+                messages.appendChild(loading);
+                messages.scrollTop = messages.scrollHeight;
 
-                const data = await response.json();
-                addMessage(data.reply, "bot");
+                try {
+                    const response = await fetch("/chatbot", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ message: text })
+                    });
+
+                    const data = await response.json();
+
+                    // Retirer l'animation
+                    messages.removeChild(loading);
+
+                    // Réponse du bot
+                    addMessage(data.reply, "bot");
+
+                } catch (error) {
+                    messages.removeChild(loading);
+                    addMessage("⚠️ Erreur de connexion au chatbot.", "bot");
+                }
             }
 
             sendBtn.addEventListener("click", sendMessage);
@@ -101,7 +124,10 @@
                 if (e.key === "Enter") sendMessage();
             });
         });
+
     </script>
+    {% endif %}
+
     {% block javascripts %}{% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </main>

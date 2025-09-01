@@ -73,7 +73,7 @@ final class ProfilController extends AbstractController
 
             if ($file instanceof UploadedFile) {
                 $name = $slugger->slug($participant->getNom()).'-'. uniqid().'.'.$file->guessExtension();
-                $file->move('D:\mENIfestation\public\uploads', $name);
+                $file->move('uploads', $name);
                 $participant->setImageProfil($name);
 
             }

@@ -30,7 +30,13 @@ final class TestController extends AbstractController
 
 
 
-
+    #[Route('/testrepo', name: 'app_t')]
+    public function t(SortieRepository $sr): Response
+    {
+        $t = $sr->findAll();
+        dd($t);
+        return $this->render('test/index.html.twig');
+    }
 
     #[Route('/calendrier', name: 'app_cal')]
     public function calendrier(SortieRepository $sr): Response

@@ -4,12 +4,12 @@
 
     <div class="form participant-info">
         <h2>{{ sortie.nom }}</h2>
-        <p>
+        <span>
             Organisateur:
             <a href="{{ path("app_profil_details",  {'id': sortie.organisateur.id }) }}">
                 {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}
             </a>
-        </p>
+        </span>
 
 
         <span>
@@ -29,10 +29,13 @@
         <p>Participants : {{ nbParticipant }}</p>
         <div class="participants">
             {% for p in sortie.participant %}
-                <a href="{{ path('app_profil_details', {'id': p.id }) }}" class="badge"
+                <div class="user-card">
+            <a href="{{ path('app_profil_details', {'id': p.id }) }}" class="badge"
                    data-info="{{ p.nom }} - {{ p.email }}">
+
                     {{ p.nom }}
                 </a>
+        </div>
             {% endfor %}
         </div>
 
