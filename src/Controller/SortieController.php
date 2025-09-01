@@ -213,7 +213,7 @@ final class SortieController extends AbstractController
                     );
                 } else {
                     // Moins de 48h avant -> envoyer immédiatement
-                    $mailService->sendReminderMail($user->getEmail(), $sortie->getNom(), $startDate);
+                    $mailService->sendReminderMail($user->getEmail(), $sortie->getNom(), $sortie->getId(), $user->getNom(), $sortieRepository);
                 }
 
 
