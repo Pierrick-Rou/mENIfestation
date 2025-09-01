@@ -36,6 +36,7 @@
                     <th>Inscrit</th>
                 </tr>
                 {% for sortie in sortieList %}
+
                     <tr onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
                         <td>{{ sortie.nom }}</td>
                         <td>{{ sortie.dateHeureDebut|date("H:i - d/m/y") }}</td>
@@ -54,5 +55,12 @@
                 {% endfor %}
             </table>
         </div>
+
+    <div>
+        {{ ux_map(map, {style: 'height: 600px;'}) }}
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
     {% endif %}
 {% endblock %}

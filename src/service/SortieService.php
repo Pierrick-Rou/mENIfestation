@@ -4,11 +4,12 @@ namespace App\Service;
 use App\Entity\Sortie;
 use App\Enum\EtatSortie;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Nette\Utils\DateTime;
 ini_set('date.timezone', 'Europe/Paris');
 class SortieService
 {
-public function changementEtat(Sortie $sortie, EntityManager $em){
+public function changementEtat(Sortie $sortie, EntityManagerInterface $em){
 
     //convertion de toutes les dates/durée en "strtotime"
 
