@@ -4,13 +4,25 @@
     font-weight: 400;
     src: url("../font/Break.ttf") format("truetype");
 }
+@font-face {
+    font-family: "Aki";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../font/AkiraExpandedDemo.otf") format("truetype");
+}
+@font-face {
+    font-family: "Coco";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../font/Cocogoose-Pro-Light-trial.ttf") format("truetype");
+}
 
 :root {
     /* 🎨 Couleurs principales */
-    --blue: rgba(2, 0, 36, 1) ;
-    --blue-dark:rgba(121, 9, 9, 1);
-    --orange: rgba(255, 221, 0, 1);
-    --yellow: rgba(249, 202, 86, 1);
+    --blue: rgb(62, 73, 213);
+    --blue-dark: rgb(232, 158, 8);
+    --orange: rgb(99, 21, 129);
+    --yellow: rgb(19, 104, 189);
 
     /* Couleurs de texte */
     --text-dark: #222;
@@ -20,13 +32,13 @@
     --gradient-main: linear-gradient(
         111.6deg,
         var(--blue) 9.4%,
-        var(--blue) 43.9%,
+        var(--orange) 43.9%,
         var(--blue-dark) 54.8%,
         var(--orange) 86.3%
     );
 
     /* Autres couleurs récurrentes */
-    --border-grey: #ddd;
+    --border-grey: #9c9696;
     --bg-light: #fafafa;
     --bg-hover: rgba(249, 202, 86, 0.64);
 }
@@ -71,15 +83,16 @@ body {
 }
 
 .navbar .nav-links a {
+    font-family: "Coco", "Helvetica", sans-serif;
     color: white;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 400;
     padding: 1em;
 }
 
 .navbar .nav-links a:hover {
     text-decoration: underline;
-    background-color: rgba(114, 167, 232, 1);
+    background-color:var(--yellow);
 }
 
 /* --- Main --- */
@@ -99,11 +112,12 @@ footer {
     text-align: center;
     padding: 1rem;
     font-size: 0.9rem;
+    font-family: "Aki", "Helvetica", sans-serif;
 }
 
 .form {
     width: 40vw;
-    border: solid 0.2em rgba(114, 167, 232, 1);
+    border: solid 0.2em var(--yellow);
     align-content: center;
     background-image: var(--gradient-main);
     padding: 1em;
@@ -116,7 +130,7 @@ footer {
 }
 .form-profile {
     width: 40vw;
-    border: solid 0.2em rgba(114, 167, 232, 1);
+    border: solid 0.2em var(--yellow);
     align-content: center;
     background-image: var(--gradient-main);
     padding: 1em;
@@ -146,10 +160,11 @@ footer {
 .filter { width: 100%; }
 
 .form label {
+    font-family: "Coco", "Helvetica", sans-serif;
     display: block;
-    margin-bottom: 8px;
+    padding-top: 0.5em;
     font-weight: 600;
-    color: #333;
+    color:var(--border-grey);
 }
 
 .form input[type="text"],
@@ -168,7 +183,7 @@ footer {
 
 /*CSS pour la card du detail de l'user*/
 .form button {
-    background-color: rgba(114, 167, 232, 1);
+    background-color: var(--yellow);
     color: white;
     padding: 12px 20px;
     border: none;
@@ -179,6 +194,7 @@ footer {
     margin-top: 10px;
 }
 .form h2{
+    font-family: "Coco", "Helvetica", sans-serif;
     color: white;
 }
 .form button:hover {
@@ -279,7 +295,7 @@ footer {
 }
 
 .calendar button {
-    background-color: rgba(114, 167, 232, 1);
+    background-color: var(--yellow);
     color: white;
     padding: 12px 20px;
     border: none;
@@ -364,7 +380,7 @@ table {
 
 /* En-têtes */
 table th {
-    background-color: rgba(114, 167, 232, 1); /* bleu foncé */
+    background-color: var(--yellow); /* bleu foncé */
     color: #fff;
     text-align: left;
     padding: 12px 15px;
@@ -484,7 +500,7 @@ table tr {
 }
 
 #add-toggle:hover {
-    box-shadow: 0 8px 18px rgba(114, 167, 232, 1);
+    box-shadow: 0 8px 18px var(--yellow);
     font-size: 3.8em;
 }
 /*#add-toggle:hover > span {*/
@@ -533,7 +549,7 @@ table tr {
 
 }
 #chat-toggle:hover {
-    box-shadow: 0 8px 18px  rgba(114, 167, 232, 1);
+    box-shadow: 0 8px 18px  var(--yellow);
     font-size:2em;
 }
 
