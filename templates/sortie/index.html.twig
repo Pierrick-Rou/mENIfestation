@@ -1,21 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello SortieController!{% endblock %}
-
+{%  block script %}{{ importmap('app') }}{% endblock %}
 {% block body %}
-    <div class="table-container">
+
+    <div class="table-container" style="z-index: 1;">
         <div class="filter-bar">
-            {#        <form method="get" action="{{ path('app_sortie_home') }}"> #}
-            {#            <label for="site">Filtrer par site :</label> #}
-            {#            <select name="site" id="site" onchange="this.form.submit()"> #}
-            {#                <option value="">-- Tous les sites --</option> #}
-            {#                {% for site in sites %} #}
-            {#                    <option value="{{ site.id }}" {% if siteId == site.id %}selected{% endif %}> #}
-            {#                        {{ site.nom }} #}
-            {#                    </option> #}
-            {#                {% endfor %} #}
-            {#            </select> #}
-            {#        </form> #}
             <div class="form filter">
                 {{ form(filtreForm) }}
             </div>
@@ -23,6 +13,7 @@
         {% if sortieList is empty %}
             <p>Pas de sortie</p>
         {% else %}
+
 
             <table>
                 <tr>
@@ -55,12 +46,10 @@
                 {% endfor %}
             </table>
         </div>
-
-    <div>
-        {{ ux_map(map, {style: 'height: 600px;'}) }}
+    <div style="width: 100%; height: 75vh;">
+        {{ ux_map(map, {style: 'height: 75vh; width: 100%; z-index: 0; border-radius:15px;'}) }}
     </div>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
 
     {% endif %}
 {% endblock %}
