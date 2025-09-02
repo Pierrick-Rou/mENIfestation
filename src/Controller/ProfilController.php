@@ -26,7 +26,6 @@ final class ProfilController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function index(Participant $participant): Response
     {
-
         return $this->render('profil/detailsProfil.html.twig', [
             'participant' => $participant,
         ]);
