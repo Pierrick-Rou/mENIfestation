@@ -24,6 +24,8 @@ class NotFoundListener
         if ($exception instanceof NotFoundHttpException) {
             // Vérifie si la requête concerne la route '_details' (optionnel)
             $request=$event->getRequest();
+
+            //On vérifie que la 404 se produit bien lorsque l'on cherche a atteindre la page detail d'un profil pour éviter d'intercepter d'autres erreurs 404
             if($request->attributes->get('_route')=='app_profil_details'){
                 $session = $request->getSession();
                 $session->getFlashBag()->add('error', 'Le participant demandé n\'existe pas.');
