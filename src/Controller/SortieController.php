@@ -44,11 +44,12 @@ use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/sortie', name: 'app_sortie_')]
 final class SortieController extends AbstractController
 {
 
-    #[IsGranted('ROLE_USER')]
+
     #[Route('', name: 'home')]
     public function index(Request                $request,
                           SortieRepository       $sortieRepository,
@@ -122,18 +123,21 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/{id}', name: 'id', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function detail(int $id, SortieRepository $sortieRepository, Sortie $sortieEntity, SortieService $sortieService, EntityManagerInterface $em): Response
+    public function detail(int $id, SortieRepository $sortieRepository, SortieService $sortieService, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
+//        dd($user);
         $sortie = $sortieRepository->find($id);
 
+
         if (!$sortie) {
-            $this->addFlash('error', 'Sortie not found');
+            $this->addFlash('error', 'Cette sortie n\'existe pas');
+            return $this->redirectToRoute('app_sortie_home');
         }
 
         $isRegistered = false;
-        if ($user && $sortie) {
-            $isRegistered = $sortieEntity->getParticipant()->contains($user);
+        if ($user) {
+            $isRegistered = $sortie->getParticipant()->contains($user);
         }
 
 

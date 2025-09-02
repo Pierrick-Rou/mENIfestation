@@ -42,8 +42,9 @@ final class RegisterController extends AbstractController
             }
             $em->persist($user);
             $em->flush();
-
+            $this->addFlash('success', 'Vous êtes inscrit sur le site et connecté!');
             return $security->login($user, 'form_login', 'main');
+
         }
 
         return $this->render('registration/register.html.twig', [

@@ -25,7 +25,6 @@ final class ProfilController extends AbstractController
     #[Route('/details/{id}', name: '_details', requirements: ['id' => '\d+'])]
     public function index(Participant $participant): Response
     {
-
         return $this->render('profil/detailsProfil.html.twig', [
             'participant' => $participant,
         ]);
