@@ -3,26 +3,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
     const currentTheme = localStorage.getItem('theme');
 
-    // Applique le thème sauvegardé ou celui du système
-    if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+    // Applique le thème sauvegardé en priorité
+    if (currentTheme === 'dark') {
         document.body.classList.add('dark-mode');
         document.getElementById('theme-toggle-icon').textContent = '☀️';
+    } else if (currentTheme === 'light') {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('theme-toggle-icon').textContent = '🌙';
+    } else {
+        // Si aucun thème sauvegardé → on suit la préférence système
+        if (prefersDarkScheme.matches) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-toggle-icon').textContent = '☀️';
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.getElementById('theme-toggle-icon').textContent = '🌙';
+        }
     }
 
-    // Écouteur pour le bouton
+    // Toggle via le bouton
     themeToggle.addEventListener('click', function() {
         if (document.body.classList.contains('dark-mode')) {
             document.body.classList.remove('dark-mode');
             document.getElementById('theme-toggle-icon').textContent = '🌙';
-            localStorage.setItem('theme', 'light');
+            localStorage.setItem('theme', 'light'); // sauvegarde
         } else {
             document.body.classList.add('dark-mode');
             document.getElementById('theme-toggle-icon').textContent = '☀️';
-            localStorage.setItem('theme', 'dark');
+            localStorage.setItem('theme', 'dark'); // sauvegarde
         }
     });
 
-    // Écouteur pour les changements de préférence système
+    // Si l’utilisateur change ses préférences système et qu’on n’a pas forcé un choix
     prefersDarkScheme.addEventListener('change', e => {
         if (!localStorage.getItem('theme')) {
             if (e.matches) {

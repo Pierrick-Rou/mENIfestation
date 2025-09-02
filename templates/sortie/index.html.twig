@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello SortieController!{% endblock %}
-{%  block script %}{{ importmap('app') }}{% endblock %}
+{% block script %}{{ importmap('app') }}{% endblock %}
 {% block body %}
 
     <div class="table-container" style="z-index: 1;">
@@ -10,46 +10,66 @@
                 {{ form(filtreForm) }}
             </div>
         </div>
-        {% if sortieList is empty %}
-            <p>Pas de sortie</p>
-        {% else %}
 
+        <div class="view-toggle">
+            <button id="btn-list" class="active">Liste</button>
+            <button id="btn-map">Carte</button>
+        </div>
 
-            <table>
-                <tr>
-                    <th>Nom</th>
-                    <th>Date</th>
-                    <th class="hide-mobile">Durée</th>
-                    <th class="hide-mobile">Limite inscription</th>
-                    <th class="hide-mobile">Participants</th>
-                    <th class="hide-mobile">Info</th>
-                    <th>État</th>
-                    <th>Inscrit</th>
-                </tr>
-                {% for sortie in sortieList %}
+        <div id="list-view" class="view">
+            {% if sortieList is empty %}
+                <p>Pas de sortie</p>
+            {% else %}
 
-                    <tr onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
-                        <td>{{ sortie.nom }}</td>
-                        <td>{{ sortie.dateHeureDebut|date("H:i - d/m/y") }}</td>
-                        <td class="hide-mobile">{{ sortie.duree|date("H:i") }}</td>
-                        <td class="hide-mobile">{{ sortie.dateLimiteInscription|date("d/m/y") }}</td>
-                        <td class="hide-mobile">{{ sortie.participant|length }}/{{ sortie.nbInscriptionMax }}</td>
-                        <td class="infos-sortie hide-mobile" title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
-                        <td>{{ sortie.etat.value }}</td>
-                        <td>
-                            {% if app.user in sortie.participant %}
-                                ✔
-                            {% else %}
-                            {% endif %}
-                        </td>
+                <table>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Date</th>
+                        <th class="hide-mobile">Durée</th>
+                        <th class="hide-mobile">Limite inscription</th>
+                        <th class="hide-mobile">Participants</th>
+                        <th class="hide-mobile">Info</th>
+                        <th>État</th>
+                        <th>Inscrit</th>
                     </tr>
-                {% endfor %}
-            </table>
-            <div style="width: 100%; height: 75vh;">
-                {{ ux_map(map, {style: 'height: 75vh; width: 100%; z-index: 0; border-radius:0, 15px, 15px, 0;'}) }}
-            </div>
-            </div>
+                    {% for sortie in sortieList %}
+
+                        <tr onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
+                            <td>{{ sortie.nom }}</td>
+                            <td>{{ sortie.dateHeureDebut|date("H:i - d/m/y") }}</td>
+                            <td class="hide-mobile">{{ sortie.duree|date("H:i") }}</td>
+                            <td class="hide-mobile">{{ sortie.dateLimiteInscription|date("d/m/y") }}</td>
+                            <td class="hide-mobile">{{ sortie.participant|length }}/{{ sortie.nbInscriptionMax }}</td>
+                            <td class="infos-sortie hide-mobile"
+                                title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
+                            <td>{{ sortie.etat.value }}</td>
+                            <td>
+                                {% if app.user in sortie.participant %}
+                                    ✔
+                                {% else %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+
+        <div id="map-view" style="display:none; width:100%; height:75vh;">
+            {{ ux_map(map, { style: 'height: 75vh; width: 100%;' }) }}
+
+            <script>
+                document.addEventListener('ux:map:connect', (event) => {
+                    // Stocke la carte dans window
+                    window.myMap = event.detail.map;
+                });
+            </script>
+        </div>
+    </div>
 
 
-    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('/scriptJS/sortie-nav.js') }}"></script>
 {% endblock %}

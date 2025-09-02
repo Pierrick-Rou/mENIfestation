@@ -433,7 +433,7 @@ button,
 /* Bouton principal */
 .btn-primary,
 button[type="submit"],
-button:not([class]) {
+button:not([class]){
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: #f8fafc;
     box-shadow: var(--shadow-sm);
@@ -1132,6 +1132,11 @@ footer {
 .nav-links li:nth-child(4) { animation-delay: 0.4s; }
 .nav-links li:nth-child(5) { animation-delay: 0.5s; }
 .nav-links li:nth-child(6) { animation-delay: 0.6s; }
+.nav-links li:nth-child(7) { animation-delay: 0.7s; }
+.nav-links li:nth-child(8) { animation-delay: 0.8s; }
+.nav-links li:nth-child(9) { animation-delay: 0.9s; }
+.nav-links li:nth-child(10) { animation-delay: 1s; }
+
 
 /* ========================================
    UTILITAIRES
@@ -1299,4 +1304,25 @@ div[class^="flash-"] {
     height: 30px;
     border-radius: 50%;
     margin-right: 0.5rem;
+}
+
+.view-switcher {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    gap: 1rem;
+}
+
+/*.view-switcher button {*/
+/*    padding: 0.5rem 1rem;*/
+/*    cursor: pointer;*/
+/*    border-radius: 6px;*/
+/*    font-weight: bold;*/
+/*    transition: 0.3s;*/
+/*    color: var(--text-primary);*/
+/*}*/
+
+.view-switcher button.active {
+    background: var(--logo-color);
+    color: var(--text-inverse);
 }
