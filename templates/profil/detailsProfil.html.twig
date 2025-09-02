@@ -16,8 +16,8 @@
     </div>
     {% if app.user.id == participant.id %}
     <div class="participant-actions">
-        <a href="{{ path('app_profil_delete', {'id': participant.id}) }} "  ><button>Supprimer mon profil</button></a>
-        <a href="{{ path('app_profil_update', {'id': participant.id}) }}" ><button>Modifier mon profil</button></a>
+        <button onclick="location.href='{{ path('app_profil_delete', {'token': csrf_token('delete'~app.user.id) }) }}'">Supprimer mon profil</button>
+        <button onclick="location.href='{{ path('app_profil_update', {'token': csrf_token('update'~app.user.id) } ) }}'">Modifier mon profil</button>
     </div>
     {%  endif %}
 </div>

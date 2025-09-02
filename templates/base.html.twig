@@ -25,20 +25,34 @@
                 <li><a href="{{ path('app_sortie_home') }}">Sorties</a></li>
                 <li><a href="{{ path('app_profil_details',{'id' :app.user.id}) }}">Mon profil</a></li>
 
-                <li><a href="{{ path('app_logout') }}">Se deconnecter</a></li>
                 {% if is_granted('ROLE_ADMIN') %}
                     <li><a href="{{ path('app_admin_index') }}">Administration</a></li>
                 {% endif %}
+                <li><a href="{{ path('app_logout') }}">Se deconnecter</a></li>
             {% else %}
                 <li><a href="{{ path('app_login') }}">Se connecter</a></li>
                 <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
             {% endif %}
+            <li>
+                <button id="theme-toggle" class="btn btn-secondary">
+                    <span id="theme-toggle-icon">🌙</span>
+                </button>
+            </li>
 
         </ul>
     </nav>
 </header>
 
 <main>
+    <div class="fl-container">
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ type }} flash">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     {% block body %}{% endblock %}
     {% if is_granted('IS_AUTHENTICATED') %}
 
@@ -73,5 +87,6 @@
 </footer>
 {% block javascripts %}
     <script src="{{ asset('/scriptJS/sciptJS.js') }}"></script>
+    <script src="{{ asset('/scriptJS/darkmode.js') }}"></script>
 {% endblock %}
 </body>
