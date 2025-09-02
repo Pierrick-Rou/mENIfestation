@@ -9,7 +9,14 @@
 
     <h2>Ajouter une ville</h2>
 
-    {{ form(villeForm) }}
+        {{ form_start(villeForm) }}
+        {{ form_row(villeForm.nom) }}
+        {{ form_row(villeForm.codePostal) }}
+
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-success">Ajouter</button>
+        </div>
+        {{ form_end(villeForm) }}
     </div>
 
 
