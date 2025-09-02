@@ -6,6 +6,9 @@
 parameters:
     mistral.api_key: '%env(MISTRAL_API_KEY)%'
 services:
+    App\EventListener\NotFoundListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
