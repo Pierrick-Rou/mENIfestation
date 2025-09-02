@@ -31,19 +31,26 @@ final class ProfilController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/delete/{id}', name: '_delete', requirements: ['id' => '\d+'])]
     public function delete(Participant $participant, EntityManagerInterface $em, Request $request, TokenStorageInterface $tokenStorage): Response
     {
-        $this->isCsrfTokenValid('delete'.$participant->getId(), $request->get('token'));
+        if($participant->getEmail()==$this->getUser()->getEmail()){
+            $this->isCsrfTokenValid('delete'.$participant->getId(), $request->get('token'));
 
-        $tokenStorage->setToken(null);
-        $request->getSession()->invalidate();
+            $tokenStorage->setToken(null);
+            $request->getSession()->invalidate();
 
-        $em->remove($participant);
-        $em->flush();
+            $em->remove($participant);
+            $em->flush();
 
-        $this->addFlash('success','le profil à été supprimé ');
-        return $this->redirectToRoute('app_home');
+            $this->addFlash('success','le profil à été supprimé ');
+            return $this->redirectToRoute('app_home');
+        }
+        $this->addFlash('alert','Vous ne pouvez supprimer que votre profil ');
+        return $this->render('profil/detailsProfil.html.twig', [
+            'participant' => $participant,
+        ]);
     }
 
     #[Route('/ban/{id}', name: '_ban', requirements: ['id' => '\d+'])]

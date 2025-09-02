@@ -17,7 +17,7 @@
         <h1 class="logo">M'ENIfestation</h1>
         <ul class="nav-links">
 
-            <li><a href="{{path('app_test')}}">Accueil</a></li>
+            <li><a href="{{path('app_home')}}">Accueil</a></li>
 
 
             {% if is_granted('IS_AUTHENTICATED') %}
@@ -42,6 +42,13 @@
 </header>
 
 <main>
+    {%  for type, messages in app.flashes %}
+        {%  for message in messages %}
+            <div class="alert alert-{{ type }}">
+                {{ message }}
+            </div>
+        {%  endfor %}
+    {%  endfor %}
     {% block body %}{% endblock %}
     {% if is_granted('IS_AUTHENTICATED') %}
 

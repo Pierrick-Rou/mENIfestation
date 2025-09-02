@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Map\Bridge\Leaflet\LeafletOptions;
 use Symfony\UX\Map\Bridge\Leaflet\Option\TileLayer;
 use Symfony\UX\Map\InfoWindow;
@@ -44,6 +45,7 @@ use Symfony\UX\Map\Point;
 final class SortieController extends AbstractController
 {
 
+    #[IsGranted('ROLE_USER')]
     #[Route('', name: 'home')]
     public function index(Request                $request,
                           SortieRepository       $sortieRepository,
