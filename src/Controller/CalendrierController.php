@@ -58,4 +58,25 @@ final class CalendrierController extends AbstractController
         ]);
     }
 
+    #[Route('/test-olv', name: 'app_test_olv')]
+    public function test(SortieRepository $sR): void
+    {
+        $sorties = $sR->findAll();
+        $output = "";
+
+        foreach ($sorties as $sortie) {
+            $output .= sprintf(
+                "- %s le %s à %s l'état est:%s (participants: %d). Organisé par :%s\n",
+                $sortie->getNom(),
+                $sortie->getDateHeureDebut()->format('d/m/Y H:i'),
+                $sortie->getLieu()->getNom(),
+                $sortie->getEtat()->value,
+                count($sortie->getParticipant()),
+                $sortie->getSite()->getNom()
+            );
+        }
+
+        dd($output);
+    }
+
 }

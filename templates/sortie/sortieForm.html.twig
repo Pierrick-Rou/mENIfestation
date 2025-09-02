@@ -2,7 +2,6 @@
 
 {% block body %}
 
-
     <div class="form">
 
         <h2>Ajouter une nouvelle sortie</h2>
@@ -40,8 +39,6 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
 
             <div class="modal-content form">
-
-
                 {{ form_start(lieuForm, {
                     'action' : path('app_sortie_ajoutLieu'),
                     'attr': {'id': 'addLieuForm'}}
@@ -53,7 +50,7 @@
                         <div class="mb-3">
                             {{ form_label(lieuForm.ville) }}
                             {{ form_widget(lieuForm.ville, {'attr': {'id': 'selectVille', 'class': 'form-select'}}) }}
-                            <a href="{{ path('app_ville_creer') }}">Ajouter une ville<a>
+                            <a href="{{ path('app_ville_creer') }}">Ajouter une ville</a>
                         </div>
 
                     </div>

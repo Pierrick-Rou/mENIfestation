@@ -144,8 +144,8 @@ class SortieRepository extends ServiceEntityRepository
         }
 
         if ($filtreDTO->getVille()) {
-            $qb->andWhere('l.ville = :ville')
-                ->setParameter('ville', $filtreDTO->getVille());
+            $qb->andWhere('v.nom = :ville')
+                ->setParameter('ville', $filtreDTO->getVille()->getNom());
         }
 
         if ($filtreDTO->getOrganisateur()) {

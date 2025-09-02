@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}M'ENIfestation{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-{#    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 #}
-{#        viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚑</text></svg>">#}
+    {#    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 #}
+    {#        viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚑</text></svg>"> #}
     {% block stylesheets %}{% endblock %}
     {% block script %}{% endblock %}
 
@@ -21,56 +22,59 @@
 
 
             {% if is_granted('IS_AUTHENTICATED') %}
-                <li><a href="{{path('app_sortie_home')}}">Sorties</a></li>
-                <li><a href="{{path('app_logout')}}">Se deconnecter</a></li>
+                <li><a href="{{ path('app_sortie_home') }}">Sorties</a></li>
+                <li><a href="{{ path('app_profil_details',{'id' :app.user.id}) }}">Mon profil</a></li>
 
-                <li><a href="{{path('app_profil_details',{'id' :app.user.id}) }}">Mon profil</a></li>
-
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ path('app_admin_index') }}">Administration</a></li>
+                {% endif %}
+                <li><a href="{{ path('app_logout') }}">Se deconnecter</a></li>
             {% else %}
-                <li><a href="{{path('app_login')}}">Se connecter</a></li>
-                <li><a href="{{path('app_register')}}">S'inscrire</a></li>
+                <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+                <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
             {% endif %}
-            {% if is_granted('ROLE_ADMIN') %}
-                <li><a href="{{path('app_admin_index')}}">Administration</a></li>
-            {% endif %}
-
-
-
+            <li>
+                <button id="theme-toggle" class="btn btn-secondary">
+                    <span id="theme-toggle-icon">🌙</span>
+                </button>
+            </li>
 
         </ul>
     </nav>
 </header>
 
 <main>
-    {%  for type, messages in app.flashes %}
-        {%  for message in messages %}
-            <div class="alert alert-{{ type }}">
-                {{ message }}
-            </div>
-        {%  endfor %}
-    {%  endfor %}
+    <div class="fl-container">
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ type }} flash">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     {% block body %}{% endblock %}
     {% if is_granted('IS_AUTHENTICATED') %}
 
-    <!-- Bouton rond flottant -->
-        <a href="{{ path('app_sortie_create') }}"  id="add-toggle">
-    <div>+</div>
+        <!-- Bouton rond flottant -->
+        <a href="{{ path('app_sortie_create') }}" id="add-toggle">
+            <div>+</div>
             <span>Créer une sortie</span>
         </a>
     {% endif %}
     {% if is_granted('IS_AUTHENTICATED') %}
-    <!-- Bouton rond flottant -->
-    <div id="chat-toggle">💬</div>
+        <!-- Bouton rond flottant -->
+        <div id="chat-toggle">💬</div>
 
-    <!-- Fenêtre du chat (masquée au départ) -->
-    <div id="chat-widget" style="display: none;">
-        <div id="chat-header">Chatbot</div>
-        <div id="chat-messages"></div>
-        <div id="chat-input">
-            <input type="text" id="chat-text" placeholder="Écrivez un message..." />
-            <button id="chat-send">➤</button>
+        <!-- Fenêtre du chat (masquée au départ) -->
+        <div id="chat-widget" style="display: none;">
+            <div id="chat-header">Chatbot</div>
+            <div id="chat-messages"></div>
+            <div id="chat-input">
+                <input type="text" id="chat-text" placeholder="Écrivez un message..."/>
+                <button id="chat-send">➤</button>
+            </div>
         </div>
-    </div>
 
 
     {% endif %}
@@ -83,5 +87,6 @@
 </footer>
 {% block javascripts %}
     <script src="{{ asset('/scriptJS/sciptJS.js') }}"></script>
+    <script src="{{ asset('/scriptJS/darkmode.js') }}"></script>
 {% endblock %}
 </body>

@@ -39,12 +39,13 @@ class ChatBotController extends AbstractController
 
         foreach ($sorties as $sortie) {
             $output .= sprintf(
-                "- %s le %s à %s l'état est:%s (participants: %d)\n",
+                "- %s le %s à %s l'état est:%s (participants: %d). Organisé par :%s\n",
                 $sortie->getNom(),
                 $sortie->getDateHeureDebut()->format('d/m/Y H:i'),
                 $sortie->getLieu()->getNom(),
                 $sortie->getEtat()->value,
-                count($sortie->getParticipant())
+                count($sortie->getParticipant()),
+                $sortie->getSite()->getNom()
             );
         }
 
