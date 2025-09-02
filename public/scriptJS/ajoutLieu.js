@@ -17,6 +17,8 @@ document.getElementById('addLieuForm').addEventListener('submit', function(e) {
                 alert(data.errors.join('\n'));
                 return;
             }
+
+            // ajout de la nouvelle donnée dans le select
             const select = document.getElementById('sortie_lieu')
             const option = new Option(data.nom, data.id, true, true)
             select.add(option)
