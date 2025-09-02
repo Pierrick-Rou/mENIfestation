@@ -20,11 +20,15 @@
         <ul class="nav-links">
             <li><a href="{{path('app_home')}}">Accueil</a></li>
             {% if is_granted('IS_AUTHENTICATED') %}
-                <li><a href="{{ path('app_sortie_home') }}">Sorties</a></li>
-                <li><a href="{{ path('app_profil_details',{'id' :app.user.id}) }}">Mon profil</a></li>
+
+                <li><a href="{{path('app_sortie_home')}}">Sorties</a></li>
+                <li><a href="{{path('app_profil_details',{'id' :app.user.id}) }}">Mon profil</a></li>
+                <li><a href="{{path('app_group_index') }}">Mes groupes</a></li>
+
                 {% if is_granted('ROLE_ADMIN') %}
                     <li><a href="{{ path('app_admin_index') }}">Administration</a></li>
                 {% endif %}
+
                 <li><a href="{{ path('app_logout') }}">Se deconnecter</a></li>
             {% else %}
                 <li><a href="{{ path('app_login') }}">Se connecter</a></li>
@@ -44,7 +48,6 @@
             <span></span>
         </button>
     </nav>
-
 </header>
 
 <main>
@@ -90,7 +93,6 @@
     <p>&copy; {{ "now"|date("Y") }} M'ENIfestation – Tous droits reserves</p>
 </footer>
 {% block javascripts %}
-    <
     <script src="{{ asset('/scriptJS/sciptJS.js') }}"></script>
     <script src="{{ asset('/scriptJS/menuBurger.js') }}"></script>
     <script src="{{ asset('/scriptJS/darkmode.js') }}"></script>

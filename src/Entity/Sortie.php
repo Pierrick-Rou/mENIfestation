@@ -63,6 +63,12 @@ class Sortie
     private ?Site $site = null;
 
     /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'sortie')]
+    private Collection $groupes;
+
+    /**
      * @var Collection<int, Commentaire>
      */
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'sortie')]
@@ -71,6 +77,7 @@ class Sortie
     public function __construct()
     {
         $this->participant = new ArrayCollection();
+        $this->groupes = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
     }
 
@@ -224,6 +231,33 @@ class Sortie
     public function setSite(?Site $site): static
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroupes(): Collection
+    {
+        return $this->groupes;
+    }
+
+    public function addGroupe(Group $groupe): static
+    {
+        if (!$this->groupes->contains($groupe)) {
+            $this->groupes->add($groupe);
+            $groupe->addSortie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupe(Group $groupe): static
+    {
+        if ($this->groupes->removeElement($groupe)) {
+            $groupe->removeSortie($this);
+        }
 
         return $this;
     }
