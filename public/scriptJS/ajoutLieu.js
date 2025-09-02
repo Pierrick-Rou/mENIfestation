@@ -1,3 +1,6 @@
+
+
+
 document.getElementById('addLieuForm').addEventListener('submit', function(e) {
 
     e.preventDefault();
@@ -17,6 +20,7 @@ document.getElementById('addLieuForm').addEventListener('submit', function(e) {
             const select = document.getElementById('sortie_lieu')
             const option = new Option(data.nom, data.id, true, true)
             select.add(option)
+            select.value = data.id;
 
             const modalEl = document.getElementById('addLieuModal');
             const modal = bootstrap.Modal.getInstance(modalEl);
@@ -28,3 +32,4 @@ document.getElementById('addLieuForm').addEventListener('submit', function(e) {
 
 
 });
+

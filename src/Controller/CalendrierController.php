@@ -9,34 +9,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
-final class TestController extends AbstractController
+final class CalendrierController extends AbstractController
 {
-    #[Route('/', name: 'app_test')]
-    public function index(): Response
-    {
-        return $this->render('test/creer-ville.html.twig', [
-            'controller_name' => 'TestController',
-        ]);
-    }
-
-    #[Route('/test-admin', name: 'app_test_admin')]
-    #[ISGranted('ROLE_ADMIN')]
-    public function indexAdmin(): Response
-    {
-        return $this->render('test/index_admin.html.twig', [
-            'controller_name' => 'TestController',
-        ]);
-    }
-
-
-
-    #[Route('/testrepo', name: 'app_t')]
-    public function t(SortieRepository $sr): Response
-    {
-        $t = $sr->findAll();
-        dd($t);
-        return $this->render('test/index.html.twig');
-    }
 
     #[Route('/calendrier', name: 'app_cal')]
     public function calendrier(SortieRepository $sr): Response
@@ -73,7 +47,7 @@ final class TestController extends AbstractController
 //        dd($days);
 
 
-        return $this->render('test/calendrier.html.twig', ['moisArr'=>$moisArr,
+        return $this->render('calendrier/calendrier.html.twig', ['moisArr'=>$moisArr,
                                                                 'dateDuJour'=>$dateDuJour,
                                                                 'nbJours'=>$joursDansLeMois,
                                                                 'jours'=>$days,
