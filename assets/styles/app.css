@@ -1166,3 +1166,27 @@ div[class^="flash-"] {
     width: 1rem;
     height: 1rem;
 }
+.page-bouton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh; /* plein écran verticalement */
+}
+
+/* Style du gros bouton */
+.page-bouton .gros-bouton {
+    display: inline-block;
+    padding: 20px 40px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    background-color: #007BFF;
+    text-decoration: none;
+    border-radius: 10px;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+.page-bouton .gros-bouton:hover {
+    background-color: #0056b3;
+}
