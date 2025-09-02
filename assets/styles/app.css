@@ -149,6 +149,10 @@ body {
         font-size: 1.25rem;
     }
 }
+a {
+    color: var(--text-primary);
+    font-weight: 600;
+}
 
 header {
     background: var(--bg-primary);
@@ -222,7 +226,69 @@ header {
     top: 0.75em;
 }
 
+/* Burger button */
+.burger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    /*height: 20px;*/
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+}
 
+.burger span {
+    display: block;
+    width: 25px;        /* largeur de la barre */
+    height: 3px;        /* hauteur de la barre */
+    background: var(--text-primary); /* couleur visible */
+    margin: 0;      /* espace entre les barres */
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Affichage mobile */
+@media (max-width: 768px) {
+    .burger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: var(--bg-primary);
+        padding: var(--space-lg);
+        gap: var(--space-md);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        text-align: center;
+    }
+}
+
+/* Animation burger */
+.burger.toggle span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 10.5px);
+}
+
+.burger.toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger.toggle span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -10.5px);
+}
 
 /* ========================================
    LAYOUT PRINCIPAL
@@ -487,6 +553,10 @@ tr:last-child td {
 
     .infos-sortie {
         max-width: 100px;
+    }
+
+    .hide-mobile {
+        display: none;
     }
 }
 
@@ -971,6 +1041,7 @@ footer {
 
     #add-toggle {
         right: var(--space-lg);
+        display: none;
     }
 
     #chat-toggle {
@@ -994,6 +1065,7 @@ footer {
 }
 
 @media (max-width: 480px) {
+
     .form {
         padding: var(--space-md);
         border-radius: var(--radius-lg);
@@ -1211,4 +1283,11 @@ div[class^="flash-"] {
 .comment-body {
     font-size: 1rem;
     line-height: 1.4;
+}
+
+.comments img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
 }

@@ -71,7 +71,11 @@
             {% for commentaire in commentaires %}
                 <div class="comment-card">
                     <div class="comment-header">
-                        <strong>{{ commentaire.auteur.nom }} {{ commentaire.auteur.prenom }}</strong>
+                        <a href="{{ path("app_profil_details",  {'id': commentaire.auteur.id }) }}">
+                            <img src="{{ asset('uploads/' ~ commentaire.auteur.imageProfil) }}"
+                                 alt="Photo de profil de {{ commentaire.auteur.nom }} {{ commentaire.auteur.prenom }}">
+                            {{ commentaire.auteur.nom }} {{ commentaire.auteur.prenom }}
+                        </a>
                         {% if commentaire.auteur.roles[0] is same as('ROLE_ADMIN') %}
                             <span class="badge-admin">(Modérateur)</span>
                         {% endif %}
