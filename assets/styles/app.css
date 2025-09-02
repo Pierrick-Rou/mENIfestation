@@ -947,3 +947,7 @@ footer {
         --text-secondary: #000000;
     }
 }
+.modal-header .btn-close {
+    width: 1rem;
+    height: 1rem;
+}
