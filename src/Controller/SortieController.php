@@ -251,24 +251,20 @@ final class SortieController extends AbstractController
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     public function create(EtatRepository $er, SessionInterface $session): Response
     {
+
+
+        // création des forms
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie, [
             'user' => $this->getUser()
         ]);
         $lieu = new Lieu();
         $lieuForm = $this->createForm(LieuType::class, $lieu);
-        $ville = new Ville();
-        $villeForm = $this->createForm(VilleType::class, $ville);
-
-
-        $reopenModal = $session->get('reopen_modal', false);
-        $session->remove('reopen_modal');
-
 
         return $this->render("sortie/sortieForm.html.twig", [
             "sortieForm" => $sortieForm,
             "lieuForm" => $lieuForm,
-            "villeForm" => $villeForm,
+
         ]);
     }
 
@@ -327,10 +323,12 @@ final class SortieController extends AbstractController
         $form = $this->createForm(LieuType::class, $lieu);
         $form->handleRequest($request);
 
+        // mise en BDD
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($lieu);
             $em->flush();
 
+            //JsonResponse afin de pouvoir l'exploiter dans JavaScript (ajoutLieu.js)
             return new JsonResponse([
                 'id' => $lieu->getId(),
                 'nom' => $lieu->getNom(),
