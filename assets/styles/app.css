@@ -581,10 +581,8 @@ tr:last-child td {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 2px;
-    padding: 4px;
-    width: 100%;
-    font-size: 0.8rem;
-    white-space: nowrap;
+    padding: calc(var(--space-lg) - 10px) !important;
+    text-wrap: wrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
