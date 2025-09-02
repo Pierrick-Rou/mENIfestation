@@ -1251,12 +1251,13 @@ div[class^="flash-"] {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 0.5rem;
+
     border: 0.1em dotted var(--border);
     padding: 0.5rem;
 }
 .group-select label {
     font-weight: 600;
+    padding-right: 1em;
 }
 .group-select select {
 
