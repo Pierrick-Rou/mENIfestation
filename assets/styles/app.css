@@ -384,7 +384,7 @@ textarea:focus {
     background: var(--bg-primary);
 }
 
-input:invalid {
+input:not(#commentaire_contenu):invalid {
     border-color: var(--error);
 }
 
