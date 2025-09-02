@@ -1,17 +1,17 @@
-/* ========================================
-   VARIABLES CSS ET FONDATIONS
-======================================== */
 :root {
     /* Couleurs principales - thème événementiel moderne */
     --primary: #6366f1;
     --primary-light: #818cf8;
+    --primary-lighter: #a7b6fb;
     --primary-dark: #4f46e5;
-    --secondary: #f59e0b;
-    --secondary-light: #fbbf24;
+    --primary-darker: #332aa3;
     --accent: #ef4444;
-    --success: #10b981;
+    --success: #39d652;
     --warning: #f59e0b;
     --error: #ef4444;
+    --secondary: #f59e0b;
+    --secondary-light: #fbbf24;
+
 
     /* Couleurs neutres */
     --bg-primary: #ffffff;
@@ -24,6 +24,7 @@
     --text-inverse: #ffffff;
     --border: #e2e8f0;
     --border-light: #f1f5f9;
+    --logo-color: #4f46e5;
 
     /* Typographie */
     --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -55,22 +56,44 @@
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+/* ========================================
+   VARIABLES CSS ET FONDATIONS
+======================================== */
+
+.dark-mode {
+    --primary-light: #4f46e5;
+    --primary-lighter: #6366f1;
+    --primary-dark: #3730a3;
+    --primary-darker: #a7b6fb;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-dark: #ffffff;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+    --text-inverse: #0f172a;
+    --border: #334155;
+    --border-light: #1e293b;
+    --logo-color: #f8fafc;
+}
 
 /* Mode sombre */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-primary: #0f172a;
-        --bg-secondary: #1e293b;
-        --bg-tertiary: #334155;
-        --bg-dark: #ffffff;
-        --text-primary: #f8fafc;
-        --text-secondary: #cbd5e1;
-        --text-muted: #64748b;
-        --text-inverse: #0f172a;
-        --border: #334155;
-        --border-light: #1e293b;
-    }
-}
+/*@media (prefers-color-scheme: dark) {*/
+/*    :root {*/
+/*        --bg-primary: #0f172a;*/
+/*        --bg-secondary: #1e293b;*/
+/*        --bg-tertiary: #334155;*/
+/*        --bg-dark: #ffffff;*/
+/*        --text-primary: #f8fafc;*/
+/*        --text-secondary: #cbd5e1;*/
+/*        --text-muted: #64748b;*/
+/*        --text-inverse: #0f172a;*/
+/*        --border: #334155;*/
+/*        --border-light: #1e293b;*/
+/*        --logo-color: #f8fafc;*/
+/*    }*/
+/*}*/
 
 /* ========================================
    RESET ET BASE
@@ -99,6 +122,34 @@ body {
 /* ========================================
    HEADER ET NAVIGATION
 ======================================== */
+/* Navigation mobile */
+@media (max-width: 768px) {
+    .navbar {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-primary);
+        flex-direction: column;
+        padding: var(--space-lg);
+        border-top: 1px solid var(--border);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .logo {
+        font-size: 1.25rem;
+    }
+}
+
 header {
     background: var(--bg-primary);
     border-bottom: 1px solid var(--border);
@@ -121,7 +172,7 @@ header {
     font-family: var(--font-display);
     font-size: 1.5rem;
     font-weight: 800;
-    background: var(--bg-dark);
+    background: var(--logo-color);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -132,7 +183,7 @@ header {
     display: flex;
     list-style: none;
     gap: var(--space-lg);
-    align-items: center;
+    align-items: flex-end;
 }
 
 .nav-links a {
@@ -166,33 +217,12 @@ header {
     width: 80%;
 }
 
-/* Navigation mobile */
-@media (max-width: 768px) {
-    .navbar {
-        padding: var(--space-sm) var(--space-md);
-    }
-
-    .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: var(--bg-primary);
-        flex-direction: column;
-        padding: var(--space-lg);
-        border-top: 1px solid var(--border);
-        box-shadow: var(--shadow-lg);
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
-
-    .logo {
-        font-size: 1.25rem;
-    }
+#theme-toggle {
+    position: relative;
+    top: 0.75em;
 }
+
+
 
 /* ========================================
    LAYOUT PRINCIPAL
@@ -241,12 +271,19 @@ main {
 }
 
 label {
-    display: block;
+    display: inline-block;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--space-sm);
     font-size: 0.875rem;
     letter-spacing: 0.025em;
+}
+
+input[type="checkbox"] {
+    padding-left: 10px;
+    width: 150px;
+    cursor: pointer;
+
 }
 
 input,
@@ -323,7 +360,7 @@ button,
 button[type="submit"],
 button:not([class]) {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
+    color: #f8fafc;
     box-shadow: var(--shadow-sm);
 }
 
@@ -450,6 +487,117 @@ tr:last-child td {
 
     .infos-sortie {
         max-width: 100px;
+    }
+}
+
+/* ========================================
+   CALENDRIER
+======================================== */
+.calendar {
+    background-color: var(--primary-light);
+    color: var(--text-primary);
+    border: #1a1d20 1px solid;
+    display: grid;
+    min-height: 60vh;
+    width: 100%;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+    gap: 3px;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: 5%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+    .calendar {
+        min-height: 50vh;
+        gap: 2px;
+        padding: 4px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .calendar {
+        min-height: 40vh;
+        gap: 2px;
+        padding: 3px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar {
+        min-height: 30vh;
+        gap: 1px;
+        padding: 2px;
+        font-size: 0.7rem;
+    }
+}
+
+.calendar > .cal-day {
+    border: #1a1d20 1px dashed;
+    border-radius: 5px;
+    padding: 3px;
+    background-color: var(--primary-lighter);
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+@media (max-width: 1024px) {
+    .calendar > .cal-day {
+        min-height: 50px;
+        padding: 2px;
+    }
+}
+
+@media (max-width: 768px) {
+    .calendar > .cal-day {
+        min-height: 40px;
+        padding: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar > .cal-day {
+        min-height: 30px;
+        padding: 1px;
+    }
+}
+
+.cal-day-greyed {
+    border: #1a1d20 1px dashed;
+    border-radius: 5px;
+    background: rgba(15, 99, 184, 0.17);
+}
+
+.calendar button {
+    background: var(--primary-light);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 2px;
+    padding: calc(var(--space-lg) - 10px) !important;
+    text-wrap: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+    .calendar button {
+        font-size: 0.75rem;
+        padding: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar button {
+        font-size: 0.7rem;
+        padding: 2px;
     }
 }
 
@@ -901,6 +1049,8 @@ footer {
 .nav-links li:nth-child(2) { animation-delay: 0.2s; }
 .nav-links li:nth-child(3) { animation-delay: 0.3s; }
 .nav-links li:nth-child(4) { animation-delay: 0.4s; }
+.nav-links li:nth-child(5) { animation-delay: 0.5s; }
+.nav-links li:nth-child(6) { animation-delay: 0.6s; }
 
 /* ========================================
    UTILITAIRES
@@ -923,16 +1073,16 @@ footer {
 .visible { display: block; }
 
 /* States pour l'accessibilité */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    ::before,
-    ::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-}
+/*@media (prefers-reduced-motion: reduce) {*/
+/*    *,*/
+/*    ::before,*/
+/*    ::after {*/
+/*        animation-duration: 0.01ms !important;*/
+/*        animation-iteration-count: 1 !important;*/
+/*        transition-duration: 0.01ms !important;*/
+/*        scroll-behavior: auto !important;*/
+/*    }*/
+/*}*/
 
 /* Focus visible pour l'accessibilité */
 :focus-visible {
@@ -940,13 +1090,78 @@ footer {
     outline-offset: 2px;
 }
 
-/* Amélioration des contrastes */
-@media (prefers-contrast: high) {
-    :root {
-        --border: #000000;
-        --text-secondary: #000000;
+.fl-container {
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.flash {
+    gap: 1rem;
+    z-index: 3000;
+}
+
+/* Styles généraux des messages */
+div[class^="flash-"] {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: var(--text-inverse);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    animation: flash-in 5s ease-in-out forwards;
+    max-width: 300px;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+/* Animation d’entrée */
+@keyframes flash-in {
+    0% {
+        transform: translate(0%, 50%) scale(0.8);
+        opacity: 0;
+    }
+    7% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    93% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(50%) scale(0.8);
+        opacity: 0;
     }
 }
+
+/* Types de flash */
+.flash-success {
+    background: #22d622; /* vert vif */
+    box-shadow: 0 0 12px #22d622;
+}
+
+.flash-error {
+    background: #ff4c4c; /* rouge vif */
+    box-shadow: 0 0 12px #ff4c4c;
+}
+
+.flash-warning {
+    background: #ffd633; /* or / jaune */
+    box-shadow: 0 0 12px #ffd633;
+}
+
+.flash-info {
+    background: #3399ff; /* bleu clair */
+    box-shadow: 0 0 12px #3399ff;
+}
+
 .modal-header .btn-close {
     width: 1rem;
     height: 1rem;

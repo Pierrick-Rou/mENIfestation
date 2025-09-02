@@ -23,6 +23,7 @@ use function Webmozart\Assert\Tests\StaticAnalysis\null;
 final class ProfilController extends AbstractController
 {
     #[Route('/details/{id}', name: '_details', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_USER')]
     public function index(Participant $participant): Response
     {
         return $this->render('profil/detailsProfil.html.twig', [
@@ -30,26 +31,36 @@ final class ProfilController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_USER')]
-    #[Route('/delete/{id}', name: '_delete', requirements: ['id' => '\d+'])]
-    public function delete(Participant $participant, EntityManagerInterface $em, Request $request, TokenStorageInterface $tokenStorage): Response
+    #[Route('/delete/{id}', name: '_delete_admin', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deleteAdmin(Participant $participant, EntityManagerInterface $em, Request $request, TokenStorageInterface $tokenStorage): Response
     {
-        if($participant->getEmail()==$this->getUser()->getEmail()){
-            $this->isCsrfTokenValid('delete'.$participant->getId(), $request->get('token'));
+        $this->isCsrfTokenValid('delete'.$participant->getId(), $request->get('token'));
 
-            $tokenStorage->setToken(null);
-            $request->getSession()->invalidate();
+        $tokenStorage->setToken(null);
+        $request->getSession()->invalidate();
 
+        $em->remove($participant);
+        $em->flush();
+
+        $this->addFlash('success','le profil à été supprimé ');
+        return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/delete', name: '_delete')]
+    #[IsGranted('ROLE_USER')]
+    public function delete(EntityManagerInterface $em, Request $request, TokenStorageInterface $tokenStorage): Response
+    {
+        $participant = $this->getUser();
+        if ($this->isCsrfTokenValid('delete' . $participant->getId(), $request->get('token'))) {
             $em->remove($participant);
             $em->flush();
-
-            $this->addFlash('success','le profil à été supprimé ');
-            return $this->redirectToRoute('app_home');
+            $this->addFlash('success', 'le profil à été supprimé ');
+            $tokenStorage->setToken(null);
+            $request->getSession()->invalidate();
         }
-        $this->addFlash('alert','Vous ne pouvez supprimer que votre profil ');
-        return $this->render('profil/detailsProfil.html.twig', [
-            'participant' => $participant,
-        ]);
+
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('/ban/{id}', name: '_ban', requirements: ['id' => '\d+'])]
@@ -66,33 +77,38 @@ final class ProfilController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    #[Route('/update/{id}', name: '_update', requirements: ['id' => '\d+'])]
-    public function update(Participant $participant, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
+    #[Route('/update', name: '_update')]
+    public function update(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
+        $user = $this->getUser();
+        /* @var Participant $user */
 
-        $form = $this->createForm(EditProfilType::class, $participant);
+        if (!$this->isCsrfTokenValid('update' . $user->getId(), $request->get('token'))) {
+            throw $this->createAccessDeniedException('Invalid link token.');
+        }
 
+        $form = $this->createForm(EditProfilType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('poster_file')->getData();
 
             if ($file instanceof UploadedFile) {
-                $name = $slugger->slug($participant->getNom()).'-'. uniqid().'.'.$file->guessExtension();
+                $name = $slugger->slug($user->getNom()) . '-' . uniqid() . '.' . $file->guessExtension();
                 $file->move('uploads', $name);
-                $participant->setImageProfil($name);
-
+                $user->setImageProfil($name);
             }
-            $em->persist($participant);
+
+            $em->persist($user);
             $em->flush();
 
-            $this->addFlash('succes', 'le profil a été mis à jour');
-            return $this->redirectToRoute('app_profil_details', ['id' => $participant->getId()]);
+            $this->addFlash('success', 'Le profil a été mis à jour');
+            return $this->redirectToRoute('app_profil_details', ['id' => $user->getId()]);
         }
 
         return $this->render('profil/editProfil.html.twig', [
             'editProfilType' => $form->createView()
         ]);
-        }
+    }
 
 }
