@@ -38,12 +38,6 @@ class SortieType extends AbstractType
                     'data-ville-field' => '#sortie_lieu_ville'
                 ]
             ])
-            ->add('ville_button', ButtonType::class, [
-                'label' => 'Ajouter une ville',
-                'attr' => [
-                    'onclick' => "window.location.href='/ville/creer'"
-                ]
-            ])
             ->add('dateHeureDebut')
             ->add('duree')
             ->add('dateLimiteInscription')

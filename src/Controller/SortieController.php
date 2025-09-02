@@ -8,11 +8,13 @@ use App\DTO\FiltrageSortieDTO;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Enum\EtatSortie;
 use App\Form\FiltreSortieType;
 use App\Form\LieuType;
 use App\Form\RegistrationType;
 use App\Form\SortieType;
+use App\Form\VilleType;
 use App\Repository\LieuRepository;
 
 use App\Message\ReminderEmailMessage;
@@ -30,6 +32,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Routing\Attribute\Route;
@@ -240,16 +243,24 @@ final class SortieController extends AbstractController
 
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-    public function create(EtatRepository $er): Response
+    public function create(EtatRepository $er, SessionInterface $session): Response
     {
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $lieu = new Lieu();
         $lieuForm = $this->createForm(LieuType::class, $lieu);
+        $ville = new Ville();
+        $villeForm = $this->createForm(VilleType::class, $ville);
+
+
+        $reopenModal = $session->get('reopen_modal', false);
+        $session->remove('reopen_modal');
+
+
         return $this->render("sortie/sortieForm.html.twig", [
             "sortieForm" => $sortieForm,
             "lieuForm" => $lieuForm,
-
+            "villeForm" => $villeForm,
         ]);
     }
 
