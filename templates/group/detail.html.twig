@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}Détail Sortie{% endblock %}
+
+{% block body %}
+    <div class="form">
+        <p>Nom du groupe: {{ group.getName() }}</p>
+        <p>Fondateur du groupe: {{ group.getGroupFounder().getNom() }}</p>
+        <p>Sorties:</p>
+        {%  for s in group.getSortie %}
+        <p>{{ s.getNom() }}</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}
