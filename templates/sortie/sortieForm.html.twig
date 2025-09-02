@@ -12,17 +12,13 @@
         {{ form_row(sortieForm.dateHeureDebut) }}
         {{ form_row(sortieForm.duree) }}
         {{ form_row(sortieForm.dateLimiteInscription) }}
-        {{ form_row(sortieForm.nbInscriptionMax) }}
+        {{ form_row(sortieForm.nbInscriptionMax, {'row_attr': {'class': 'mb-3'}}) }}
 
-        <div class="row g-2 align-items-center">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    {{ form_widget(sortieForm.lieu) }}
-                </div>
-            </div>
-            <div class="col-auto">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addLieuModal">+</button>
-            </div>
+        <div class="input-group mb-3">
+            {{ form_widget(sortieForm.lieu, {'attr': {'class': 'form-select'}}) }}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLieuModal">
+                +
+            </button>
         </div>
 
 
