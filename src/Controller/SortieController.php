@@ -240,10 +240,12 @@ final class SortieController extends AbstractController
 
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-    public function create(EtatRepository $er): Response
+    public function create(EtatRepository $er, ): Response
     {
         $sortie = new Sortie();
-        $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $sortieForm = $this->createForm(SortieType::class, $sortie, [
+            'user' => $this->getUser()
+        ]);
         $lieu = new Lieu();
         $lieuForm = $this->createForm(LieuType::class, $lieu);
         return $this->render("sortie/sortieForm.html.twig", [
@@ -259,8 +261,9 @@ final class SortieController extends AbstractController
         $sortie = new Sortie();
 
         // 2. Crée le formulaire
-        $form = $this->createForm(SortieType::class, $sortie);
-
+        $form = $this->createForm(SortieType::class, $sortie, [
+            'user' => $this->getUser(), // obligatoire
+        ]);
         // 3. Gère la soumission du formulaire
         $form->handleRequest($request);
 
@@ -281,7 +284,9 @@ final class SortieController extends AbstractController
             $entityManager->flush();
 
             // 6. Redirige vers une autre page (ex: liste des sorties)
-            return $this->redirectToRoute('app_sortie_home');
+            return $this->redirectToRoute('app_sortie_home',  [
+                'user' => $this->getUser()
+            ]);
         }
 
         // 7. Affiche le formulaire

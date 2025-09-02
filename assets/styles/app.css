@@ -1,6 +1,12 @@
 /* ========================================
    VARIABLES CSS ET FONDATIONS
 ======================================== */
+@font-face {
+    font-family: 'Break';
+    src: url("../font/AkiraExpandedDemo.otf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+}
 :root {
     /* Couleurs principales - thème événementiel moderne */
     --primary: #6366f1;
@@ -87,7 +93,7 @@ html {
 }
 
 body {
-    font-family: var(--font-primary);
+
     background-color: var(--bg-secondary);
     color: var(--text-primary);
     line-height: 1.6;
@@ -118,16 +124,19 @@ header {
 }
 
 .logo {
-    font-family: var(--font-display);
+    color: var(--text-primary);
+    font-family: 'Break', cursive;
     font-size: 1.5rem;
-    font-weight: 800;
-    background: var(--bg-dark);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-weight: 400; /* doit correspondre à ce qui est chargé */
+
+
+
+
+
+    padding: 0.5em;
+
     margin: 0;
 }
-
 .nav-links {
     display: flex;
     list-style: none;
@@ -301,6 +310,7 @@ input[type="radio"] {
 ======================================== */
 button,
 .btn {
+    margin-top: 0.5em;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -946,4 +956,9 @@ footer {
         --border: #000000;
         --text-secondary: #000000;
     }
+}
+.groupes {
+
+    display: flex;
+    flex-direction: row;
 }

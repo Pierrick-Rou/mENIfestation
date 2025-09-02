@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GroupController!{% endblock %}
+
+{% block body %}
+    <div class="form">
+        <h2>Créer Un Groupe</h2>
+        {{ form_start(group_form,  {'action': path('app_group_create')}) }}
+        {{ form_row(group_form.Name) }}
+
+        <button>Créer Groupe</button>
+        {{ form_end(group_form) }}
+
+    </div>
+{% endblock %}
