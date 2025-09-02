@@ -67,6 +67,7 @@ class SortieType extends AbstractType
                 ],
                 // CHANGEMENTS IMPORTANTS
                 'multiple' => true,
+                'expanded' =>true,
                 'by_reference' => false,
             ]);
 
