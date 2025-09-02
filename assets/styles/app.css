@@ -1175,3 +1175,18 @@ div[class^="flash-"] {
     width: 1rem;
     height: 1rem;
 }
+.group-select {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border: 0.1em dotted var(--border);
+    padding: 0.5rem;
+}
+.group-select label {
+    font-weight: 600;
+}
+.group-select select {
+
+
+}
