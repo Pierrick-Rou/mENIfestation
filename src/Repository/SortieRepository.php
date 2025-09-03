@@ -66,6 +66,13 @@ class SortieRepository extends ServiceEntityRepository
             $qb->andWhere('v.nom = :ville')
                 ->setParameter('ville', $filtreDTO->getVille()->getNom());
         }
+        if (!$filtreDTO->getGroupes()->isEmpty()) {
+            // Adapter 's.groupes' si le nom de l'association diffère dans l'entité Sortie
+            $qb->join('s.groupes', 'g')
+                ->andWhere('g IN (:groupes)')
+                ->setParameter('groupes', $filtreDTO->getGroupes()->toArray());
+        }
+
 
         if ($filtreDTO->getOrganisateur()) {
             $qb->andWhere('s.organisateur = :organisateur')
@@ -86,6 +93,7 @@ class SortieRepository extends ServiceEntityRepository
             $qb->andWhere('s.etat = :etat')
                 ->setParameter('etat', $filtreDTO->getEtat());
         }
+
 
         return $qb->getQuery()->getResult();
     }
