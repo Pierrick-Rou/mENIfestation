@@ -3,9 +3,11 @@
 namespace App\Form;
 
 use App\DTO\FiltrageSortieDTO;
+use App\Entity\Group;
 use App\Entity\Site;
 use App\Entity\Ville;
 use App\Enum\EtatSortie;
+use App\Repository\GroupRepository;
 use App\Repository\SiteRepository;
 use App\Repository\VilleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -59,6 +61,30 @@ class FiltreSortieType extends AbstractType
                     'style' => "margin-left: 0.5em;"
                 ]
             ])
+            ->add('groupes', EntityType::class, [
+                'class' => Group::class,
+                'choice_label' => 'Name',
+                // 'placeholder' n'est pas utilisé quand expanded=true
+                'query_builder' => function (GroupRepository $gR) use ($options) {
+                    $user = $options['user'] ?? null;
+                    $qb = $gR->createQueryBuilder('g');
+                    if ($user instanceof \App\Entity\Participant) {
+                        return $qb
+                            ->where(':user MEMBER OF g.participants')
+                            ->setParameter('user', $user)
+                            ->orderBy('g.Name', 'ASC');
+                    }
+                    // Aucun utilisateur -> pas de résultats
+                    return $qb->where('1 = 0');
+                },
+                'attr' => [
+                    'class' => 'group-select',
+                ],
+                'multiple' => true,
+                'expanded' => true,
+                'by_reference' => false,
+            ])
+
             ->add('inscrit', CheckboxType::class, [
                 'required' => false,
                 'attr' => [
@@ -86,6 +112,7 @@ class FiltreSortieType extends AbstractType
         $resolver->setDefaults([
             'data_class' => FiltrageSortieDTO::class,
             'method' => 'GET',
+            'user' => null,
         ]);
     }
 }

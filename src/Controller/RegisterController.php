@@ -40,6 +40,9 @@ final class RegisterController extends AbstractController
                     $user->setImageProfil($name);
 
             }
+            else{
+                $user->setImageProfil('pp.jpg');
+            }
             $em->persist($user);
             $em->flush();
             $this->addFlash('success', 'Vous êtes inscrit sur le site et connecté!');

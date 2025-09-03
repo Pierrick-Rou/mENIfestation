@@ -60,7 +60,9 @@ final class SortieController extends AbstractController
     {
 
         $filtrageSortieDTO = new FiltrageSortieDTO();
-        $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO);
+        $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO, [
+            'user' => $this->getUser()
+        ]);
         $form->handleRequest($request);
 
         /* @var Participant $user */
@@ -133,7 +135,7 @@ final class SortieController extends AbstractController
                            Request                $request): Response
     {
         $user = $this->getUser();
-//        dd($user);
+
         $sortie = $sortieRepository->find($id);
 
 

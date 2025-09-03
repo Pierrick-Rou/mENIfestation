@@ -426,11 +426,13 @@ input[type="radio"] {
 ======================================== */
 button,
 .btn {
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
     padding: var(--space-md) var(--space-lg);
+    margin-top: var(--space-md);
     border: none;
     border-radius: var(--radius-md);
     font-weight: 600;
