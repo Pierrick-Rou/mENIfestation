@@ -51,8 +51,8 @@ class RegistrationType extends AbstractType
                         'message' => 'Veuillez saisir un email',
                     ]),
                     new Assert\Regex([
-                        'pattern' => '/^[A-Za-z0-9._%+-]+@menif\.fr$/',
-                        'message' => 'L’adresse email doit se terminer par @menif.fr',
+                        'pattern' => '/^[A-Za-z0-9._%+-]+@campus-eni\.fr$/',
+                        'message' => 'L’adresse email doit se terminer par @campus-eni.fr',
                     ]),
                 ],
             ])

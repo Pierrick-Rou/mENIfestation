@@ -46,8 +46,8 @@
                 <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
             {% endif %}
             <li>
-                <button id="theme-toggle" class="btn btn-secondary">
-                    <span id="theme-toggle-icon">🌙</span>
+                <button data-controller="theme" data-action="click->theme#toggleTheme" id="theme-toggle" class="btn btn-secondary">
+                    <span data-theme-target="icon" id="theme-toggle-icon">🌙</span>
                 </button>
             </li>
         </ul>
@@ -72,7 +72,7 @@
         {% endfor %}
     </div>
     {% block body %}{% endblock %}
-    {% if is_granted('IS_AUTHENTICATED') %}
+    {% if is_granted('IS_AUTHENTICATED') and not is_mobile() %}
 
         <!-- Bouton rond flottant -->
         <a href="{{ path('app_sortie_create') }}" id="add-toggle">
@@ -82,19 +82,20 @@
     {% endif %}
     {% if is_granted('IS_AUTHENTICATED') %}
         <!-- Bouton rond flottant -->
-        <div id="chat-toggle">💬</div>
+        <div id="chat-toggle">💬
+            <span>Ouvrir le chatbot</span>
+        </div>
 
         <!-- Fenêtre du chat (masquée au départ) -->
         <div id="chat-widget" style="display: none;">
             <div id="chat-header">Chatbot</div>
             <div id="chat-messages"></div>
             <div id="chat-input">
+                <label for="chat-text"></label>
                 <input type="text" id="chat-text" placeholder="Écrivez un message..."/>
                 <button id="chat-send">➤</button>
             </div>
         </div>
-
-
     {% endif %}
 
 </main>

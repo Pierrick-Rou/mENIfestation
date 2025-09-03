@@ -7,6 +7,7 @@
     font-style: normal;
     font-weight: 400;
 }
+
 :root {
     /* Couleurs principales - thème événementiel moderne */
     --primary: #6366f1;
@@ -65,6 +66,7 @@
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 /* ========================================
    VARIABLES CSS ET FONDATIONS
 ======================================== */
@@ -158,6 +160,7 @@ body {
         font-size: 1.25rem;
     }
 }
+
 a {
     color: var(--text-primary);
     font-weight: 600;
@@ -250,10 +253,10 @@ header {
 
 .burger span {
     display: block;
-    width: 25px;        /* largeur de la barre */
-    height: 3px;        /* hauteur de la barre */
+    width: 25px; /* largeur de la barre */
+    height: 3px; /* hauteur de la barre */
     background: var(--text-primary); /* couleur visible */
-    margin: 0;      /* espace entre les barres */
+    margin: 0; /* espace entre les barres */
     border-radius: 2px;
     transition: all 0.3s ease;
 }
@@ -361,6 +364,16 @@ input[type="checkbox"] {
 
 }
 
+div .toggle-list {
+    display: flex;
+    width: 100%;
+    margin-bottom: 1rem
+}
+
+div .toggle-list button {
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
 input,
 select,
 textarea {
@@ -433,7 +446,7 @@ button,
 /* Bouton principal */
 .btn-primary,
 button[type="submit"],
-button:not([class]){
+button:not([class]) {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: #f8fafc;
     box-shadow: var(--shadow-sm);
@@ -793,7 +806,6 @@ tr:last-child td {
 #add-toggle:hover {
     transform: scale(1.1);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    color: var(--text-inverse);
 }
 
 #add-toggle span {
@@ -829,16 +841,41 @@ tr:last-child td {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
+    font-weight: bold;
     box-shadow: var(--shadow-xl);
     cursor: pointer;
     transition: var(--transition);
     z-index: 1000;
     color: var(--text-inverse);
+    text-decoration: none;
+    border: none;
 }
 
 #chat-toggle:hover {
     transform: scale(1.1);
 }
+
+/* Le texte flottant */
+#chat-toggle span {
+    position: absolute;
+    left: 70px; /* car bouton à gauche, on met le texte à droite */
+    background: var(--bg-dark);
+    color: var(--text-inverse);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: var(--transition);
+    pointer-events: none;
+}
+
+#chat-toggle:hover span {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 
 #chat-widget {
     position: fixed;
@@ -1050,7 +1087,6 @@ footer {
 
     #add-toggle {
         right: var(--space-lg);
-        display: none;
     }
 
     #chat-toggle {
@@ -1126,37 +1162,100 @@ footer {
     animation-fill-mode: both;
 }
 
-.nav-links li:nth-child(1) { animation-delay: 0.1s; }
-.nav-links li:nth-child(2) { animation-delay: 0.2s; }
-.nav-links li:nth-child(3) { animation-delay: 0.3s; }
-.nav-links li:nth-child(4) { animation-delay: 0.4s; }
-.nav-links li:nth-child(5) { animation-delay: 0.5s; }
-.nav-links li:nth-child(6) { animation-delay: 0.6s; }
-.nav-links li:nth-child(7) { animation-delay: 0.7s; }
-.nav-links li:nth-child(8) { animation-delay: 0.8s; }
-.nav-links li:nth-child(9) { animation-delay: 0.9s; }
-.nav-links li:nth-child(10) { animation-delay: 1s; }
+.nav-links li:nth-child(1) {
+    animation-delay: 0.05s;
+}
 
+.nav-links li:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.nav-links li:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.nav-links li:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.nav-links li:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.nav-links li:nth-child(6) {
+    animation-delay: 0.3s;
+}
+
+.nav-links li:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+.nav-links li:nth-child(8) {
+    animation-delay: 0.4s;
+}
+
+.nav-links li:nth-child(9) {
+    animation-delay: 0.45s;
+}
+
+.nav-links li:nth-child(10) {
+    animation-delay: 0.5s;
+}
 
 /* ========================================
    UTILITAIRES
 ======================================== */
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
+.text-center {
+    text-align: center;
+}
 
-.mt-1 { margin-top: var(--space-xs); }
-.mt-2 { margin-top: var(--space-sm); }
-.mt-3 { margin-top: var(--space-md); }
-.mt-4 { margin-top: var(--space-lg); }
+.text-left {
+    text-align: left;
+}
 
-.mb-1 { margin-bottom: var(--space-xs); }
-.mb-2 { margin-bottom: var(--space-sm); }
-.mb-3 { margin-bottom: var(--space-md); }
-.mb-4 { margin-bottom: var(--space-lg); }
+.text-right {
+    text-align: right;
+}
 
-.hidden { display: none; }
-.visible { display: block; }
+.mt-1 {
+    margin-top: var(--space-xs);
+}
+
+.mt-2 {
+    margin-top: var(--space-sm);
+}
+
+.mt-3 {
+    margin-top: var(--space-md);
+}
+
+.mt-4 {
+    margin-top: var(--space-lg);
+}
+
+.mb-1 {
+    margin-bottom: var(--space-xs);
+}
+
+.mb-2 {
+    margin-bottom: var(--space-sm);
+}
+
+.mb-3 {
+    margin-bottom: var(--space-md);
+}
+
+.mb-4 {
+    margin-bottom: var(--space-lg);
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
 
 /* States pour l'accessibilité */
 /*@media (prefers-reduced-motion: reduce) {*/
@@ -1252,6 +1351,29 @@ div[class^="flash-"] {
     width: 1rem;
     height: 1rem;
 }
+.group-select {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    border: 0.1em dotted var(--border);
+    padding: 0.5rem;
+}
+.group-select label {
+    font-weight: 600;
+    padding-right: 1em;
+}
+.group-select select {
+
+
+}
+
+.groupes{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 
 
 .comments {
@@ -1265,7 +1387,7 @@ div[class^="flash-"] {
     padding: 1rem;
     border-radius: 8px;
     background: var(--bg-tertiary);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     color: var(--text-primary);
 }
 
@@ -1304,25 +1426,4 @@ div[class^="flash-"] {
     height: 30px;
     border-radius: 50%;
     margin-right: 0.5rem;
-}
-
-.view-switcher {
-    display: flex;
-    justify-content: center;
-    margin: 1rem 0;
-    gap: 1rem;
-}
-
-/*.view-switcher button {*/
-/*    padding: 0.5rem 1rem;*/
-/*    cursor: pointer;*/
-/*    border-radius: 6px;*/
-/*    font-weight: bold;*/
-/*    transition: 0.3s;*/
-/*    color: var(--text-primary);*/
-/*}*/
-
-.view-switcher button.active {
-    background: var(--logo-color);
-    color: var(--text-inverse);
 }
