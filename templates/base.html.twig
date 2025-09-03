@@ -96,16 +96,16 @@
 
 
     {% endif %}
-    {% block javascripts %}
-        <script src="{{ asset('/scriptJS/darkmode.js') }}"></script>
-        <script src="{{ asset('/scriptJS/menuBurger.js') }}"></script>
-        <script src="{{ asset('/scriptJS/sciptJS.js') }}"></script>
-    {% endblock %}
 
 </main>
 
 <footer>
     <p>&copy; {{ "now"|date("Y") }} M'ENIfestation – Tous droits reserves</p>
 </footer>
+    {% block javascripts %}
+        <script src="{{ asset('/scriptJS/darkmode.js') }}"></script>
+        <script src="{{ asset('/scriptJS/menuBurger.js') }}"></script>
+        <script src="{{ asset('/scriptJS/sciptJS.js') }}"></script>
+    {% endblock %}
 
 </body>

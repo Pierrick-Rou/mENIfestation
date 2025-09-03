@@ -784,7 +784,7 @@ tr:last-child td {
     font-weight: bold;
     box-shadow: var(--shadow-xl);
     transition: var(--transition);
-    z-index: 40;
+    z-index: 1000;
     text-decoration: none;
     border: none;
     cursor: pointer;
@@ -832,7 +832,7 @@ tr:last-child td {
     box-shadow: var(--shadow-xl);
     cursor: pointer;
     transition: var(--transition);
-    z-index: 40;
+    z-index: 1000;
     color: var(--text-inverse);
 }
 
