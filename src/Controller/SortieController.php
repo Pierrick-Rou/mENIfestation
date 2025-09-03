@@ -69,6 +69,8 @@ final class SortieController extends AbstractController
 
         $sortieList = $sortieRepository->findFilteredEventsWithMapData($filtrageSortieDTO, $user);
 
+        $viewMode = $request->query->get('view', 'list');
+
         $map = (new Map('default'))
             ->center(new Point(45.7534031, 4.8295061))
             ->zoom(6);
@@ -119,6 +121,7 @@ final class SortieController extends AbstractController
             'sortieList' => $sortieList,
             'filtreForm' => $form->createView(),
             'map' => $map,
+            'viewMode' => $viewMode,
         ]);
     }
 
