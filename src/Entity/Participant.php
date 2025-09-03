@@ -86,7 +86,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Group>
      */
-    #[ORM\OneToMany(targetEntity: Group::class, mappedBy: 'groupFounder')]
+    #[ORM\OneToMany(targetEntity: Group::class, mappedBy: 'groupFounder', cascade: ['remove'])]
     private Collection $groupFounded;
 
     public function getId(): ?int

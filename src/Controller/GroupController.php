@@ -25,6 +25,7 @@ final class GroupController extends AbstractController
 
         $group = new Group();
         $groupForm = $this->createForm(GroupType::class, $group);
+
         $groupForm->handleRequest($request);
         if ($groupForm->isSubmitted() && $groupForm->isValid()){
             $group->setGroupFounder($this->getUser());
