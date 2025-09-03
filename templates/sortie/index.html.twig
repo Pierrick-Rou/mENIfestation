@@ -19,10 +19,10 @@
                 <tr>
                     <th>Nom</th>
                     <th>Date</th>
-                    <th>Durée</th>
-                    <th>Limite inscription</th>
-                    <th>Participants</th>
-                    <th>Info</th>
+                    <th class="hide-mobile">Durée</th>
+                    <th class="hide-mobile">Limite inscription</th>
+                    <th class="hide-mobile">Participants</th>
+                    <th class="hide-mobile">Info</th>
                     <th>État</th>
                     <th>Inscrit</th>
                 </tr>
@@ -31,10 +31,10 @@
                     <tr onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
                         <td>{{ sortie.nom }}</td>
                         <td>{{ sortie.dateHeureDebut|date("H:i - d/m/y") }}</td>
-                        <td>{{ sortie.duree|date("H:i") }}</td>
-                        <td>{{ sortie.dateLimiteInscription|date("d/m/y") }}</td>
-                        <td>{{ sortie.participant|length }}/{{ sortie.nbInscriptionMax }}</td>
-                        <td class="infos-sortie" title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
+                        <td class="hide-mobile">{{ sortie.duree|date("H:i") }}</td>
+                        <td class="hide-mobile">{{ sortie.dateLimiteInscription|date("d/m/y") }}</td>
+                        <td class="hide-mobile">{{ sortie.participant|length }}/{{ sortie.nbInscriptionMax }}</td>
+                        <td class="infos-sortie hide-mobile" title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
                         <td>{{ sortie.etat.value }}</td>
                         <td>
                             {% if app.user in sortie.participant %}

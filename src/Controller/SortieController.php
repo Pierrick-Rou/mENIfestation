@@ -5,20 +5,20 @@ ini_set('date.timezone', 'Europe/Paris');
 
 
 use App\DTO\FiltrageSortieDTO;
+use App\Entity\Commentaire;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Enum\EtatSortie;
+use App\Form\CommentaireType;
 use App\Form\FiltreSortieType;
 use App\Form\LieuType;
-use App\Form\RegistrationType;
 use App\Form\SortieType;
 use App\Form\VilleType;
-use App\Repository\LieuRepository;
-
 use App\Message\ReminderEmailMessage;
 use App\Repository\EtatRepository;
+use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
@@ -122,8 +122,12 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'id', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function detail(int $id, SortieRepository $sortieRepository, SortieService $sortieService, EntityManagerInterface $em): Response
+    #[Route('/{id}', name: 'id', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function detail(int                    $id,
+                           SortieRepository       $sortieRepository,
+                           SortieService          $sortieService,
+                           EntityManagerInterface $em,
+                           Request                $request): Response
     {
         $user = $this->getUser();
 //        dd($user);
@@ -144,10 +148,23 @@ final class SortieController extends AbstractController
         //gestion des états des sorties
         $sortieService->changementEtat($sortie, $em);
 
+        $commentForm = $this->createForm(CommentaireType::class, $comment = new Commentaire());
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setSortie($sortie);
+            $comment->setDate(new \DateTime());
+            $comment->setAuteur($user);
+            $em->persist($comment);
+            $em->flush();
+            return $this->redirectToRoute('app_sortie_id', ['id' => $id]);
+        }
 
         $nbParticipant = $sortie->getParticipant()->count();
         $etat = $sortie->getEtat();
         $placeRestante = $sortie->getNbInscriptionMax() - $nbParticipant;
+
+        $commentaires = $sortie->getCommentaires();
 
 
         return $this->render('sortie/sortiePage.html.twig', [
@@ -156,6 +173,8 @@ final class SortieController extends AbstractController
             'etat' => $etat,
             'nbParticipant' => $nbParticipant,
             'placeRestante' => $placeRestante,
+            'commentaires' => $commentaires,
+            'commentForm' => $commentForm->createView(),
         ]);
     }
 
@@ -229,9 +248,7 @@ final class SortieController extends AbstractController
             } else {
                 $this->addFlash('error', 'Nombre limite de participants atteint');
             }
-        }
-
-        // DESINSCRIPTION
+        } // DESINSCRIPTION
         else {
             $sortie->removeParticipant($participant);
             $em->flush();

@@ -124,3 +124,8 @@ VALUES (1, 1),
        (12, 4),
        (12, 5),
        (12, 6);
+
+INSERT INTO commentaire (auteur_id, sortie_id, contenu, date)
+VALUES (1, 3, 'Test de commentaire', '2025-09-15 14:00:00'),
+       (2, 3, 'deuxieme commentaire', '2025-09-15 14:00:00'),
+       (4, 3, 'first!', '2025-09-15 14:00:00');

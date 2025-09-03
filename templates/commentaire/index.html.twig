@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SortieController!{% endblock %}
+{% block body %}
+
+    {% for commentaire in commentaires %}
+        <p>{{ commentaire.auteur.nom }} {{ commentaire.auteur.prenom }}
+        {% if commentaire.auteur.roles[0] is same as('ROLE_ADMIN') %}
+            (Modérateur)
+        {% endif %}
+        </p>
+        <p>
+        {{ commentaire.contenu }}</p>
+        <p>{{ commentaire.date|date("d/m/Y - H:i") }}</p><br>
+    {% endfor %}
+
+{% endblock %}

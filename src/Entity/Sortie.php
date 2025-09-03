@@ -68,10 +68,17 @@ class Sortie
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'sortie')]
     private Collection $groupes;
 
+    /**
+     * @var Collection<int, Commentaire>
+     */
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'sortie')]
+    private Collection $commentaires;
+
     public function __construct()
     {
         $this->participant = new ArrayCollection();
         $this->groupes = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -250,6 +257,36 @@ class Sortie
     {
         if ($this->groupes->removeElement($groupe)) {
             $groupe->removeSortie($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setSortie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getSortie() === $this) {
+                $commentaire->setSortie(null);
+            }
         }
 
         return $this;

@@ -63,10 +63,11 @@ class SortieType extends AbstractType
                         ->orderBy('g.Name', 'ASC'); // exactement comme la propriété
                 },
                 'attr' => [
-                    'class' => 'lieu-select',
+                    'class' => 'group-select',
                 ],
                 // CHANGEMENTS IMPORTANTS
                 'multiple' => true,
+                'expanded' =>true,
                 'by_reference' => false,
             ]);
 

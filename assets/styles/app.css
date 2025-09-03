@@ -158,6 +158,10 @@ body {
         font-size: 1.25rem;
     }
 }
+a {
+    color: var(--text-primary);
+    font-weight: 600;
+}
 
 header {
     background: var(--bg-primary);
@@ -231,7 +235,69 @@ header {
     top: 0.75em;
 }
 
+/* Burger button */
+.burger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    /*height: 20px;*/
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+}
 
+.burger span {
+    display: block;
+    width: 25px;        /* largeur de la barre */
+    height: 3px;        /* hauteur de la barre */
+    background: var(--text-primary); /* couleur visible */
+    margin: 0;      /* espace entre les barres */
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Affichage mobile */
+@media (max-width: 768px) {
+    .burger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: var(--bg-primary);
+        padding: var(--space-lg);
+        gap: var(--space-md);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        text-align: center;
+    }
+}
+
+/* Animation burger */
+.burger.toggle span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 10.5px);
+}
+
+.burger.toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger.toggle span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -10.5px);
+}
 
 /* ========================================
    LAYOUT PRINCIPAL
@@ -318,7 +384,7 @@ textarea:focus {
     background: var(--bg-primary);
 }
 
-input:invalid {
+input:not(#commentaire_contenu):invalid {
     border-color: var(--error);
 }
 
@@ -496,6 +562,10 @@ tr:last-child td {
 
     .infos-sortie {
         max-width: 100px;
+    }
+
+    .hide-mobile {
+        display: none;
     }
 }
 
@@ -787,7 +857,7 @@ tr:last-child td {
 
 #chat-header {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
+    color: #f8fafc;
     padding: var(--space-md);
     font-weight: 600;
     text-align: center;
@@ -819,7 +889,7 @@ tr:last-child td {
 
 #chat-send {
     background: var(--primary);
-    color: var(--text-inverse);
+    color: #f8fafc;
     border: none;
     padding: var(--space-sm) var(--space-md);
     border-radius: var(--radius-md);
@@ -980,6 +1050,7 @@ footer {
 
     #add-toggle {
         right: var(--space-lg);
+        display: none;
     }
 
     #chat-toggle {
@@ -1003,6 +1074,7 @@ footer {
 }
 
 @media (max-width: 480px) {
+
     .form {
         padding: var(--space-md);
         border-radius: var(--radius-lg);
@@ -1174,4 +1246,80 @@ div[class^="flash-"] {
 .modal-header .btn-close {
     width: 1rem;
     height: 1rem;
+}
+.group-select {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    border: 0.1em dotted var(--border);
+    padding: 0.5rem;
+}
+.group-select label {
+    font-weight: 600;
+    padding-right: 1em;
+}
+.group-select select {
+
+
+}
+
+.groupes{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+
+.comments {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.comment-card {
+    padding: 1rem;
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    color: var(--text-primary);
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.comment-header strong {
+    font-weight: 600;
+}
+
+.comment-date {
+    font-size: 0.8rem;
+}
+
+.badge-admin {
+    background: var(--primary) !important;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem !important;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+}
+
+.comment-body {
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.comments img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
 }
