@@ -35,8 +35,8 @@
                 <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
             {% endif %}
             <li>
-                <button id="theme-toggle" class="btn btn-secondary">
-                    <span id="theme-toggle-icon">🌙</span>
+                <button data-controller="theme" data-action="click->theme#toggleTheme" id="theme-toggle" class="btn btn-secondary">
+                    <span data-theme-target="icon" id="theme-toggle-icon">🌙</span>
                 </button>
             </li>
         </ul>
