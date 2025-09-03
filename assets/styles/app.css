@@ -1264,6 +1264,13 @@ div[class^="flash-"] {
 
 }
 
+.groupes{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
 
 .comments {
     margin-top: 1rem;
