@@ -9,22 +9,22 @@ use App\Entity\Commentaire;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
-use App\Entity\Ville;
 use App\Enum\EtatSortie;
 use App\Form\AnnulerSortieType;
 use App\Form\CommentaireType;
 use App\Form\FiltreSortieType;
 use App\Form\LieuType;
 use App\Form\SortieType;
-use App\Form\VilleType;
 use App\Message\ReminderEmailMessage;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
+use App\Service\CalendrierService;
 use App\Service\MailService;
 use App\Service\SortieService;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
@@ -56,6 +56,7 @@ final class SortieController extends AbstractController
                           SortieRepository       $sortieRepository,
                           SiteRepository         $sR,
                           SortieService          $sortieService,
+                          CalendrierService      $calendrierService,
                           EntityManagerInterface $em): Response
 
     {
@@ -68,9 +69,9 @@ final class SortieController extends AbstractController
 
         /* @var Participant $user */
         $user = $this->getUser();
-
-
         $sortieList = $sortieRepository->findFilteredEventsWithMapData($filtrageSortieDTO, $user);
+
+        $viewMode = $request->query->get('view', 'list');
 
         $map = (new Map('default'))
             ->center(new Point(45.7534031, 4.8295061))
@@ -78,7 +79,7 @@ final class SortieController extends AbstractController
 
         foreach ($sortieList as $sortie) {
             if ($sortie->getLieu()->getLatitude() === null || $sortie->getLieu()->getLongitude() === null) {
-                continue; // Protection si certains lieux sont mal définis
+                continue;
             }
 
 
@@ -112,19 +113,19 @@ final class SortieController extends AbstractController
         );
 
 
+
+        //gestion des états des sorties
         foreach ($sortieList as $sortie) {
-            //gestion des états des sorties
             $sortieService->changementEtat($sortie, $em);
         }
-
-
 
 
         return $this->render('sortie/index.html.twig', [
             'sortieList' => $sortieList,
             'filtreForm' => $form->createView(),
             'map' => $map,
-
+            'viewMode' => $viewMode,
+            'calendarData' => $calendrierService->getCalendarData($filtrageSortieDTO, $user),
         ]);
     }
 
@@ -159,7 +160,7 @@ final class SortieController extends AbstractController
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $comment->setSortie($sortie);
-            $comment->setDate(new \DateTime());
+            $comment->setDate(new DateTime());
             $comment->setAuteur($user);
             $em->persist($comment);
             $em->flush();
@@ -326,7 +327,7 @@ final class SortieController extends AbstractController
             $this->addFlash('success', 'la sortie a été créée avec succès!');
 
             // 6. Redirige vers une autre page (ex: liste des sorties)
-            return $this->redirectToRoute('app_sortie_home',  [
+            return $this->redirectToRoute('app_sortie_home', [
                 'user' => $this->getUser()
             ]);
         }

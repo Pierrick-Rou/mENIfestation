@@ -1,0 +1,40 @@
+<table>
+    <tr>
+        <th>Nom</th>
+        <th>Date</th>
+        <th class="hide-mobile">Durée</th>
+        <th class="hide-mobile">Limite inscription</th>
+        <th class="hide-mobile">Participants</th>
+        <th class="hide-mobile">Groupes</th>
+        <th class="hide-mobile">Info</th>
+        <th>État</th>
+        <th>Inscrit</th>
+    </tr>
+    {% for sortie in sortieList %}
+
+        <tr onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
+            <td>{{ sortie.nom }}</td>
+            <td>{{ sortie.dateHeureDebut|date("H:i - d/m/y") }}</td>
+            <td class="hide-mobile">{{ sortie.duree|date("H:i") }}</td>
+            <td class="hide-mobile">{{ sortie.dateLimiteInscription|date("d/m/y") }}</td>
+            <td class="hide-mobile">{{ sortie.participant|length }}/{{ sortie.nbInscriptionMax }}</td>
+            <td  class="hide-mobile">
+                {% for g in sortie.groupes %}
+                    {% if g in app.user.getGroupe() %}
+
+                        {{ g.Name }}{% if not loop.last %}, {% endif %}
+
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td class="infos-sortie hide-mobile" title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
+            <td>{{ sortie.etat.value }}</td>
+            <td>
+                {% if app.user in sortie.participant %}
+                    ✔
+                {% else %}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

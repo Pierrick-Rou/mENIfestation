@@ -1,67 +1,48 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello SortieController!{% endblock %}
-{%  block script %}{{ importmap('app') }}{% endblock %}
+{% block script %}{{ importmap('app') }}{% endblock %}
 {% block body %}
 
     <div class="table-container" style="z-index: 1;">
         <div class="filter-bar">
             <div class="form filter">
-                {{ form_start(filtreForm) }}
-
-                {{ form_end(filtreForm) }}
+                {{ form(filtreForm) }}
             </div>
         </div>
+        <div class="view-switch">
+            <a href="{{ path('app_sortie_home', app.request.query.all|merge({'view': 'list'})) }}"
+               class="{{ viewMode == 'list' ? 'active' : '' }}">
+                Liste
+            </a>
+            <a href="{{ path('app_sortie_home', app.request.query.all|merge({'view': 'map'})) }}"
+               class="{{ viewMode == 'map' ? 'active' : '' }}">
+                Carte
+            </a>
+            <a href="{{ path('app_sortie_home', app.request.query.all|merge({'view': 'calendar'})) }}"
+               class="{{ viewMode == 'calendar' ? 'active' : '' }}">
+                Calendrier
+            </a>
+        </div>
+
         {% if sortieList is empty %}
-            <p>Pas de sortie</p>
+            <h4>Pas de sortie</h4>
         {% else %}
 
+            {% set availableViews = ['list', 'map', 'calendar'] %}
 
-            <table>
-                <tr>
-                    <th>Nom</th>
-                    <th>Date</th>
-                    <th class="hide-mobile">Durée</th>
-                    <th class="hide-mobile">Limite inscription</th>
-                    <th class="hide-mobile">Participants</th>
-                    <th class="hide-mobile">Groupes</th>
-                    <th class="hide-mobile">Info</th>
-                    <th>État</th>
-                    <th>Inscrit</th>
-                </tr>
-                {% for sortie in sortieList %}
+            {% if viewMode in availableViews %}
+                {% if viewMode == 'calendar' %}
+                    {% include 'sortie/_calendar.html.twig' with calendarData %}
+                {% else %}
+                    {% include 'sortie/_' ~ viewMode ~ '.html.twig' %}
+                {% endif %}
+            {% else %}
+                {# fallback si une vue inconnue est demandée #}
+                {% include 'sortie/_list.html.twig' %}
+            {% endif %}
 
-                    <tr onclick="window.location.href = '{{ path('app_sortie_id', { 'id': sortie.id }) }}';">
-                        <td>{{ sortie.nom }}</td>
-                        <td>{{ sortie.dateHeureDebut|date("H:i - d/m/y") }}</td>
-                        <td class="hide-mobile">{{ sortie.duree|date("H:i") }}</td>
-                        <td class="hide-mobile">{{ sortie.dateLimiteInscription|date("d/m/y") }}</td>
-                        <td class="hide-mobile">{{ sortie.participant|length }}/{{ sortie.nbInscriptionMax }}</td>
-                        <td  class="hide-mobile">
-                            {% for g in sortie.groupes %}
-                                {% if g in app.user.getGroupe() %}
+        {% endif %}
 
-                                {{ g.Name }}{% if not loop.last %}, {% endif %}
-
-                            {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td class="infos-sortie hide-mobile" title="{{ sortie.infosSortie }}">{{ sortie.infosSortie }}</td>
-                        <td>{{ sortie.etat.value }}</td>
-                        <td>
-                            {% if app.user in sortie.participant %}
-                                ✔
-                            {% else %}
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-            <div style="width: 100%; height: 75vh;">
-                {{ ux_map(map, {style: 'height: 75vh; width: 100%; z-index: 0; border-radius:0, 15px, 15px, 0;'}) }}
-            </div>
-            </div>
-
-
-    {% endif %}
+    </div>
 {% endblock %}
