@@ -12,9 +12,9 @@
             <th>Prénom</th>
             <th>Nom</th>
             <th>Téléphone</th>
-            <td>Détails</td>
-            <td>Bannir</td>
-            <td>Supprimer</td>
+            <th></th>
+            <th></th>
+            <th></th>
 
         </tr>
         {% for participant in listeParticipants %}
@@ -26,7 +26,7 @@
                 <td>{{participant.telephone }}</td>
                 <td><a href="{{ path('app_profil_details', {id: participant.id })}}">Détails</a></td>
                 <td><a class="admin-link danger" href="{{ path('app_profil_ban', {id: participant.id })}}">Bannir</a></td>
-                <td><a href="{{ path('app_profil_delete', {id: participant.id })}}">Supprimer</a></td>
+                <td><a href="{{ path('app_profil_delete_admin', {id: participant.id })}}">Supprimer</a></td>
             </tr>
         {%  endfor %}
     </table>

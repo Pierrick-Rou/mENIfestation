@@ -2,23 +2,25 @@
 
 {% block body %}
 
-<div class="form">
-    <h2> {{ participant.prenom }} {{ participant.nom }}</h2>
+<div class="form-profile">
+
+    {% if participant.imageprofil !=null %}
+        <img src="{{ asset('uploads/' ~ participant.imageProfil) }}" class="profil-pic" width="150px" alt="Photo de profil de {{ participant.nom }}" loading="lazy">
+    {% endif %}
     <div class="participant-info">
+        <span>Nom Prénom: {{ participant.prenom }} {{ participant.nom }}</span>
         <span>Adresse mail : {{ participant.email }}</span>
         <span>Téléphone : {{ participant.telephone }}</span>
-        {% if participant.imageprofil !=null %}
-        <img src="{{ asset('uploads/' ~ participant.imageProfil) }}" width="250px" alt="Photo de profil de {{ participant.nom }}" loading="lazy">
-        {% endif %}
+        <span>Site : {{ participant.site }}</span>
+
     </div>
     {% if app.user.id == participant.id %}
     <div class="participant-actions">
-        <a href="{{ path('app_profil_delete', {'id': participant.id}) }}">Supprimer mon profil</a>
-        <a href="{{ path('app_profil_update', {'id': participant.id}) }}">Modifier mon profil</a>
+        <button onclick="location.href='{{ path('app_profil_delete', {'token': csrf_token('delete'~app.user.id) }) }}'">Supprimer mon profil</button>
+        <button onclick="location.href='{{ path('app_profil_update', {'token': csrf_token('update'~app.user.id) } ) }}'">Modifier mon profil</button>
     </div>
     {%  endif %}
 </div>
-
 
 
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GroupController!{% endblock %}
+
+{% block body %}
+    <h2>Gestion des groupes</h2>
+    <div class="groupes">
+
+<div class="form">
+<h3>Mes Groupes</h3>
+{%if app.user.getGroupe() is not empty%}
+    {% for g in app.user.getGroupe() %}
+        <a href="{{ path('app_group_detail', {'id': g.id}) }}">
+    <p>{{ g.getName() }}</p>
+        </a>
+    {%endfor %}
+    {% endif %}
+</div>
+        <div class="form">
+            <h3>Créer Un Groupe</h3>
+            {{ form_start(group_form,  {'action': path('app_group_index')}) }}
+            {{ form_row(group_form.Name) }}
+            {{ form_row(group_form.Participants) }}
+            <button>créer groupe</button>
+            {{ form_end(group_form) }}
+
+        </div>
+    </div>
+{% endblock %}

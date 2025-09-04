@@ -4,38 +4,43 @@
 
     <div class="form participant-info">
         <h2>{{ sortie.nom }}</h2>
-        <p>
+        <span>
             Organisateur:
             <a href="{{ path("app_profil_details",  {'id': sortie.organisateur.id }) }}">
                 {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}
             </a>
-        </p>
+        </span>
 
+        <span>
+            {{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat.value }})<br>
+            Durée : {{ sortie.duree|date("H:i") }}
+        </span>
 
         <span>
-        {{ sortie.dateHeureDebut|date("d/m/Y - H:i") }} ({{ sortie.etat.value }})<br>
-        Durée : {{ sortie.duree|date("H:i") }}
-    </span>
+            RDV : {{ sortie.lieu.nom }}<br><br>
+            {{ sortie.lieu.rue }}<br>
+            {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}
+        </span><br>
+
         <span>
-        RDV : {{ sortie.lieu.nom }}<br><br>
-        {{ sortie.lieu.rue }}<br>
-        {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}
-    </span><br>
-        <span>
-        {{ sortie.infosSortie }}<br><br>
-        Inscription jusqu'au {{ sortie.dateLimiteInscription|date("d/m/Y à H:i") }}<br>
-        Nombre de place : {{ sortie.nbInscriptionMax }}
-    </span>
+            {{ sortie.infosSortie }}<br><br>
+            Inscription jusqu'au {{ sortie.dateLimiteInscription|date("d/m/Y à H:i") }}<br>
+            Nombre de places : {{ sortie.nbInscriptionMax }}
+        </span>
+
         <p>Participants : {{ nbParticipant }}</p>
         <div class="participants">
             {% for p in sortie.participant %}
-                <a href="{{ path('app_profil_details', {'id': p.id }) }}" class="badge"
-                   data-info="{{ p.nom }} - {{ p.email }}">
-                    {{ p.nom }}
-                </a>
+                <div class="user-card">
+                    <a href="{{ path('app_profil_details', {'id': p.id }) }}" class="badge"
+                       data-info="{{ p.nom }} - {{ p.email }}">
+                        {{ p.nom }}
+                    </a>
+                </div>
             {% endfor %}
         </div>
 
+        {# Boutons d'inscription / désinscription #}
         {% if is_granted('IS_AUTHENTICATED') and app.user.id != sortie.organisateur.id %}
             {% if etat ==  constant('App\\Enum\\EtatSortie::OUVERTE') and placeRestante %}
                 <a href="{{ path('app_sortie_inscription', {'id' : sortie.id}) }}">
@@ -50,13 +55,40 @@
             {% endif %}
         {% endif %}
 
-
-
+        {# Bouton supprimer pour organisateur/admin #}
         {% if app.user.id == sortie.organisateur.id or is_granted('ROLE_ADMIN') %}
             <a href="{{ path('app_sortie_delete', {'id' : sortie.id}) }}">
                 <button>Supprimer sortie</button>
             </a>
         {% endif %}
+
+        <hr class="mt-4 mb-2">
+
+        {# Zone commentaires #}
+        <h3>Commentaires</h3>
+        {{ form(commentForm) }}
+        <div class="comments">
+            {% for commentaire in commentaires %}
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <a href="{{ path("app_profil_details",  {'id': commentaire.auteur.id }) }}">
+                            <img src="{{ asset('uploads/' ~ commentaire.auteur.imageProfil) }}"
+                                 alt="Photo de profil de {{ commentaire.auteur.nom }} {{ commentaire.auteur.prenom }}">
+                            {{ commentaire.auteur.nom }} {{ commentaire.auteur.prenom }}
+                        </a>
+                        {% if commentaire.auteur.roles[0] is same as('ROLE_ADMIN') %}
+                            <span class="badge-admin">(Modérateur)</span>
+                        {% endif %}
+                        <span class="comment-date">{{ commentaire.date|date("d/m/Y - H:i") }}</span>
+                    </div>
+                    <div class="comment-body">
+                        {{ commentaire.contenu }}
+                    </div>
+                </div>
+            {% else %}
+                <p>Aucun commentaire pour le moment.</p>
+            {% endfor %}
+        </div>
 
     </div>
 

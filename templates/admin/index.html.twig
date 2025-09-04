@@ -4,6 +4,7 @@
 
 {% block body %}
     <div class="form">
+        <h2>Administration</h2>
     <div class="admin-link">
     <a href="{{ path('app_admin_users') }}"><button>Gestion des Utilisateurs</button></a>
     </div>
@@ -15,5 +16,6 @@
     </div>
     <div class="admin-link">
         <a href="{{ path('app_admin_users_file') }}"><button>Ajouter des utilisateurs par fichier</button></a>
+    </div>
     </div>
 {% endblock %}

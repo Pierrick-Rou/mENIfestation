@@ -5,14 +5,17 @@
     <h1>Modifier mon compte</h1>
     {{ form_errors(editProfilType) }}
 
-    {{ form_start(editProfilType) }}
-    {{ form_row(editProfilType.nom) }}
-    {{ form_row(editProfilType.prenom) }}
-    {{ form_row(editProfilType.email) }}
-    {{ form_row(editProfilType.telephone) }}
-    {{ form_row(editProfilType.site) }}
-    <button type="submit" >Modifier</button>
-    {{ form_end(editProfilType) }}
+{#    {{ form_start(editProfilType) }}#}
+{#    {{ form_row(editProfilType.nom) }}#}
+{#    {{ form_row(editProfilType.prenom) }}#}
+{#    {{ form_row(editProfilType.email) }}#}
+{#    {{ form_row(editProfilType.telephone) }}#}
+{#    {{ form_row(editProfilType.site) }}#}
+{#    <button type="submit" >Modifier</button>#}
+{#    {{ form_end(editProfilType) }}#}
+
+    {{ form(editProfilType) }}
+
 
 
 

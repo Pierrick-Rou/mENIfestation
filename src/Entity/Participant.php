@@ -66,6 +66,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->sorties = new ArrayCollection();
         $this->organise = new ArrayCollection();
+        $this->groupe = new ArrayCollection();
+        $this->groupFounded = new ArrayCollection();
     }
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
@@ -74,6 +76,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageProfil = null;
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'participants')]
+    private Collection $groupe;
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\OneToMany(targetEntity: Group::class, mappedBy: 'groupFounder', cascade: ['remove'])]
+    private Collection $groupFounded;
 
     public function getId(): ?int
     {
@@ -305,6 +319,63 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImageProfil(?string $imageProfil): static
     {
         $this->imageProfil = $imageProfil;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroupe(): Collection
+    {
+        return $this->groupe;
+    }
+
+    public function addGroupe(Group $groupe): static
+    {
+        if (!$this->groupe->contains($groupe)) {
+            $this->groupe->add($groupe);
+            $groupe->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupe(Group $groupe): static
+    {
+        if ($this->groupe->removeElement($groupe)) {
+            $groupe->removeParticipant($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroupFounded(): Collection
+    {
+        return $this->groupFounded;
+    }
+
+    public function addGroupFounded(Group $groupFounded): static
+    {
+        if (!$this->groupFounded->contains($groupFounded)) {
+            $this->groupFounded->add($groupFounded);
+            $groupFounded->setGroupFounder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupFounded(Group $groupFounded): static
+    {
+        if ($this->groupFounded->removeElement($groupFounded)) {
+            // set the owning side to null (unless already changed)
+            if ($groupFounded->getGroupFounder() === $this) {
+                $groupFounded->setGroupFounder(null);
+            }
+        }
 
         return $this;
     }

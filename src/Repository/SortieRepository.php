@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\DTO\FiltrageSortieDTO;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,16 +19,6 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function findAllNotArchive(): array
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.dateHeureDebut > :date')
-            ->setParameter('date', new \DateTime('-1 month'))
-            ->orderBy('s.dateHeureDebut', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
     public function findByMonth(): array
     {
 
@@ -35,19 +26,22 @@ class SortieRepository extends ServiceEntityRepository
             ->andWhere('s.dateHeureDebut > :dateDebut')
             ->andWhere('s.dateHeureDebut < :dateFin')
             ->setParameter('dateDebut', date('Y-m-01'))
-            ->setParameter('dateFin', date('Y-m-01',strtotime('+1 month')))
+            ->setParameter('dateFin', date('Y-m-01', strtotime('+1 month')))
             ->orderBy('s.dateHeureDebut', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
-    public function findFilteredEvents(FiltrageSortieDTO $filtreDTO, Participant $user): array
+    public function findFilteredEventsWithMapData(FiltrageSortieDTO $filtreDTO, Participant $user): array
     {
         $qb = $this->createQueryBuilder('s')
+            ->join('s.lieu', 'l')
+            ->join('l.Ville', 'v')
             ->where('s.dateHeureDebut > :oneMonthAgo')
             ->setParameter('oneMonthAgo', new \DateTime('-1 month'))
             ->orderBy('s.dateHeureDebut', 'ASC');
 
+        // Filtres
         if ($filtreDTO->getNomSortie()) {
             $qb->andWhere('s.nom LIKE :nom')
                 ->setParameter('nom', "%{$filtreDTO->getNomSortie()}%");
@@ -65,13 +59,20 @@ class SortieRepository extends ServiceEntityRepository
 
         if ($filtreDTO->getDateFin()) {
             $qb->andWhere('s.dateHeureDebut <= :dateFin')
-                ->setParameter('dateFin', "%{$filtreDTO->getDateFin()}%");
+                ->setParameter('dateFin', $filtreDTO->getDateFin());
         }
 
         if ($filtreDTO->getVille()) {
-            $qb->andWhere('s.lieu = :ville')
-                ->setParameter('ville', $filtreDTO->getVille());
+            $qb->andWhere('v.nom = :ville')
+                ->setParameter('ville', $filtreDTO->getVille()->getNom());
         }
+        if (!$filtreDTO->getGroupes()->isEmpty()) {
+            // Adapter 's.groupes' si le nom de l'association diffère dans l'entité Sortie
+            $qb->join('s.groupes', 'g')
+                ->andWhere('g IN (:groupes)')
+                ->setParameter('groupes', $filtreDTO->getGroupes()->toArray());
+        }
+
 
         if ($filtreDTO->getOrganisateur()) {
             $qb->andWhere('s.organisateur = :organisateur')
@@ -93,9 +94,22 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('etat', $filtreDTO->getEtat());
         }
 
-        $qb->orderBy('s.dateHeureDebut', 'ASC');
+
         return $qb->getQuery()->getResult();
     }
+    public function findParticipantByNameInSortie(int $sortieId, string $nom): ?Participant
+    {
+        return $this->createQueryBuilder('s')
+            ->select('p')
+            ->join('s.participant', 'p')
+            ->where('s.id = :sortieId')
+            ->andWhere('p.nom = :nom')
+            ->setParameter('sortieId', $sortieId)
+            ->setParameter('nom', $nom)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 
     //    /**
     //     * @return Sortie[] Returns an array of Sortie objects

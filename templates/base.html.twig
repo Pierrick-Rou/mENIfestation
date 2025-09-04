@@ -2,47 +2,111 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}M'ENIfestation{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-{#    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 #}
-{#        viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚑</text></svg>">#}
+    <script>
+        (function() {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            } else if (currentTheme === 'light') {
+                document.documentElement.classList.remove('dark-mode');
+            }
+        })();
+    </script>
+
+    {#    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 #}
+    {#        viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚑</text></svg>"> #}
     {% block stylesheets %}{% endblock %}
+    {% block script %}{% endblock %}
+
 </head>
 <body>
 <header>
     <nav class="navbar">
         <h1 class="logo">M'ENIfestation</h1>
         <ul class="nav-links">
-
-            <li><a href="{{path('app_test')}}">Accueil</a></li>
-
-
+            <li><a href="{{path('app_home')}}">Accueil</a></li>
             {% if is_granted('IS_AUTHENTICATED') %}
+
                 <li><a href="{{path('app_sortie_home')}}">Sorties</a></li>
-                <li><a href="{{path('app_logout')}}">Se déconnecter</a></li>
-
                 <li><a href="{{path('app_profil_details',{'id' :app.user.id}) }}">Mon profil</a></li>
+                <li><a href="{{path('app_group_index') }}">Mes groupes</a></li>
 
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ path('app_admin_index') }}">Administration</a></li>
+                {% endif %}
+
+                <li><a href="{{ path('app_logout') }}">Se deconnecter</a></li>
             {% else %}
-                <li><a href="{{path('app_login')}}">Se connecter</a></li>
-                <li><a href="{{path('app_register')}}">S'inscrire</a></li>
+                <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+                <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
             {% endif %}
-            {% if is_granted('ROLE_ADMIN') %}
-                <li><a href="{{path('app_admin_index')}}">Administration</a></li>
-            {% endif %}
-
-
-
-
+            <li>
+                <button data-controller="theme" data-action="click->theme#toggleTheme" id="theme-toggle" class="btn btn-secondary">
+                    <span data-theme-target="icon" id="theme-toggle-icon">🌙</span>
+                </button>
+            </li>
         </ul>
+
+        <!-- Burger button -->
+        <button class="burger" id="burger-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 </header>
 
 <main>
+    <div class="fl-container">
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ type }} flash">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     {% block body %}{% endblock %}
+    {% if is_granted('IS_AUTHENTICATED') and not is_mobile() %}
+
+        <!-- Bouton rond flottant -->
+        <a href="{{ path('app_sortie_create') }}" id="add-toggle">
+            <div>+</div>
+            <span>Créer une sortie</span>
+        </a>
+    {% endif %}
+    {% if is_granted('IS_AUTHENTICATED') %}
+        <!-- Bouton rond flottant -->
+        <div id="chat-toggle">💬
+            <span>Ouvrir le chatbot</span>
+        </div>
+
+        <!-- Fenêtre du chat (masquée au départ) -->
+        <div id="chat-widget" style="display: none;">
+            <div id="chat-header">Chatbot</div>
+            <div id="chat-messages"></div>
+            <div id="chat-input">
+                <label for="chat-text"></label>
+                <input type="text" id="chat-text" placeholder="Écrivez un message..."/>
+                <button id="chat-send">➤</button>
+            </div>
+        </div>
+    {% endif %}
+
 </main>
 
 <footer>
-    <p>&copy; {{ "now"|date("Y") }} M'ENIfestation – Tous droits réservés</p>
+    <p>&copy; {{ "now"|date("Y") }} M'ENIfestation – Tous droits reserves</p>
 </footer>
+    {% block javascripts %}
+        <script src="{{ asset('/scriptJS/darkmode.js') }}"></script>
+        <script src="{{ asset('/scriptJS/menuBurger.js') }}"></script>
+        <script src="{{ asset('/scriptJS/sciptJS.js') }}"></script>
+    {% endblock %}
+
 </body>

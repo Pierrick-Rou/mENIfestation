@@ -36,14 +36,18 @@ final class RegisterController extends AbstractController
 
             if ($file instanceof UploadedFile) {
                     $name = $slugger->slug($user->getNom()).'-'. uniqid().'. '.$file->guessExtension();
-                    $file->move('D:\mENIfestation\public\uploads', $name);
+                    $file->move('\public\uploads', $name);
                     $user->setImageProfil($name);
 
             }
+            else{
+                $user->setImageProfil('pp.jpg');
+            }
             $em->persist($user);
             $em->flush();
-
+            $this->addFlash('success', 'Vous êtes inscrit sur le site et connecté!');
             return $security->login($user, 'form_login', 'main');
+
         }
 
         return $this->render('registration/register.html.twig', [

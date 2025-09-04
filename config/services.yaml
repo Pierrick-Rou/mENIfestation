@@ -4,8 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    mistral.api_key: '%env(MISTRAL_API_KEY)%'
 services:
+    App\EventListener\NotFoundListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -16,5 +19,17 @@ services:
     App\:
         resource: '../src/'
 
+    App\Service\ChatBotService:
+        arguments:
+            $mistralApiKey: '%mistral.api_key%'
+
+    Detection\MobileDetect:
+        class: Detection\MobileDetect
+
+    App\Twig\MobileDetectExtension:
+        arguments:
+            $mobileDetect: '@Detection\MobileDetect'
+        tags:
+            - { name: 'twig.extension' }
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
