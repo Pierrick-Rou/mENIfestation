@@ -17,7 +17,7 @@ class Commentaire
     private ?string $contenu = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Participant $auteur = null;
 
     #[ORM\Column]

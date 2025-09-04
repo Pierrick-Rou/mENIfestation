@@ -10,6 +10,7 @@ use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Constraint\Count;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -27,12 +28,25 @@ final class AdminController extends AbstractController
         return $this->render('admin/index.html.twig', []);
     }
 
-    #[Route('/utilisateurs', name: '_users')]
-    public function users(Request $request,ParticipantRepository $pr, SiteRepository $sr, LieuRepository $lr,): Response
-    {
-        $listeParticipants=$pr->findAll();
+//    #[Route('/utilisateurs', name: '_users')]
+//    public function users(Request $request,ParticipantRepository $pr, SiteRepository $sr, LieuRepository $lr,): Response
+//    {
+//        $listeParticipants=$pr->findAll();
+//
+//        return $this->render('admin/users.html.twig',['listeParticipants'=>$listeParticipants]);
+//
+//    }
 
-        return $this->render('admin/users.html.twig',['listeParticipants'=>$listeParticipants]);
+    #[Route('/utilisateurs/{page}', name: '_usersPage', requirements: ['page'=>'\d+'], defaults: [ 'page' =>1] , methods: ['GET'])]
+    public function usersPage(ParticipantRepository $pr, int $page): Response
+    {
+        $nbParPage=10;
+        $offset=($page-1)*$nbParPage;
+        $totalPages=$pr->count()/$nbParPage;
+        $listeParticipants=$pr->findParticipantsWithPages($nbParPage,$offset);
+
+        return $this->render('admin/users.html.twig',['listeParticipants'=>$listeParticipants,'page'=>$page,
+            'totalPages'=>$totalPages ]);
 
     }
 
@@ -48,6 +62,7 @@ final class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userfile=$form->get('file')->getData();
 //            dd($userfile);
+            $session = $request->getSession();
             $open = fopen($userfile, "r");
             $header=fgetcsv($open,1000,',' );
             //on retire les charactères BOM liés à la lecture du fichier
@@ -60,6 +75,15 @@ final class AdminController extends AbstractController
                 $participant->setNom($data['nom']);
                 $participant->setPrenom($data['prenom']);
                 $participant->setEmail($data['email']);
+
+                //check si mail existant
+                if($pr->findOneBy(['email'=>$data['email']])){
+
+                    $session->getFlashBag()->add('error', 'L\'email: '.$participant->getEmail().' existe déjà en base de données');
+                    continue;
+                }
+
+
                 $participant->setSite($sr->find($data['site_id']));
                 $participant->setPassword($userPasswordHasher->hashPassword($participant, $data['password']));
                 $participant->setTelephone($data['telephone']);
