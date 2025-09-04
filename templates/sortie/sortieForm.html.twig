@@ -16,13 +16,13 @@
         {{ form_row(sortieForm.dateLimiteInscription) }}
         {{ form_row(sortieForm.nbInscriptionMax, {'row_attr': {'class': 'mb-3'}}) }}
 
-        <div class="input-group mb-3">
-            {{ form_widget(sortieForm.lieu, {'attr': {'class': 'form-select'}}) }}
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLieuModal">
+        <div class="toggle-list">
+            {{ form_widget(sortieForm.lieu, {'attr': {'class': 'form-selection',
+                                                      'style': 'flex: 1; border-radius: 0.5rem 0 0 0.5rem;'}}) }}
+            <button type="button" class="btn-primary inline-btn" data-bs-toggle="modal" data-bs-target="#addLieuModal">
                 +
             </button>
         </div>
-
 
         {{ form_row(sortieForm.infosSortie) }}
 
