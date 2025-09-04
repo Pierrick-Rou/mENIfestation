@@ -31,7 +31,7 @@ class GroupType extends AbstractType
                 ],
                 // CHANGEMENTS IMPORTANTS
                 'multiple' => true,
-                'expanded' =>true,
+                'expanded' =>false,
                 'by_reference' => false,
 
 
