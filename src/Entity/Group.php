@@ -33,7 +33,7 @@ class Group
 
     #[ORM\ManyToOne(inversedBy: 'groupFounded')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?participant $groupFounder = null;
+    private ?Participant $groupFounder = null;
 
     public function __construct()
     {
