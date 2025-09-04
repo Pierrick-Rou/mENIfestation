@@ -61,7 +61,7 @@
                 <button>Supprimer sortie</button>
             </a>
         {% endif  %}
-        {% if app.user.id == sortie.organisateur.id or is_granted('ROLE_ADMIN') %}
+        {% if app.user.id == sortie.organisateur.id %}
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAnnulerSortieModal">
                 Annuler sortie
             </button>
