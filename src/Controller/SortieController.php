@@ -22,7 +22,9 @@ use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use App\Service\CalendrierService;
+use App\Service\CarteService;
 use App\Service\MailService;
+use App\Service\MapService;
 use App\Service\SortieService;
 use DateTime;
 use DateTimeImmutable;
@@ -57,6 +59,7 @@ final class SortieController extends AbstractController
                           SiteRepository         $sR,
                           SortieService          $sortieService,
                           CalendrierService      $calendrierService,
+                          CarteService           $carteService,
                           EntityManagerInterface $em): Response
 
     {
@@ -73,45 +76,7 @@ final class SortieController extends AbstractController
 
         $viewMode = $request->query->get('view', 'list');
 
-        $map = (new Map('default'))
-            ->center(new Point(45.7534031, 4.8295061))
-            ->zoom(6);
-
-        foreach ($sortieList as $sortie) {
-            if ($sortie->getLieu()->getLatitude() === null || $sortie->getLieu()->getLongitude() === null) {
-                continue;
-            }
-
-
-            $position = new Point($sortie->getLieu()->getLatitude(), $sortie->getLieu()->getLongitude());
-            $title = $sortie->getNom();
-
-            $content = sprintf(
-                '<h5><a href="%s">%s</a></h5><p>%s</p><p><strong>Lieu:</strong> %s, %s %s</p><p><strong>Date:</strong> %s</p>',
-                htmlspecialchars('sortie/' . $sortie->getId()),
-                htmlspecialchars("{$sortie->getNom()}"),
-                nl2br(htmlspecialchars($sortie->getInfosSortie())),
-                htmlspecialchars($sortie->getLieu()->getNom()),
-                htmlspecialchars($sortie->getLieu()->getVille()->getCodePostal()),
-                htmlspecialchars($sortie->getLieu()->getVille()->getNom()),
-                $sortie->getDateHeureDebut()->format('d/m/Y H:i')
-            );
-
-            $map->addMarker(new Marker(
-                position: $position,
-                title: $title,
-                infoWindow: new InfoWindow(content: $content)
-            ));
-        }
-
-        $map->options((new LeafletOptions())
-            ->tileLayer(new TileLayer(
-                url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                options: ['maxZoom' => 19]
-            ))
-        );
-
+        $map = $carteService->buildMap($sortieList);
 
 
         //gestion des états des sorties
