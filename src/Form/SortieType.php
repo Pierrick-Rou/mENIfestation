@@ -63,7 +63,7 @@ class SortieType extends AbstractType
                     'class' => 'group-select',
                 ],
                 'multiple' => true,
-                'expanded' => true,
+                'expanded' => false,
                 'by_reference' => false,
             ]);
 

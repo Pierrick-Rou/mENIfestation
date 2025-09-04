@@ -3,10 +3,8 @@
 {% block title %}Acceuil | {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur mENIfestation!</h1>
-
-    <div class="page-bouton">
-
-    <a href="https://r.mtdv.me/rickrollmENI" class="gros-bouton">ENTRER SUR LE SITE</a>
-    </div>
+    <a href="{{ path('app_sortie_home') }}">
+    <div class="home">
+    <h1 class="glitch">MENIFESTATION</h1>
+    </div></a>
 {% endblock %}
