@@ -60,6 +60,9 @@
             <a href="{{ path('app_sortie_delete', {'id' : sortie.id}) }}">
                 <button>Supprimer sortie</button>
             </a>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAnnulerSortieModal">
+                Annuler ma sortie
+            </button>
         {% endif %}
 
         <hr class="mt-4 mb-2">
@@ -92,4 +95,31 @@
 
     </div>
 
+
+    {#    modal pour annuler une sortie #}
+    <div class="modal fade" id="addAnnulerSortieModal" tabindex="-1" aria-labelledby="addLieuModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+
+            <div class="modal-content ">
+                {{ form_start(annulerSortieForm, {
+                    'action' : path('app_sortie_annulerSortie', {'id': sortie.id}),
+                    'attr': {'id': 'addAnnulerSortieForm'}}
+                ) }}
+
+                <div class="modal-body" >
+
+
+                    {{ form_row(annulerSortieForm.infosSortie) }}
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Ajouter</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                </div>
+                {{ form_end(annulerSortieForm) }}
+            </div>
+        </div>
+    </div>
+    <script src="{{ asset('scriptJS/annulerSortie.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

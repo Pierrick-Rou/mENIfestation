@@ -2,9 +2,12 @@
 
 namespace App\DTO;
 
+use App\Entity\Group;
 use App\Entity\Site;
 use App\Entity\Ville;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class FiltrageSortieDTO
 {
@@ -18,6 +21,12 @@ class FiltrageSortieDTO
     private ?bool $nonInscrit;
     private ?string $etat;
 
+    /**
+     * @var Collection<int, Group>
+     */
+    private Collection $groupes;
+
+
 
     public function __construct()
     {
@@ -30,6 +39,8 @@ class FiltrageSortieDTO
         $this->inscrit = null;
         $this->nonInscrit = null;
         $this->etat = null;
+        $this->groupes = new ArrayCollection();
+
     }
 
     public function getNomSortie(): ?string
@@ -131,6 +142,30 @@ class FiltrageSortieDTO
         $this->etat = $etat;
         return $this;
     }
+    /**
+     * @return Collection<int, Group>
+     */
 
+    public function getGroupes(): Collection
+    {
+        return $this->groupes;
+    }
+
+    /**
+     * @param Collection<int, Group> $groupes
+     */
+    public function setGroupes(Collection $groupes): FiltrageSortieDTO
+    {
+        $this->groupes = $groupes;
+        return $this;
+    }
+//    public function addGroup(Group $group): void
+//    {
+//        $this->groupes->add($group);
+//    }
+//    public function removeGroup(Group $group): void
+//    {
+//        $this->groupes->removeElement($group);
+//    }
 
 }

@@ -50,26 +50,23 @@ class SortieType extends AbstractType
             ->add('infosSortie', textareaType::class)
             ->add('groupes', EntityType::class, [
                 'class' => Group::class,
-                'choice_label' => 'Name', // correspond à ta propriété
-                'placeholder' => 'Choisissez un groupe',
+                'choice_label' => 'name',
+                // 'placeholder' n'est pas utilisé quand expanded=true
                 'query_builder' => function (GroupRepository $gR) use ($options) {
                     $user = $options['user'];
-
-
                     return $gR->createQueryBuilder('g')
-                        ->join('g.participants', 'p')
-                        ->where('p.id = :userId')
-                        ->setParameter('userId', $user->getId())
-                        ->orderBy('g.Name', 'ASC'); // exactement comme la propriété
+                        ->where(':user MEMBER OF g.participants')
+                        ->setParameter('user', $user)
+                        ->orderBy('g.Name', 'ASC');
                 },
                 'attr' => [
                     'class' => 'group-select',
                 ],
-                // CHANGEMENTS IMPORTANTS
                 'multiple' => true,
-                'expanded' =>true,
+                'expanded' => true,
                 'by_reference' => false,
             ]);
+
 
 
 

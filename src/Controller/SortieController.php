@@ -9,21 +9,22 @@ use App\Entity\Commentaire;
 use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
-use App\Entity\Ville;
 use App\Enum\EtatSortie;
+use App\Form\AnnulerSortieType;
 use App\Form\CommentaireType;
 use App\Form\FiltreSortieType;
 use App\Form\LieuType;
 use App\Form\SortieType;
-use App\Form\VilleType;
 use App\Message\ReminderEmailMessage;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
+use App\Service\CalendrierService;
 use App\Service\MailService;
 use App\Service\SortieService;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,19 +56,22 @@ final class SortieController extends AbstractController
                           SortieRepository       $sortieRepository,
                           SiteRepository         $sR,
                           SortieService          $sortieService,
+                          CalendrierService      $calendrierService,
                           EntityManagerInterface $em): Response
 
     {
 
         $filtrageSortieDTO = new FiltrageSortieDTO();
-        $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO);
+        $form = $this->createForm(FiltreSortieType::class, $filtrageSortieDTO, [
+            'user' => $this->getUser()
+        ]);
         $form->handleRequest($request);
 
         /* @var Participant $user */
         $user = $this->getUser();
-
-
         $sortieList = $sortieRepository->findFilteredEventsWithMapData($filtrageSortieDTO, $user);
+
+        $viewMode = $request->query->get('view', 'list');
 
         $map = (new Map('default'))
             ->center(new Point(45.7534031, 4.8295061))
@@ -75,7 +79,7 @@ final class SortieController extends AbstractController
 
         foreach ($sortieList as $sortie) {
             if ($sortie->getLieu()->getLatitude() === null || $sortie->getLieu()->getLongitude() === null) {
-                continue; // Protection si certains lieux sont mal définis
+                continue;
             }
 
 
@@ -109,8 +113,9 @@ final class SortieController extends AbstractController
         );
 
 
+
+        //gestion des états des sorties
         foreach ($sortieList as $sortie) {
-            //gestion des états des sorties
             $sortieService->changementEtat($sortie, $em);
         }
 
@@ -119,6 +124,8 @@ final class SortieController extends AbstractController
             'sortieList' => $sortieList,
             'filtreForm' => $form->createView(),
             'map' => $map,
+            'viewMode' => $viewMode,
+            'calendarData' => $calendrierService->getCalendarData($filtrageSortieDTO, $user),
         ]);
     }
 
@@ -130,7 +137,7 @@ final class SortieController extends AbstractController
                            Request                $request): Response
     {
         $user = $this->getUser();
-//        dd($user);
+
         $sortie = $sortieRepository->find($id);
 
 
@@ -153,7 +160,7 @@ final class SortieController extends AbstractController
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $comment->setSortie($sortie);
-            $comment->setDate(new \DateTime());
+            $comment->setDate(new DateTime());
             $comment->setAuteur($user);
             $em->persist($comment);
             $em->flush();
@@ -166,6 +173,10 @@ final class SortieController extends AbstractController
 
         $commentaires = $sortie->getCommentaires();
 
+        $annulerSortie = new Sortie();
+        $annulerSortieForm = $this->createForm(AnnulerSortieType::class, $annulerSortie, [
+            'user' => $user,
+        ]);
 
         return $this->render('sortie/sortiePage.html.twig', [
             'sortie' => $sortie,
@@ -175,6 +186,7 @@ final class SortieController extends AbstractController
             'placeRestante' => $placeRestante,
             'commentaires' => $commentaires,
             'commentForm' => $commentForm->createView(),
+            'annulerSortieForm' => $annulerSortieForm->createView(),
         ]);
     }
 
@@ -314,7 +326,7 @@ final class SortieController extends AbstractController
             $entityManager->flush();
 
             // 6. Redirige vers une autre page (ex: liste des sorties)
-            return $this->redirectToRoute('app_sortie_home',  [
+            return $this->redirectToRoute('app_sortie_home', [
                 'user' => $this->getUser()
             ]);
         }
@@ -334,7 +346,7 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/ajoutLieu', name: 'ajoutLieu', methods: ['GET', 'POST'])]
-    public function ajoutLieu(LieuRepository $er, Request $request, EntityManagerInterface $em): JsonResponse
+    public function ajoutLieu(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $lieu = new Lieu();
         $form = $this->createForm(LieuType::class, $lieu);
@@ -351,6 +363,33 @@ final class SortieController extends AbstractController
                 'nom' => $lieu->getNom(),
                 'latitude' => $lieu->getLatitude(),
                 'longitude' => $lieu->getLongitude(),
+            ]);
+
+        }
+        return new JsonResponse([]);
+    }
+
+    #[Route('/annulerSortie/{id}', name: 'annulerSortie', methods: ['GET', 'POST'])]
+    public function annulerSortie(int $id,SortieRepository $sr, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $sortie = $sr->find($id);
+        $form = $this->createForm(AnnulerSortieType::class, $sortie, [
+            'user' => $this->getUser()
+        ]);
+        $form->handleRequest($request);
+
+        // mise en BDD
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sortie->setEtat(EtatSortie::ANNULEE);
+            $sortie->setInfosSortie($form->get('infosSortie')->getData());
+//            $em->persist($sortie);
+            $em->flush();
+
+            //JsonResponse afin de pouvoir l'exploiter dans JavaScript (annulerSortie.js)
+            return new JsonResponse([
+                'id' => $sortie->getId(),
+                'infoSortie' => $sortie->getInfosSortie(),
+
             ]);
 
         }
