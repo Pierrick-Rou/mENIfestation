@@ -11,6 +11,7 @@ use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Enum\EtatSortie;
+use App\Form\AnnulerSortieType;
 use App\Form\CommentaireType;
 use App\Form\FiltreSortieType;
 use App\Form\LieuType;
@@ -115,10 +116,13 @@ final class SortieController extends AbstractController
         }
 
 
+
+
         return $this->render('sortie/index.html.twig', [
             'sortieList' => $sortieList,
             'filtreForm' => $form->createView(),
             'map' => $map,
+
         ]);
     }
 
@@ -166,6 +170,10 @@ final class SortieController extends AbstractController
 
         $commentaires = $sortie->getCommentaires();
 
+        $annulerSortie = new Sortie();
+        $annulerSortieForm = $this->createForm(AnnulerSortieType::class, $annulerSortie, [
+            'user' => $user,
+        ]);
 
         return $this->render('sortie/sortiePage.html.twig', [
             'sortie' => $sortie,
@@ -175,6 +183,7 @@ final class SortieController extends AbstractController
             'placeRestante' => $placeRestante,
             'commentaires' => $commentaires,
             'commentForm' => $commentForm->createView(),
+            'annulerSortieForm' => $annulerSortieForm->createView(),
         ]);
     }
 
@@ -334,7 +343,7 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/ajoutLieu', name: 'ajoutLieu', methods: ['GET', 'POST'])]
-    public function ajoutLieu(LieuRepository $er, Request $request, EntityManagerInterface $em): JsonResponse
+    public function ajoutLieu(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $lieu = new Lieu();
         $form = $this->createForm(LieuType::class, $lieu);
@@ -351,6 +360,33 @@ final class SortieController extends AbstractController
                 'nom' => $lieu->getNom(),
                 'latitude' => $lieu->getLatitude(),
                 'longitude' => $lieu->getLongitude(),
+            ]);
+
+        }
+        return new JsonResponse([]);
+    }
+
+    #[Route('/annulerSortie/{id}', name: 'annulerSortie', methods: ['GET', 'POST'])]
+    public function annulerSortie(int $id,SortieRepository $sr, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $sortie = $sr->find($id);
+        $form = $this->createForm(AnnulerSortieType::class, $sortie, [
+            'user' => $this->getUser()
+        ]);
+        $form->handleRequest($request);
+
+        // mise en BDD
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sortie->setEtat(EtatSortie::ANNULEE);
+            $sortie->setInfosSortie($form->get('infosSortie')->getData());
+//            $em->persist($sortie);
+            $em->flush();
+
+            //JsonResponse afin de pouvoir l'exploiter dans JavaScript (annulerSortie.js)
+            return new JsonResponse([
+                'id' => $sortie->getId(),
+                'infoSortie' => $sortie->getInfosSortie(),
+
             ]);
 
         }
