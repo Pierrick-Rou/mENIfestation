@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Détail Sortie{% endblock %}
+{% block title %}{{ group.getName() }} | {{ parent() }}{% endblock %}
 
 {% block body %}
     <div class="form">
@@ -7,14 +7,14 @@
 
         <p>Fondateur du groupe:  <a href="{{ path('app_profil_details', {'id': group.getGroupFounder().getId()}) }}">{{ group.getGroupFounder().getNom() }}</a></p>
 
-        <p >Sorties:</p>
+        <p>Sorties :</p>
         {% for s in group.getSortie() %}
             <a href="{{ path('app_sortie_id', {'id': s.getId()}) }}" >
                 <p>{{ s.getNom() }}</p>
             </a>
         {% endfor %}
             <div class="gr-membre">
-                <p>Membres:</p>
+                <p>Membres :</p>
                 {% for m in group.getParticipants() %}
                     <a href="{{ path('app_profil_details', {'id': m.getId()}) }}" class="badge">{{ m.getNom() }}</a>
                 {% else %}
