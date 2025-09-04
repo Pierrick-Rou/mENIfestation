@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}{{ participant.prenom }} {{ participant.nom }} | {{ parent() }}{% endblock %}
 {% block body %}
 
 <div class="form-profile">
