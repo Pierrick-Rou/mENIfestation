@@ -1323,3 +1323,11 @@ div[class^="flash-"] {
     border-radius: 50%;
     margin-right: 0.5rem;
 }
+
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1em;
+
+}

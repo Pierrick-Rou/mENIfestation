@@ -5,6 +5,16 @@
 {% block body %}
     <div>
         <h2>Liste des Utilisateurs</h2>
+        <section>
+            <div class="buttonContainer">
+                {% if page > 1 %}
+                    <a href="{{ path('app_admin_usersPage', {'page' : page -1 }) }}">Page précédente</a>&nbsp;
+                {% endif %}
+                {% if page < totalPages %}
+                    <a href="{{ path('app_admin_usersPage', {'page' : page +1 }) }}">Page Suivante</a>
+                {% endif %}
+            </div>
+        </section><br>
     <table>
         <tr>
             <th>Id</th>
