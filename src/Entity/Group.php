@@ -106,12 +106,12 @@ class Group
         return $this;
     }
 
-    public function getGroupFounder(): ?participant
+    public function getGroupFounder(): ?Participant
     {
         return $this->groupFounder;
     }
 
-    public function setGroupFounder(?participant $groupFounder): static
+    public function setGroupFounder(?Participant $groupFounder): static
     {
         $this->groupFounder = $groupFounder;
 
