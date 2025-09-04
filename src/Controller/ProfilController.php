@@ -74,7 +74,20 @@ final class ProfilController extends AbstractController
         $em->flush();
 
         $this->addFlash('success','le profil à été banni ');
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_admin_users');
+    }
+    #[Route('/unban/{id}', name: '_unban', requirements: ['id' => '\d+'])]
+    #[ISGranted('ROLE_ADMIN')]
+    public function unban(EntityManagerInterface $em,ParticipantRepository $pr, Request $request): Response
+    {
+        $participant=$pr->findOneBy(['id'=>$request->get('id')]);
+        $participant->setactif();
+//        dd($participant);
+        $em->persist($participant);
+        $em->flush();
+
+        $this->addFlash('success','le profil à été débanni ');
+        return $this->redirectToRoute('app_admin_users');
     }
 
     #[Route('/update', name: '_update')]
