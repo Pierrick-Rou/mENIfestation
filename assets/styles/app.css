@@ -432,7 +432,7 @@ button,
     justify-content: center;
     gap: var(--space-sm);
     padding: var(--space-md) var(--space-lg);
-    margin-top: var(--space-md);
+    /*margin-top: var(--space-md);*/
     border: none;
     border-radius: var(--radius-md);
     font-weight: 600;
@@ -448,10 +448,15 @@ button,
 /* Bouton principal */
 .btn-primary,
 button[type="submit"],
-button:not([class]) {
+button:not([class]){
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: #f8fafc;
     box-shadow: var(--shadow-sm);
+}
+
+
+button:not(.inline-btn) {
+    margin-top: var(--space-md);
 }
 
 .btn-primary:hover,
