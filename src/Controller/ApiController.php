@@ -6,7 +6,9 @@ use App\Entity\Group;
 use App\Entity\Participant;
 use App\Repository\GroupRepository;
 use App\Repository\ParticipantRepository;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,4 +70,27 @@ final class ApiController extends AbstractController
         $eM->persist($group);
         $eM->flush();
     }
+    #[Route('/toutesLesSorties', name: 'toutesLesSortie', methods: ['GET'])]
+    public function annulerSortie(SortieRepository $sr, Request $request, EntityManagerInterface $em,SerializerInterface $serializer,): JsonResponse
+    {
+        $sorties = $sr->findAll();
+
+        foreach ($sorties as $sortie) {
+            $data [] = [
+                'id' => $sortie->getId(),
+                'nom' => $sortie->getNom(),
+                'dateHeureDebut' => $sortie->getDateHeureDebut(),
+                'duree' => $sortie->getDuree()->format('H:i'),
+                'dateLimiteInscription' => $sortie->getDateLimiteInscription(),
+                'nbInscriptionMax' => $sortie->getNbInscriptionMax(),
+                'infoSortie' => $sortie->getInfosSortie(),
+                'etat' => $sortie->getEtat(),
+            ];
+        }
+
+            return new JsonResponse($data);
+
+        }
+
+
 }
