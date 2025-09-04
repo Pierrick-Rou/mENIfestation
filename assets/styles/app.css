@@ -71,7 +71,7 @@
    VARIABLES CSS ET FONDATIONS
 ======================================== */
 
-.dark-mode {
+body.dark-mode {
     --primary-light: #4f46e5;
     --primary-lighter: #6366f1;
     --primary-dark: #3730a3;
