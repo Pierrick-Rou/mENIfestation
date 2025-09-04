@@ -1,42 +1,42 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-toggle-icon');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    const currentTheme = localStorage.getItem('theme');
+function initDarkMode() {
+    const btn = document.getElementById('theme-toggle');
+    const icon = document.getElementById('theme-toggle-icon');
+    const root = document.documentElement;
 
-    // Fonction pour appliquer le thème
-    function applyTheme(theme) {
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark-mode');
-            themeIcon.textContent = '☀️';
-            localStorage.setItem('theme', 'dark');
+    if (!btn || !root) return;
+
+    // Empêche double initialisation (Turbo, etc.)
+    if (btn.dataset.bound === 'true') return;
+    btn.dataset.bound = 'true';
+
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const getStored = () => localStorage.getItem('theme'); // 'dark' | 'light' | null
+    const store = (val) => localStorage.setItem('theme', val);
+
+    const applyTheme = (mode) => {
+        if (mode === 'dark') {
+            root.classList.add('dark-mode');
+            if (icon) icon.textContent = '☀️';
         } else {
-            document.documentElement.classList.remove('dark-mode');
-            themeIcon.textContent = '🌙';
-            localStorage.setItem('theme', 'light');
+            root.classList.remove('dark-mode');
+            if (icon) icon.textContent = '🌙';
         }
-    }
+    };
 
-    // Appliquer le thème sauvegardé ou la préférence système
-    if (currentTheme) {
-        applyTheme(currentTheme);
-    } else {
-        applyTheme(prefersDarkScheme.matches ? 'dark' : 'light');
-    }
+    // Synchroniser l’UI avec l’état actuel (localStorage ou préférence système)
+    const current = getStored() || (prefersDark ? 'dark' : 'light');
+    applyTheme(current);
 
-    // Toggle au clic
-    themeToggle.addEventListener('click', () => {
-        if (document.documentElement.classList.contains('dark-mode')) {
-            applyTheme('light');
-        } else {
-            applyTheme('dark');
-        }
-    });
+    const toggleTheme = () => {
+        const next = root.classList.contains('dark-mode') ? 'light' : 'dark';
+        applyTheme(next);
+        store(next);
+    };
 
-    // Écoute changement système
-    prefersDarkScheme.addEventListener('change', e => {
-        if (!localStorage.getItem('theme')) {
-            applyTheme(e.matches ? 'dark' : 'light');
-        }
-    });
-});
+    btn.addEventListener('click', toggleTheme);
+}
+
+// Compatible DOM classique et Turbo
+document.addEventListener('DOMContentLoaded', initDarkMode);
+document.addEventListener('turbo:load', initDarkMode);

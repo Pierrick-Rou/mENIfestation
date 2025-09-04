@@ -71,7 +71,7 @@
    VARIABLES CSS ET FONDATIONS
 ======================================== */
 
-body.dark-mode {
+.dark-mode {
     --primary-light: #4f46e5;
     --primary-lighter: #6366f1;
     --primary-dark: #3730a3;
@@ -271,7 +271,6 @@ header {
         display: none;
         flex-direction: column;
         position: absolute;
-        top: 60px;
         left: 0;
         width: 100%;
         background: var(--bg-primary);
