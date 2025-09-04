@@ -44,7 +44,7 @@ class Sortie
      * @var Collection<int, Participant>
      */
     #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
-    private Collection $participant;
+    private Collection $participants;
 
     #[ORM\ManyToOne(inversedBy: 'organise')]
     #[ORM\JoinColumn(nullable: false)]
@@ -76,7 +76,7 @@ class Sortie
 
     public function __construct()
     {
-        $this->participant = new ArrayCollection();
+        $this->participants = new ArrayCollection();
         $this->groupes = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
     }
@@ -175,13 +175,13 @@ class Sortie
      */
     public function getParticipant(): Collection
     {
-        return $this->participant;
+        return $this->participants;
     }
 
     public function addParticipant(Participant $participant): static
     {
-        if (!$this->participant->contains($participant)) {
-            $this->participant->add($participant);
+        if (!$this->participants->contains($participant)) {
+            $this->participants->add($participant);
             $participant->addSortie($this);
         }
 
@@ -190,7 +190,7 @@ class Sortie
 
     public function removeParticipant(Participant $participant): static
     {
-        if ($this->participant->removeElement($participant)) {
+        if ($this->participants->removeElement($participant)) {
             $participant->removeSortie($this);
         };
 
