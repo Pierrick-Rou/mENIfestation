@@ -44,7 +44,7 @@ final class ProfilController extends AbstractController
         $em->flush();
 
         $this->addFlash('success','le profil à été supprimé ');
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_admin_users');
     }
 
     #[Route('/delete', name: '_delete')]
