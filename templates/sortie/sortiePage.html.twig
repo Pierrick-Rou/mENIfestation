@@ -56,12 +56,14 @@
         {% endif %}
 
         {# Bouton supprimer pour organisateur/admin #}
-        {% if app.user.id == sortie.organisateur.id or is_granted('ROLE_ADMIN') %}
+        {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('app_sortie_delete', {'id' : sortie.id}) }}">
                 <button>Supprimer sortie</button>
             </a>
+        {% endif  %}
+        {% if app.user.id == sortie.organisateur.id or is_granted('ROLE_ADMIN') %}
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAnnulerSortieModal">
-                Annuler ma sortie
+                Annuler sortie
             </button>
         {% endif %}
 

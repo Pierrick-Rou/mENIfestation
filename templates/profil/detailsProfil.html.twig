@@ -14,12 +14,23 @@
         <span>Site : {{ participant.site }}</span>
 
     </div>
-    {% if app.user.id == participant.id %}
+    {% if app.user.id == participant.id and not is_granted('ROLE_ADMIN') %}
     <div class="participant-actions">
-        <button onclick="location.href='{{ path('app_profil_delete', {'token': csrf_token('delete'~app.user.id) }) }}'">Supprimer mon profil</button>
-        <button onclick="location.href='{{ path('app_profil_update', {'token': csrf_token('update'~app.user.id) } ) }}'">Modifier mon profil</button>
+        <button onclick="location.href='{{ path('app_profil_delete', {'token': csrf_token('delete'~app.user.id) }) }}'">Supprimer profil</button>
+        <button onclick="location.href='{{ path('app_profil_update', {'token': csrf_token('update'~app.user.id) } ) }}'">Modifier profil</button>
+        {%  endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+        <button onclick="location.href='{{ path('app_profil_delete_admin', {'id': participant.id }) }}'">Supprimer profil</button>
+
+        {% endif %}
+        {% if participant.actif and not is_granted('ROLE_ADMIN')%}
+        <button onclick="location.href='{{ path('app_profil_ban',  { id: participant.id, _query: { redirect: 'app_profil_details' }})  }}'">Bannir profil</button>
+        {% else %}
+            <button onclick="location.href='{{ path('app_profil_unban',  { id: participant.id, _query: { redirect: 'app_profil_details' }})  }}'">Débannir profil</button>
+        {% endif %}
+
     </div>
-    {%  endif %}
+
 </div>
 
 

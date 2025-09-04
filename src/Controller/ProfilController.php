@@ -37,8 +37,8 @@ final class ProfilController extends AbstractController
     {
         $this->isCsrfTokenValid('delete'.$participant->getId(), $request->get('token'));
 
-        $tokenStorage->setToken(null);
-        $request->getSession()->invalidate();
+//        $tokenStorage->setToken(null);
+//        $request->getSession()->invalidate();
 
         $em->remove($participant);
         $em->flush();
@@ -60,7 +60,7 @@ final class ProfilController extends AbstractController
             $request->getSession()->invalidate();
         }
 
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_admin_users');
     }
 
     #[Route('/ban/{id}', name: '_ban', requirements: ['id' => '\d+'])]
@@ -74,7 +74,9 @@ final class ProfilController extends AbstractController
         $em->flush();
 
         $this->addFlash('success','le profil à été banni ');
-        return $this->redirectToRoute('app_admin_users');
+        $redirect = $request->query->get('redirect', 'app_admin_users');
+        return $this->redirectToRoute($redirect);
+
     }
     #[Route('/unban/{id}', name: '_unban', requirements: ['id' => '\d+'])]
     #[ISGranted('ROLE_ADMIN')]
@@ -82,7 +84,7 @@ final class ProfilController extends AbstractController
     {
         $participant=$pr->findOneBy(['id'=>$request->get('id')]);
         $participant->setactif();
-//        dd($participant);
+
         $em->persist($participant);
         $em->flush();
 
