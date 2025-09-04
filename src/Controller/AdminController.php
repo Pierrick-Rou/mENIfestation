@@ -37,7 +37,7 @@ final class AdminController extends AbstractController
 //
 //    }
 
-    #[Route('/utilisateurs/{page}', name: '_usersPage', requirements: ['page'=>'\d+'], defaults: [ 'page' =>1] , methods: ['GET'])]
+    #[Route('/utilisateurs/{page}', name: '_users', requirements: ['page'=>'\d+'], defaults: [ 'page' =>1] , methods: ['GET'])]
     public function usersPage(ParticipantRepository $pr, int $page): Response
     {
         $nbParPage=10;

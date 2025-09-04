@@ -8,10 +8,10 @@
         <section>
             <div class="buttonContainer">
                 {% if page > 1 %}
-                    <a href="{{ path('app_admin_usersPage', {'page' : page -1 }) }}">Page précédente</a>&nbsp;
+                    <a href="{{ path('app_admin_users', {'page' : page -1 }) }}">Page précédente</a>&nbsp;
                 {% endif %}
                 {% if page < totalPages %}
-                    <a href="{{ path('app_admin_usersPage', {'page' : page +1 }) }}">Page Suivante</a>
+                    <a href="{{ path('app_admin_users', {'page' : page +1 }) }}">Page Suivante</a>
                 {% endif %}
             </div>
         </section><br>
