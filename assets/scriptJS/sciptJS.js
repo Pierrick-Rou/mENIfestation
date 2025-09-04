@@ -1,63 +1,113 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.getElementById("chat-toggle");
-    const widget = document.getElementById("chat-widget");
-    const messages = document.getElementById("chat-messages");
-    const input = document.getElementById("chat-text");
-    const sendBtn = document.getElementById("chat-send");
+function initChatbot() {
+    const toggle = document.getElementById('chat-toggle');
+    const widget = document.getElementById('chat-widget');
+    const input = document.getElementById('chat-text');
+    const sendBtn = document.getElementById('chat-send');
+    const messages = document.getElementById('chat-messages');
 
-    if (!toggle || !widget) return; // sécurité si pas connecté
-
-    // Ouvrir / fermer le chat
-    toggle.addEventListener("click", () => {
-        widget.style.display = widget.style.display === "none" ? "flex" : "none";
-    });
-
-    function addMessage(text, sender) {
-        const msg = document.createElement("div");
-        msg.textContent = text;
-        msg.style.margin = "5px 0";
-        msg.style.padding = "5px 10px";
-        msg.style.borderRadius = "10px";
-        msg.style.maxWidth = "80%";
-        msg.style.background = sender === "user" ? "#4f46e5" : "#818cf8";
-        msg.style.alignSelf = sender === "user" ? "flex-end" : "flex-start";
-        messages.appendChild(msg);
-        messages.scrollTop = messages.scrollHeight;
+    // Si le widget n’est pas présent sur cette page (ex: non connecté), on sort
+    if (!toggle || !widget || !input || !sendBtn || !messages) {
+        return;
     }
 
-    async function sendMessage() {
-        const text = input.value.trim();
+    // Empêcher les doubles initialisations (Turbo, re-renders…)
+    if (widget.dataset.bound === 'true') {
+        return;
+    }
+    widget.dataset.bound = 'true';
+
+    const scrollToBottom = () => {
+        messages.scrollTop = messages.scrollHeight;
+    };
+
+    const appendMessage = (role, text) => {
+        const div = document.createElement('div');
+        div.className = role === 'user' ? 'msg msg--user' : 'msg msg--bot';
+        div.textContent = text;
+        messages.appendChild(div);
+        scrollToBottom();
+    };
+
+    const setSending = (sending) => {
+        sendBtn.disabled = sending;
+        input.disabled = sending;
+        sendBtn.classList.toggle('is-sending', sending);
+    };
+
+    let loaderEl = null;
+    const showLoader = () => {
+        loaderEl = document.createElement('div');
+        loaderEl.className = 'msg msg--bot msg--loader';
+        loaderEl.textContent = '…';
+        messages.appendChild(loaderEl);
+        scrollToBottom();
+    };
+    const hideLoader = () => {
+        if (loaderEl && loaderEl.parentNode) {
+            loaderEl.parentNode.removeChild(loaderEl);
+        }
+        loaderEl = null;
+    };
+
+    const openWidget = () => {
+        widget.style.display = 'block';
+        input.focus();
+    };
+
+    const toggleWidget = () => {
+        if (widget.style.display === 'none' || widget.style.display === '') {
+            openWidget();
+        } else {
+            widget.style.display = 'none';
+        }
+    };
+
+    const sendMessage = async () => {
+        const text = (input.value || '').trim();
         if (!text) return;
 
-        addMessage(text, "user");
-        input.value = "";
-
-        const loading = document.createElement("div");
-        loading.classList.add("typing-indicator");
-        loading.innerHTML = "<span></span><span></span><span></span>";
-        messages.appendChild(loading);
-        messages.scrollTop = messages.scrollHeight;
+        appendMessage('user', text);
+        input.value = '';
+        setSending(true);
+        showLoader();
 
         try {
-            const response = await fetch("/chatbot", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: text })
+            const res = await fetch('/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({ message: text }),
             });
 
-            const data = await response.json();
+            if (!res.ok) {
+                throw new Error(`Erreur serveur (${res.status})`);
+            }
 
-            messages.removeChild(loading);
-            addMessage(data.reply, "bot");
-
-        } catch (error) {
-            messages.removeChild(loading);
-            addMessage("⚠️ Erreur de connexion au chatbot.", "bot");
+            const data = await res.json();
+            hideLoader();
+            appendMessage('bot', data?.reply ?? 'Désolé, aucune réponse.');
+        } catch (e) {
+            hideLoader();
+            appendMessage('bot', "Une erreur est survenue. Réessayez plus tard.");
+            // Optionnel: console.error(e);
+        } finally {
+            setSending(false);
         }
-    }
+    };
 
-    sendBtn.addEventListener("click", sendMessage);
-    input.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") sendMessage();
+    // Handlers
+    toggle.addEventListener('click', toggleWidget);
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
     });
-});
+}
+
+// Compatible DOM classique et Turbo
+document.addEventListener('DOMContentLoaded', initChatbot);
+document.addEventListener('turbo:load', initChatbot);
