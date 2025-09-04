@@ -44,6 +44,7 @@ export default class extends Controller {
 
     // Méthode appelée quand on clique sur le bouton (via `data-action="click->theme#toggleTheme"`).
     toggleTheme() {
+
         // Si le thème sombre est déjà actif :
         if (document.body.classList.contains('dark-mode')) {
             document.body.classList.remove('dark-mode'); // Passe en thème clair.
