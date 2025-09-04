@@ -518,6 +518,7 @@ button:not([class]):hover {
 .table-container {
     background: var(--bg-primary);
     border-radius: var(--radius-lg);
+
     overflow: hidden;
     box-shadow: var(--shadow-lg);
     margin-bottom: var(--space-xl);

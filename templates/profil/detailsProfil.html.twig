@@ -27,7 +27,7 @@
 
         <button onclick="location.href='{{ path('app_profil_ban',  { id: participant.id, _query: { redirect: 'app_profil_details' }})  }}'">Bannir profil</button>
         {% endif %}
-        {% if not participant.actif and not is_granted('ROLE_ADMIN') and participant.administrateur %}
+        {% if not participant.actif and is_granted('ROLE_ADMIN') and not participant.administrateur %}
             <button onclick="location.href='{{ path('app_profil_unban',  { id: participant.id, _query: { redirect: 'app_profil_details' }})  }}'">Débannir profil</button>
         {% endif %}
 

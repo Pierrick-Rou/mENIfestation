@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendBtn = document.getElementById("chat-send");
 
     if (!toggle || !widget) return; // sécurité si pas connecté
-
+    widget.style.display = "none";
     // Ouvrir / fermer le chat
     toggle.addEventListener("click", () => {
         widget.style.display = widget.style.display === "none" ? "flex" : "none";
