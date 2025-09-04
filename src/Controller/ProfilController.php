@@ -74,7 +74,11 @@ final class ProfilController extends AbstractController
         $em->flush();
 
         $this->addFlash('success','le profil à été banni ');
+
         $redirect = $request->query->get('redirect', 'app_admin_users');
+        if ($redirect === 'app_profil_details') {
+            return $this->redirectToRoute($redirect, ['id' => $participant->getId()]);
+        }
         return $this->redirectToRoute($redirect);
 
     }
