@@ -101,9 +101,8 @@ class SortieRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->select('s')
-            ->addselect('p')
-            ->join('s.participant', 'p')
-            ->andwhere('s.id = :sortieId')
+            ->join('s.participants', 'p')
+            ->where('s.id = :sortieId')
             ->andWhere('p.nom = :nom')
             ->setParameter('sortieId', $sortieId)
             ->setParameter('nom', $nom)
