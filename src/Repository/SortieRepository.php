@@ -100,7 +100,8 @@ class SortieRepository extends ServiceEntityRepository
     public function findParticipantByNameInSortie(int $sortieId, string $nom): ?Participant
     {
         return $this->createQueryBuilder('s')
-            ->select('p')
+            ->select('s')
+            ->addselect('p')
             ->join('s.participant', 'p')
             ->andwhere('s.id = :sortieId')
             ->andWhere('p.nom = :nom')
